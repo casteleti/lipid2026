@@ -7,7 +7,7 @@ COPY package.json pnpm-workspace.yaml ./
 COPY apps/website/package.json ./apps/website/package.json
 COPY packages ./packages
 
-RUN npm install -g pnpm && pnpm install --frozen-lockfile --filter lipid-website...
+RUN npm install -g pnpm && pnpm install --no-frozen-lockfile --filter lipid-website...
 
 # Stage 2: Build
 FROM node:18-alpine AS builder

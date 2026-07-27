@@ -7,7 +7,7 @@ COPY package.json pnpm-workspace.yaml ./
 COPY apps/api/package.json ./apps/api/package.json
 COPY packages ./packages
 
-RUN npm install -g pnpm && pnpm install --frozen-lockfile --filter lipid-api...
+RUN npm install -g pnpm && pnpm install --no-frozen-lockfile --filter lipid-api...
 
 COPY apps/api ./apps/api
 
