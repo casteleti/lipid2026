@@ -17,6 +17,9 @@ WORKDIR /app
 COPY --from=deps /app ./
 COPY apps/admin ./apps/admin
 
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 RUN npm install -g pnpm && pnpm --filter lipid-admin run build
 
 # Stage 3: Runtime
