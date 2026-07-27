@@ -24,6 +24,9 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   });
 
+  // "/" e "/health" ficam sem prefixo (usados pelo healthcheck do Coolify)
+  app.setGlobalPrefix('api/v1', { exclude: ['/', 'health'] });
+
   const port = process.env.API_PORT || 3002;
   await app.listen(port);
 

@@ -8,15 +8,17 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String    @id @default(cuid())
+  email     String    @unique
   name      String?
-  password  String?
-  role      UserRole @default(USER)
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  password  String
+  role      UserRole  @default(USER)
+  active    Boolean   @default(true)
+  lastLogin DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
+  @@index([email])
   @@map("users")
 }
 
@@ -30,16 +32,19 @@ model Application {
   id          String   @id @default(cuid())
   name        String   @unique
   slug        String   @unique
-  description String?
+  description String   @db.Text
+  excerpt     String?
   icon        String?
-  category    String?
+  banner      String?
   order       Int      @default(0)
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   technologies TechnologyOnApplication[]
+  ingredients  IngredientOnApplication[]
 
+  @@index([slug])
   @@map("applications")
 }
 
@@ -47,7 +52,8 @@ model Technology {
   id          String   @id @default(cuid())
   name        String   @unique
   slug        String   @unique
-  description String?
+  description String   @db.Text
+  excerpt     String?
   icon        String?
   order       Int      @default(0)
   active      Boolean  @default(true)
@@ -57,16 +63,17 @@ model Technology {
   applications TechnologyOnApplication[]
   ingredients  IngredientOnTechnology[]
 
+  @@index([slug])
   @@map("technologies")
 }
 
 model TechnologyOnApplication {
-  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  applicationId String
   technology    Technology  @relation(fields: [technologyId], references: [id], onDelete: Cascade)
   technologyId  String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
 
-  @@id([applicationId, technologyId])
+  @@id([technologyId, applicationId])
   @@map("technologies_on_applications")
 }
 
@@ -74,26 +81,38 @@ model Ingredient {
   id          String   @id @default(cuid())
   name        String   @unique
   slug        String   @unique
-  description String?
-  INCI        String?
+  description String   @db.Text
+  inci        String?
   supplier    String?
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   technologies IngredientOnTechnology[]
+  applications IngredientOnApplication[]
 
+  @@index([slug])
   @@map("ingredients")
 }
 
 model IngredientOnTechnology {
-  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
-  technologyId String
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
   ingredientId String
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  technologyId String
 
-  @@id([technologyId, ingredientId])
+  @@id([ingredientId, technologyId])
   @@map("ingredients_on_technologies")
+}
+
+model IngredientOnApplication {
+  ingredient    Ingredient  @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  ingredientId  String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
+
+  @@id([ingredientId, applicationId])
+  @@map("ingredients_on_applications")
 }
 
 model Content {
@@ -130,9 +149,9 @@ model Lead {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("leads")
   @@index([email])
   @@index([createdAt])
+  @@map("leads")
 }
 
 model SeoPage {
