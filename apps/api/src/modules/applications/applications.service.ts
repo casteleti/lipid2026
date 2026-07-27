@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
@@ -27,18 +27,23 @@ export class ApplicationsService {
   }
 
   async findAll(skip = 0, take = 10) {
-    const [data, total] = await Promise.all([
-      this.db.application.findMany({
-        where: { active: true },
-        skip,
-        take,
-        include: {
-          technologies: { include: { technology: true } },
-        },
-        orderBy: { order: 'asc' },
-      }),
-      this.db.application.count({ where: { active: true } }),
-    ]);
+    let data, total;
+    try {
+      [data, total] = await Promise.all([
+        this.db.application.findMany({
+          where: { active: true },
+          skip,
+          take,
+          include: {
+            technologies: { include: { technology: true } },
+          },
+          orderBy: { order: 'asc' },
+        }),
+        this.db.application.count({ where: { active: true } }),
+      ]);
+    } catch (error) {
+      throw new InternalServerErrorException(`DEBUG: ${(error as Error).message}`);
+    }
 
     return {
       data,
