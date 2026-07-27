@@ -11,6 +11,8 @@ RUN npm install -g pnpm && pnpm install --no-frozen-lockfile --filter lipid-api.
 
 COPY apps/api ./apps/api
 
+RUN pnpm --filter lipid-api exec prisma generate
+
 RUN pnpm --filter lipid-api run build
 
 # Stage 2: Runtime
