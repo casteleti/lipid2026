@@ -35,5 +35,4 @@ WORKDIR /app/apps/api
 
 EXPOSE 3002
 
-# Sincroniza o schema com o banco antes de subir (Fase 1: ainda sem historico de migrations)
-CMD ["sh", "-c", "npx --no-install prisma db push --skip-generate --accept-data-loss || true; node dist/main"]
+CMD ["node", "dist/main"]
