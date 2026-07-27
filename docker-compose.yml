@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: lipid_postgres_dev
+    environment:
+      POSTGRES_DB: lipid_development
+      POSTGRES_PASSWORD: dev
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - lipid_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: lipid_api_dev
+    environment:
+      DATABASE_URL: postgresql://postgres:dev@postgres:5432/lipid_development
+      NODE_ENV: development
+      API_PORT: 3002
+      JWT_SECRET: dev-secret-change-this
+    ports:
+      - "3002:3002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - lipid_network
+    volumes:
+      - ./apps/api/src:/app/src
+    command: pnpm run start:dev
+
+  website:
+    build:
+      context: .
+      dockerfile: apps/website/Dockerfile
+    container_name: lipid_website_dev
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3002
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - lipid_network
+    volumes:
+      - ./apps/website/src:/app/src
+    command: pnpm run dev
+
+  admin:
+    build:
+      context: .
+      dockerfile: apps/admin/Dockerfile
+    container_name: lipid_admin_dev
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3002
+    ports:
+      - "3001:3001"
+    depends_on:
+      - api
+    networks:
+      - lipid_network
+    volumes:
+      - ./apps/admin/src:/app/src
+    command: pnpm run dev
+
+volumes:
+  postgres_data:
+
+networks:
+  lipid_network:
+    driver: bridge

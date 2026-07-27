@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String?
+  role      UserRole @default(USER)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  USER
+}
+
+model Application {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  category    String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  technologies TechnologyOnApplication[]
+
+  @@map("applications")
+}
+
+model Technology {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  applications TechnologyOnApplication[]
+  ingredients  IngredientOnTechnology[]
+
+  @@map("technologies")
+}
+
+model TechnologyOnApplication {
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
+  technology    Technology  @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  technologyId  String
+
+  @@id([applicationId, technologyId])
+  @@map("technologies_on_applications")
+}
+
+model Ingredient {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  INCI        String?
+  supplier    String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  technologies IngredientOnTechnology[]
+
+  @@map("ingredients")
+}
+
+model IngredientOnTechnology {
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  technologyId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  ingredientId String
+
+  @@id([technologyId, ingredientId])
+  @@map("ingredients_on_technologies")
+}
+
+model Content {
+  id          String        @id @default(cuid())
+  title       String        @unique
+  slug        String        @unique
+  excerpt     String?
+  content     String
+  featured    String?
+  status      ContentStatus @default(DRAFT)
+  author      String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  publishedAt DateTime?
+
+  @@map("content")
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  company   String?
+  message   String?
+  source    String   @default("website")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("leads")
+  @@index([email])
+  @@index([createdAt])
+}
+
+model SeoPage {
+  id          String   @id @default(cuid())
+  route       String   @unique
+  title       String?
+  description String?
+  keywords    String?
+  ogImage     String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("seo_pages")
+}

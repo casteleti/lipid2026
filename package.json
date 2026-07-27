@@ -1,0 +1,14 @@
+{
+  "name": "lipid2026",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm run -r --parallel dev",
+    "build": "pnpm run -r build",
+    "lint": "pnpm run -r lint",
+    "format": "prettier --write \"apps/**/*.{ts,tsx,js,jsx}\" \"packages/**/*.{ts,tsx,js,jsx}\""
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8"
+  }
+}

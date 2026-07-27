@@ -1,0 +1,36 @@
+services:
+  website:
+    build:
+      context: .
+      dockerfile: apps/website/Dockerfile
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: https://api.daksa.app.br
+      NODE_ENV: production
+    expose:
+      - "3000"
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_ENV: production
+      API_PORT: 3002
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRY: 24h
+    expose:
+      - "3002"
+
+  admin:
+    build:
+      context: .
+      dockerfile: apps/admin/Dockerfile
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: https://api.daksa.app.br
+      NODE_ENV: production
+    expose:
+      - "3001"
