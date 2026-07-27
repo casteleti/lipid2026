@@ -1,6 +1,8 @@
 # Stage 1: Build
 FROM node:18-alpine AS builder
 
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 COPY package.json pnpm-workspace.yaml ./
@@ -17,6 +19,8 @@ RUN pnpm --filter lipid-api run build
 
 # Stage 2: Runtime
 FROM node:18-alpine
+
+RUN apk add --no-cache openssl
 
 WORKDIR /app
 
