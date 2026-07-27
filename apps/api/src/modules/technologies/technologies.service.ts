@@ -7,7 +7,7 @@ import { UpdateTechnologyDto } from './dto/update-technology.dto';
 export class TechnologiesService {
   constructor(private db: DatabaseService) {}
 
-  private async generateSlug(name: string): Promise<string> {
+  private async generateSlug(name: string, excludeId?: string): Promise<string> {
     const base = name
       .toLowerCase()
       .normalize('NFD')
@@ -18,7 +18,11 @@ export class TechnologiesService {
     let slug = base;
     let counter = 1;
 
-    while (await this.db.technology.findUnique({ where: { slug } })) {
+    while (
+      await this.db.technology.findFirst({
+        where: { slug, ...(excludeId ? { id: { not: excludeId } } : {}) },
+      })
+    ) {
       slug = `${base}-${counter}`;
       counter++;
     }
@@ -91,7 +95,7 @@ export class TechnologiesService {
 
     const updateData: UpdateTechnologyDto & { slug?: string } = { ...data };
     if (data.name) {
-      updateData.slug = await this.generateSlug(data.name);
+      updateData.slug = await this.generateSlug(data.name, id);
     }
 
     return this.db.technology.update({

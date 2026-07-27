@@ -7,7 +7,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 export class CategoriesService {
   constructor(private db: DatabaseService) {}
 
-  private async generateSlug(name: string): Promise<string> {
+  private async generateSlug(name: string, excludeId?: string): Promise<string> {
     const base = name
       .toLowerCase()
       .normalize('NFD')
@@ -18,7 +18,11 @@ export class CategoriesService {
     let slug = base;
     let counter = 1;
 
-    while (await this.db.category.findUnique({ where: { slug } })) {
+    while (
+      await this.db.category.findFirst({
+        where: { slug, ...(excludeId ? { id: { not: excludeId } } : {}) },
+      })
+    ) {
       slug = `${base}-${counter}`;
       counter++;
     }
@@ -63,7 +67,7 @@ export class CategoriesService {
 
     const updateData: UpdateCategoryDto & { slug?: string } = { ...data };
     if (data.name) {
-      updateData.slug = await this.generateSlug(data.name);
+      updateData.slug = await this.generateSlug(data.name, id);
     }
 
     return this.db.category.update({

@@ -13,6 +13,7 @@ describe('ApplicationsService', () => {
         findMany: jest.fn(),
         count: jest.fn(),
         findUnique: jest.fn(),
+        findFirst: jest.fn(),
         create: jest.fn(),
         update: jest.fn(),
       },
@@ -64,7 +65,7 @@ describe('ApplicationsService', () => {
 
   describe('create', () => {
     it('gera slug a partir do nome e cria a aplicacao', async () => {
-      db.application.findUnique.mockResolvedValue(null); // slug ainda nao existe
+      db.application.findFirst.mockResolvedValue(null); // slug ainda nao existe
       db.application.create.mockResolvedValue({ id: '1', name: 'Nutracêutico', slug: 'nutraceutico' });
 
       const result = await service.create({
@@ -79,7 +80,7 @@ describe('ApplicationsService', () => {
     });
 
     it('adiciona sufixo numerico quando o slug ja existe', async () => {
-      db.application.findUnique
+      db.application.findFirst
         .mockResolvedValueOnce({ id: 'outro', slug: 'cosmeticos' }) // "cosmeticos" ja existe
         .mockResolvedValueOnce(null); // "cosmeticos-1" esta livre
       db.application.create.mockResolvedValue({ id: '2', name: 'Cosméticos', slug: 'cosmeticos-1' });
@@ -90,6 +91,26 @@ describe('ApplicationsService', () => {
       });
 
       expect(result.slug).toBe('cosmeticos-1');
+    });
+  });
+
+  describe('update', () => {
+    it('mantem o mesmo slug ao editar sem trocar o nome (nao deve se auto-colidir)', async () => {
+      db.application.findUnique.mockResolvedValue({ id: '1', active: true, name: 'Cosméticos' });
+      db.application.findFirst.mockResolvedValue(null); // exclude self => nenhuma colisao real
+      db.application.update.mockResolvedValue({ id: '1', name: 'Cosméticos', slug: 'cosmeticos' });
+
+      await service.update('1', {
+        name: 'Cosméticos',
+        description: 'Descrição de teste com mais de dez caracteres',
+      });
+
+      expect(db.application.findFirst).toHaveBeenCalledWith(
+        expect.objectContaining({ where: expect.objectContaining({ id: { not: '1' } }) }),
+      );
+      expect(db.application.update).toHaveBeenCalledWith(
+        expect.objectContaining({ data: expect.objectContaining({ slug: 'cosmeticos' }) }),
+      );
     });
   });
 

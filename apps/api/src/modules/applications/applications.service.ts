@@ -7,7 +7,7 @@ import { UpdateApplicationDto } from './dto/update-application.dto';
 export class ApplicationsService {
   constructor(private db: DatabaseService) {}
 
-  private async generateSlug(name: string): Promise<string> {
+  private async generateSlug(name: string, excludeId?: string): Promise<string> {
     const base = name
       .toLowerCase()
       .normalize('NFD')
@@ -18,7 +18,11 @@ export class ApplicationsService {
     let slug = base;
     let counter = 1;
 
-    while (await this.db.application.findUnique({ where: { slug } })) {
+    while (
+      await this.db.application.findFirst({
+        where: { slug, ...(excludeId ? { id: { not: excludeId } } : {}) },
+      })
+    ) {
       slug = `${base}-${counter}`;
       counter++;
     }
@@ -94,7 +98,7 @@ export class ApplicationsService {
 
     const updateData: UpdateApplicationDto & { slug?: string } = { ...data };
     if (data.name) {
-      updateData.slug = await this.generateSlug(data.name);
+      updateData.slug = await this.generateSlug(data.name, id);
     }
 
     return this.db.application.update({

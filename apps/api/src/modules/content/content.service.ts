@@ -7,7 +7,7 @@ import { UpdateContentDto } from './dto/update-content.dto';
 export class ContentService {
   constructor(private db: DatabaseService) {}
 
-  private async generateSlug(title: string): Promise<string> {
+  private async generateSlug(title: string, excludeId?: string): Promise<string> {
     const base = title
       .toLowerCase()
       .normalize('NFD')
@@ -18,7 +18,11 @@ export class ContentService {
     let slug = base;
     let counter = 1;
 
-    while (await this.db.content.findUnique({ where: { slug } })) {
+    while (
+      await this.db.content.findFirst({
+        where: { slug, ...(excludeId ? { id: { not: excludeId } } : {}) },
+      })
+    ) {
       slug = `${base}-${counter}`;
       counter++;
     }
@@ -92,7 +96,7 @@ export class ContentService {
 
     const updateData: Record<string, unknown> = { ...rest };
     if (data.title) {
-      updateData.slug = await this.generateSlug(data.title);
+      updateData.slug = await this.generateSlug(data.title, id);
     }
     if (data.status === 'PUBLISHED' && existing.status !== 'PUBLISHED') {
       updateData.publishedAt = new Date();
