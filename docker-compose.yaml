@@ -9,6 +9,8 @@ services:
       NODE_ENV: production
     expose:
       - "3000"
+    networks:
+      - coolify
 
   api:
     build:
@@ -23,6 +25,8 @@ services:
       JWT_EXPIRY: 24h
     expose:
       - "3002"
+    networks:
+      - coolify
 
   admin:
     build:
@@ -34,3 +38,9 @@ services:
       NODE_ENV: production
     expose:
       - "3001"
+    networks:
+      - coolify
+
+networks:
+  coolify:
+    external: true
