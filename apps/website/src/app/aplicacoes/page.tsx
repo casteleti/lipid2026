@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface Application {
   id: string;
+  slug: string;
   name: string;
   excerpt: string | null;
 }
@@ -35,10 +37,14 @@ export default function AplicacoesPage() {
       ) : (
         <div className="grid gap-8 md:grid-cols-3">
           {apps.map((app) => (
-            <div key={app.id} className="rounded-lg border p-6 transition hover:shadow-lg">
+            <Link
+              key={app.id}
+              href={`/aplicacoes/${app.slug}`}
+              className="block rounded-lg border p-6 transition hover:shadow-lg"
+            >
               <h3 className="mb-2 text-xl font-semibold">{app.name}</h3>
               <p className="text-gray-600">{app.excerpt}</p>
-            </div>
+            </Link>
           ))}
         </div>
       )}

@@ -1,9 +1,15 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
+import { mkdirSync } from 'fs';
 import { AppModule } from './app.module';
+import { UPLOADS_DIR } from './modules/upload/upload.controller';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  mkdirSync(UPLOADS_DIR, { recursive: true });
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useStaticAssets(UPLOADS_DIR, { prefix: '/uploads/' });
 
   app.useGlobalPipes(
     new ValidationPipe({

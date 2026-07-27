@@ -1,5 +1,19 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  HttpCode,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { IngredientsService } from './ingredients.service';
+import { CreateIngredientDto } from './dto/create-ingredient.dto';
+import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Controller('ingredients')
 export class IngredientsController {
@@ -13,5 +27,24 @@ export class IngredientsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
+  }
+
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  create(@Body() dto: CreateIngredientDto) {
+    return this.service.create(dto);
+  }
+
+  @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  update(@Param('id') id: string, @Body() dto: UpdateIngredientDto) {
+    return this.service.update(id, dto);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  @UseGuards(JwtAuthGuard)
+  remove(@Param('id') id: string) {
+    return this.service.remove(id);
   }
 }

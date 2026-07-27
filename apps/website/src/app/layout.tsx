@@ -31,6 +31,9 @@ export default function RootLayout({
               <li><a href="/">Home</a></li>
               <li><a href="/aplicacoes">Aplicações</a></li>
               <li><a href="/tecnologias">Tecnologias</a></li>
+              <li><a href="/ingredientes">Ingredientes</a></li>
+              <li><a href="/parceiros">Parceiros</a></li>
+              <li><a href="/blog">Blog</a></li>
               <li><a href="/sobre">Sobre</a></li>
               <li><a href="/contato">Contato</a></li>
             </ul>

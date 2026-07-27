@@ -27,6 +27,8 @@ services:
       - "3002"
     networks:
       - coolify
+    volumes:
+      - api_uploads:/app/apps/api/uploads
 
   admin:
     build:
@@ -44,3 +46,6 @@ services:
 networks:
   coolify:
     external: true
+
+volumes:
+  api_uploads:

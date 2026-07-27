@@ -7,7 +7,18 @@ import { Card } from '@/components/Card';
 import { Input } from '@/components/Input';
 import { Textarea } from '@/components/Textarea';
 import { Button } from '@/components/Button';
+import { CheckboxGroup } from '@/components/CheckboxGroup';
 import { api } from '@/lib/api-client';
+
+interface Technology {
+  id: string;
+  name: string;
+}
+
+interface Ingredient {
+  id: string;
+  name: string;
+}
 
 interface Application {
   id: string;
@@ -17,6 +28,8 @@ interface Application {
   icon: string | null;
   banner: string | null;
   active: boolean;
+  technologies: { technology: Technology }[];
+  ingredients: { ingredient: Ingredient }[];
 }
 
 export default function EditarAplicacaoPage() {
@@ -29,6 +42,10 @@ export default function EditarAplicacaoPage() {
   const [icon, setIcon] = useState('');
   const [banner, setBanner] = useState('');
   const [active, setActive] = useState(true);
+  const [technologyIds, setTechnologyIds] = useState<string[]>([]);
+  const [ingredientIds, setIngredientIds] = useState<string[]>([]);
+  const [allTechnologies, setAllTechnologies] = useState<Technology[]>([]);
+  const [allIngredients, setAllIngredients] = useState<Ingredient[]>([]);
 
   const [loadingData, setLoadingData] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -36,6 +53,16 @@ export default function EditarAplicacaoPage() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
+    api
+      .get<{ data: Technology[] }>('/technologies?take=100')
+      .then((res) => setAllTechnologies(res.data))
+      .catch(() => setAllTechnologies([]));
+
+    api
+      .get<{ data: Ingredient[] }>('/ingredients?take=100')
+      .then((res) => setAllIngredients(res.data))
+      .catch(() => setAllIngredients([]));
+
     api
       .get<Application>(`/applications/${params.id}`)
       .then((app) => {
@@ -45,6 +72,8 @@ export default function EditarAplicacaoPage() {
         setIcon(app.icon || '');
         setBanner(app.banner || '');
         setActive(app.active);
+        setTechnologyIds(app.technologies.map((t) => t.technology.id));
+        setIngredientIds(app.ingredients.map((i) => i.ingredient.id));
       })
       .catch(() => setNotFound(true))
       .finally(() => setLoadingData(false));
@@ -63,6 +92,8 @@ export default function EditarAplicacaoPage() {
         icon: icon || undefined,
         banner: banner || undefined,
       });
+      await api.put(`/applications/${params.id}/technologies`, { ids: technologyIds });
+      await api.put(`/applications/${params.id}/ingredients`, { ids: ingredientIds });
       router.push('/aplicacoes');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Não foi possível salvar as alterações');
@@ -146,6 +177,24 @@ export default function EditarAplicacaoPage() {
             value={banner}
             onChange={(e) => setBanner(e.target.value)}
             disabled={saving}
+          />
+
+          <CheckboxGroup
+            label="Tecnologias vinculadas"
+            options={allTechnologies.map((t) => ({ id: t.id, label: t.name }))}
+            selected={technologyIds}
+            onChange={setTechnologyIds}
+            disabled={saving}
+            emptyText="Nenhuma tecnologia cadastrada ainda."
+          />
+
+          <CheckboxGroup
+            label="Ingredientes vinculados"
+            options={allIngredients.map((i) => ({ id: i.id, label: i.name }))}
+            selected={ingredientIds}
+            onChange={setIngredientIds}
+            disabled={saving}
+            emptyText="Nenhum ingrediente cadastrado ainda."
           />
 
           <p className="text-sm text-gray-500">

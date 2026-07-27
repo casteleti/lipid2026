@@ -115,12 +115,45 @@ model IngredientOnApplication {
   @@map("ingredients_on_applications")
 }
 
+model Partner {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String   @db.Text
+  excerpt     String?
+  logo        String?
+  website     String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@map("partners")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  content ContentOnCategory[]
+
+  @@index([slug])
+  @@map("categories")
+}
+
 model Content {
   id          String        @id @default(cuid())
   title       String        @unique
   slug        String        @unique
   excerpt     String?
-  content     String
+  content     String        @db.Text
   featured    String?
   status      ContentStatus @default(DRAFT)
   author      String?
@@ -128,6 +161,10 @@ model Content {
   updatedAt   DateTime      @updatedAt
   publishedAt DateTime?
 
+  categories ContentOnCategory[]
+
+  @@index([slug])
+  @@index([status])
   @@map("content")
 }
 
@@ -135,6 +172,16 @@ enum ContentStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+model ContentOnCategory {
+  content    Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId  String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+
+  @@id([contentId, categoryId])
+  @@map("content_on_categories")
 }
 
 model Lead {

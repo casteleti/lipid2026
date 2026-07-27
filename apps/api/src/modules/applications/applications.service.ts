@@ -65,6 +65,22 @@ export class ApplicationsService {
     return app;
   }
 
+  async findBySlug(slug: string) {
+    const app = await this.db.application.findUnique({
+      where: { slug },
+      include: {
+        technologies: { include: { technology: true } },
+        ingredients: { include: { ingredient: true } },
+      },
+    });
+
+    if (!app || !app.active) {
+      throw new NotFoundException(`Aplicação ${slug} não encontrada`);
+    }
+
+    return app;
+  }
+
   async create(data: CreateApplicationDto) {
     const slug = await this.generateSlug(data.name);
 
@@ -94,5 +110,31 @@ export class ApplicationsService {
       where: { id },
       data: { active: false },
     });
+  }
+
+  async setTechnologies(id: string, technologyIds: string[]) {
+    await this.findOne(id);
+
+    await this.db.technologyOnApplication.deleteMany({ where: { applicationId: id } });
+    if (technologyIds.length) {
+      await this.db.technologyOnApplication.createMany({
+        data: technologyIds.map((technologyId) => ({ applicationId: id, technologyId })),
+      });
+    }
+
+    return this.findOne(id);
+  }
+
+  async setIngredients(id: string, ingredientIds: string[]) {
+    await this.findOne(id);
+
+    await this.db.ingredientOnApplication.deleteMany({ where: { applicationId: id } });
+    if (ingredientIds.length) {
+      await this.db.ingredientOnApplication.createMany({
+        data: ingredientIds.map((ingredientId) => ({ applicationId: id, ingredientId })),
+      });
+    }
+
+    return this.findOne(id);
   }
 }

@@ -37,8 +37,15 @@ export async function getTechnologies() {
 
 export async function submitContact(data: {
   email: string;
-  name: string;
-  message: string;
+  name?: string;
+  phone?: string;
+  company?: string;
+  message?: string;
 }) {
   return api.post('/leads', data);
+}
+
+export function resolveMediaUrl(path?: string | null): string {
+  if (!path) return '';
+  return path.startsWith('http') ? path : `${API_URL}${path}`;
 }
