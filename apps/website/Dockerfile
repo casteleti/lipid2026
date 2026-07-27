@@ -24,12 +24,14 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-RUN npm install -g pnpm
+# node_modules raiz contém o store pnpm (.pnpm) para o qual os symlinks apontam
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/website/node_modules ./apps/website/node_modules
+COPY --from=builder /app/apps/website/.next ./apps/website/.next
+COPY --from=builder /app/apps/website/public ./apps/website/public
+COPY --from=builder /app/apps/website/package.json ./apps/website/package.json
 
-COPY --from=builder /app/apps/website/node_modules ./node_modules
-COPY --from=builder /app/apps/website/.next ./.next
-COPY --from=builder /app/apps/website/public ./public
-COPY --from=builder /app/apps/website/package.json ./package.json
+WORKDIR /app/apps/website
 
 EXPOSE 3000
 
