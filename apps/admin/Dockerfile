@@ -24,6 +24,8 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+RUN npm install -g pnpm
+
 # node_modules raiz contém o store pnpm (.pnpm) para o qual os symlinks apontam
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/apps/admin/node_modules ./apps/admin/node_modules
