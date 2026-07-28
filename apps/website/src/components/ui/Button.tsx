@@ -32,21 +32,22 @@ interface ButtonProps extends VariantProps<typeof buttonVariants> {
   disabled?: boolean;
   className?: string;
   type?: 'button' | 'submit' | 'reset';
+  tabIndex?: number;
 }
 
-export function Button({ children, href, variant, size, className, type, ...props }: ButtonProps) {
+export function Button({ children, href, variant, size, className, type, onClick, tabIndex, ...props }: ButtonProps) {
   const baseClass = buttonVariants({ variant, size, className });
 
   if (href) {
     return (
-      <Link href={href} className={baseClass}>
+      <Link href={href} className={baseClass} onClick={onClick} tabIndex={tabIndex}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button type={type || 'button'} className={baseClass} {...props}>
+    <button type={type || 'button'} className={baseClass} onClick={onClick} tabIndex={tabIndex} {...props}>
       {children}
     </button>
   );

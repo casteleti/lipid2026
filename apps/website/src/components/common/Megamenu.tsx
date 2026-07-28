@@ -1,95 +1,71 @@
-import { LinkArrow } from '@/components/ui/LinkArrow';
+'use client';
+
+import Link from 'next/link';
+import clsx from 'clsx';
+import { megamenuContent, type DropdownKey } from './nav-data';
 
 interface MegamenuProps {
-  section: string;
+  id: string;
+  section: DropdownKey;
+  open: boolean;
+  onNavigate: () => void;
 }
 
-const megamenuContent: Record<
-  string,
-  {
-    title: string;
-    description: string;
-    ctaText: string;
-    ctaHref: string;
-    groups: { heading: string; items: { name: string; desc: string; href: string }[] }[];
-  }
-> = {
-  TECNOLOGIAS: {
-    title: 'Tecnologia lipídica em escala industrial.',
-    description:
-      'Explore nosso portfólio de tecnologias — ciência aplicada e desempenho validado para indústrias regulamentadas.',
-    ctaText: 'CONHECER PLATAFORMA',
-    ctaHref: '/tecnologias',
-    groups: [
-      {
-        heading: 'PLATAFORMAS',
-        items: [
-          { name: 'Lipossomas', desc: 'Vesículas para entrega ativa direcionada.', href: '/tecnologias/lipossomas' },
-          { name: 'Fosfolipídios', desc: 'Estruturas biomiméticas de alta pureza.', href: '/tecnologias/fosfolipidios' },
-          { name: 'Encapsulação', desc: 'Proteção e estabilização molecular.', href: '/tecnologias/encapsulacao' },
-        ],
-      },
-    ],
-  },
-  APLICAÇÕES: {
-    title: 'Soluções para múltiplas indústrias.',
-    description: 'Ingredientes especializados para cosméticos, farmacêutica, nutracêuticos e veterinária.',
-    ctaText: 'CONHEÇA NOSSAS APLICAÇÕES',
-    ctaHref: '/aplicacoes',
-    groups: [
-      {
-        heading: 'MERCADOS',
-        items: [
-          { name: 'Farmacêutica', desc: 'Entrega controlada de ativos.', href: '/aplicacoes' },
-          { name: 'Cosméticos', desc: 'Fórmulas premium de alta performance.', href: '/aplicacoes' },
-          { name: 'Nutracêutico', desc: 'Nutrientes com maior biodisponibilidade.', href: '/aplicacoes' },
-        ],
-      },
-    ],
-  },
-  'CONTEÚDO TÉCNICO': {
-    title: 'Conhecimento técnico e científico.',
-    description: 'Artigos e materiais sobre lipídios, tecnologias e aplicações.',
-    ctaText: 'ACESSAR BIBLIOTECA',
-    ctaHref: '/blog',
-    groups: [
-      {
-        heading: 'RECURSOS',
-        items: [{ name: 'Blog', desc: 'Artigos e novidades técnicas.', href: '/blog' }],
-      },
-    ],
-  },
-};
-
-export function Megamenu({ section }: MegamenuProps) {
+export function Megamenu({ id, section, open, onNavigate }: MegamenuProps) {
   const content = megamenuContent[section];
   if (!content) return null;
 
   return (
-    <div className="absolute left-0 right-0 top-full z-40 border-t border-gray-100 bg-white shadow-xl animate-fade-in">
-      <div className="container-main grid grid-cols-1 gap-10 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
-        <div>
-          <p className="eyebrow mb-3">{section}</p>
-          <h3 className="mb-3 text-2xl font-bold text-gray-900">{content.title}</h3>
-          <p className="mb-6 text-gray-600">{content.description}</p>
-          <LinkArrow href={content.ctaHref}>{content.ctaText}</LinkArrow>
-        </div>
+    <div
+      id={id}
+      role="group"
+      aria-label={`Submenu ${section.toLowerCase()}`}
+      aria-hidden={!open}
+      className={clsx(
+        'absolute left-0 top-full z-40 mt-3 w-[380px] rounded-2xl border border-gray-100 bg-white p-2 shadow-[0_20px_45px_-15px_rgba(15,23,42,0.18)] transition-all duration-200 ease-out motion-reduce:transition-none',
+        open
+          ? 'translate-y-0 scale-100 opacity-100'
+          : 'pointer-events-none -translate-y-1 scale-[0.98] opacity-0',
+      )}
+    >
+      <div className="px-3 pb-3 pt-2.5">
+        <p className="eyebrow mb-1.5">{section}</p>
+        <h3 className="text-base font-bold leading-snug text-gray-900">{content.title}</h3>
+        <p className="mt-1.5 text-sm leading-relaxed text-gray-500">{content.description}</p>
+      </div>
 
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-          {content.groups.map((group) => (
-            <div key={group.heading}>
-              <p className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-400">{group.heading}</p>
-              <div className="space-y-4">
-                {group.items.map((item) => (
-                  <a key={item.name} href={item.href} className="block group">
-                    <p className="font-semibold text-gray-900 group-hover:text-primary-600">{item.name}</p>
-                    <p className="text-sm text-gray-500">{item.desc}</p>
-                  </a>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="space-y-0.5">
+        {content.items.map((item) => (
+          <Link
+            key={item.name}
+            href={item.href}
+            tabIndex={open ? 0 : -1}
+            onClick={onNavigate}
+            className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors duration-150 hover:bg-gray-50 focus-visible:bg-gray-50 focus-visible:outline-none"
+          >
+            <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-gray-100 bg-gray-50 text-primary-600 transition-colors duration-150 group-hover:border-primary-100 group-hover:bg-primary-50">
+              <item.icon className="h-4 w-4" />
+            </span>
+            <span className="pt-0.5">
+              <span className="block text-sm font-semibold text-gray-900">{item.name}</span>
+              <span className="block text-xs text-gray-500">{item.desc}</span>
+            </span>
+          </Link>
+        ))}
+      </div>
+
+      <div className="mt-1 border-t border-gray-100 px-3 pt-3">
+        <Link
+          href={content.ctaHref}
+          tabIndex={open ? 0 : -1}
+          onClick={onNavigate}
+          className="group inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 transition-colors duration-150 hover:text-primary-700 focus-visible:outline-none"
+        >
+          {content.ctaText}
+          <span aria-hidden className="transition-transform duration-150 group-hover:translate-x-0.5">
+            →
+          </span>
+        </Link>
       </div>
     </div>
   );
