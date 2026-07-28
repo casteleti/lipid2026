@@ -1,49 +1,116 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { ListingHero } from '@/components/ui/ListingHero';
+import { SearchBar } from '@/components/ui/SearchBar';
+import { Pagination } from '@/components/ui/Pagination';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import { Grid } from '@/components/ui/Grid';
+import { Section } from '@/components/ui/Section';
 
 interface Ingredient {
   id: string;
   name: string;
   description: string;
   inci: string | null;
+  supplier: string | null;
 }
 
 interface Paginated<T> {
   data: T[];
+  total: number;
+  totalPages: number;
 }
+
+const PAGE_SIZE = 12;
 
 export default function IngredientesPage() {
   const [items, setItems] = useState<Ingredient[]>([]);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ingredients`)
-      .then((r) => r.json())
-      .then((res: Paginated<Ingredient>) => setItems(res.data))
-      .catch(() => setItems([]))
-      .finally(() => setLoading(false));
+  const fetchItems = useCallback(async (currentPage: number, q: string) => {
+    setLoading(true);
+    try {
+      const skip = (currentPage - 1) * PAGE_SIZE;
+      const params = new URLSearchParams({ skip: String(skip), take: String(PAGE_SIZE) });
+      if (q) params.set('q', q);
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ingredients?${params}`);
+      const json: Paginated<Ingredient> = await res.json();
+      setItems(json.data || []);
+      setTotal(json.total || 0);
+      setTotalPages(json.totalPages || 1);
+    } catch {
+      setItems([]);
+      setTotal(0);
+      setTotalPages(1);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return (
-    <div className="mx-auto max-w-7xl px-4 py-20">
-      <h1 className="text-4xl font-bold mb-12">Ingredientes</h1>
+  useEffect(() => {
+    fetchItems(page, query);
+  }, [fetchItems, page, query]);
 
-      {loading ? (
-        <p className="text-gray-500">Carregando...</p>
-      ) : items.length === 0 ? (
-        <p className="text-gray-500">Nenhum ingrediente cadastrado ainda.</p>
-      ) : (
-        <div className="grid gap-8 md:grid-cols-3">
-          {items.map((item) => (
-            <div key={item.id} className="rounded-lg border p-6">
-              <h3 className="mb-1 text-xl font-semibold">{item.name}</h3>
-              {item.inci && <p className="mb-2 text-xs uppercase tracking-wide text-gray-400">{item.inci}</p>}
-              <p className="text-gray-600">{item.description}</p>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+  const handleSearch = (q: string) => {
+    setQuery(q);
+    setPage(1);
+  };
+
+  return (
+    <>
+      <ListingHero
+        badge="INGREDIENTES"
+        title="Ingredientes Especializados"
+        description="Catálogo de ingredientes lipídicos de alta performance para formulações exigentes, fornecidos por parceiros de referência mundial."
+      >
+        <SearchBar value={query} onChange={handleSearch} placeholder="Buscar por nome ou INCI..." />
+      </ListingHero>
+
+      <Section>
+        {loading ? (
+          <p className="py-12 text-center text-gray-400">Carregando...</p>
+        ) : items.length === 0 ? (
+          <p className="py-12 text-center text-gray-500">Nenhum ingrediente encontrado.</p>
+        ) : (
+          <div className="space-y-12">
+            <p className="text-sm text-gray-500">
+              {total} ingrediente{total === 1 ? '' : 's'} {query && `para "${query}"`}
+            </p>
+
+            <Grid cols={4} gap="md">
+              {items.map((item) => (
+                <Card key={item.id} className="space-y-3 p-6">
+                  <h3 className="font-bold text-gray-900">{item.name}</h3>
+
+                  {item.inci && (
+                    <div className="space-y-1">
+                      <p className="text-xs uppercase tracking-wide text-gray-400">INCI</p>
+                      <p className="text-sm text-gray-700">{item.inci}</p>
+                    </div>
+                  )}
+
+                  {item.supplier && (
+                    <Badge variant="secondary" className="w-fit">
+                      {item.supplier}
+                    </Badge>
+                  )}
+
+                  <p className="line-clamp-3 text-sm text-gray-600">{item.description}</p>
+                </Card>
+              ))}
+            </Grid>
+
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+          </div>
+        )}
+      </Section>
+    </>
   );
 }

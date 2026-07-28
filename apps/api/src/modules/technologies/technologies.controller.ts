@@ -20,8 +20,8 @@ export class TechnologiesController {
   constructor(private readonly service: TechnologiesService) {}
 
   @Get()
-  findAll(@Query('skip') skip = 0, @Query('take') take = 10) {
-    return this.service.findAll(Number(skip), Number(take));
+  findAll(@Query('skip') skip = 0, @Query('take') take = 10, @Query('q') q?: string) {
+    return this.service.findAll(Number(skip), Number(take), q);
   }
 
   @Get('slug/:slug')

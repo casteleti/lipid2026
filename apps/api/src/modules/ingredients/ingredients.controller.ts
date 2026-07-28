@@ -20,8 +20,8 @@ export class IngredientsController {
   constructor(private readonly service: IngredientsService) {}
 
   @Get()
-  findAll(@Query('skip') skip = 0, @Query('take') take = 10) {
-    return this.service.findAll(Number(skip), Number(take));
+  findAll(@Query('skip') skip = 0, @Query('take') take = 10, @Query('q') q?: string) {
+    return this.service.findAll(Number(skip), Number(take), q);
   }
 
   @Get(':id')

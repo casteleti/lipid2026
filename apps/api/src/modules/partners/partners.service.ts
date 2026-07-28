@@ -30,15 +30,20 @@ export class PartnersService {
     return slug;
   }
 
-  async findAll(skip = 0, take = 10) {
+  async findAll(skip = 0, take = 10, q?: string) {
+    const where = {
+      active: true,
+      ...(q ? { name: { contains: q, mode: 'insensitive' as const } } : {}),
+    };
+
     const [data, total] = await Promise.all([
       this.db.partner.findMany({
-        where: { active: true },
+        where,
         skip,
         take,
         orderBy: { order: 'asc' },
       }),
-      this.db.partner.count({ where: { active: true } }),
+      this.db.partner.count({ where }),
     ]);
 
     return {

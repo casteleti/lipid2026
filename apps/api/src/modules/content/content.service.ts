@@ -30,8 +30,12 @@ export class ContentService {
     return slug;
   }
 
-  async findAll(skip = 0, take = 10, status?: string) {
-    const where = status ? { status: status as never } : { NOT: { status: 'ARCHIVED' as never } };
+  async findAll(skip = 0, take = 10, status?: string, q?: string, categorySlug?: string) {
+    const where = {
+      ...(status ? { status: status as never } : { NOT: { status: 'ARCHIVED' as never } }),
+      ...(q ? { title: { contains: q, mode: 'insensitive' as const } } : {}),
+      ...(categorySlug ? { categories: { some: { category: { slug: categorySlug } } } } : {}),
+    };
 
     const [data, total] = await Promise.all([
       this.db.content.findMany({

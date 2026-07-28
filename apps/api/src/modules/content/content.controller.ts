@@ -20,8 +20,14 @@ export class ContentController {
   constructor(private readonly service: ContentService) {}
 
   @Get()
-  findAll(@Query('skip') skip = 0, @Query('take') take = 10, @Query('status') status?: string) {
-    return this.service.findAll(Number(skip), Number(take), status);
+  findAll(
+    @Query('skip') skip = 0,
+    @Query('take') take = 10,
+    @Query('status') status?: string,
+    @Query('q') q?: string,
+    @Query('category') category?: string,
+  ) {
+    return this.service.findAll(Number(skip), Number(take), status, q, category);
   }
 
   @Get('slug/:slug')

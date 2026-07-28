@@ -30,15 +30,27 @@ export class IngredientsService {
     return slug;
   }
 
-  async findAll(skip = 0, take = 10) {
+  async findAll(skip = 0, take = 10, q?: string) {
+    const where = {
+      active: true,
+      ...(q
+        ? {
+            OR: [
+              { name: { contains: q, mode: 'insensitive' as const } },
+              { inci: { contains: q, mode: 'insensitive' as const } },
+            ],
+          }
+        : {}),
+    };
+
     const [data, total] = await Promise.all([
       this.db.ingredient.findMany({
-        where: { active: true },
+        where,
         skip,
         take,
         orderBy: { name: 'asc' },
       }),
-      this.db.ingredient.count({ where: { active: true } }),
+      this.db.ingredient.count({ where }),
     ]);
 
     return {

@@ -1,7 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useCallback, useEffect, useState } from 'react';
+import { ListingHero } from '@/components/ui/ListingHero';
+import { SearchBar } from '@/components/ui/SearchBar';
+import { FilterButton } from '@/components/ui/FilterButton';
+import { Pagination } from '@/components/ui/Pagination';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import { LinkArrow } from '@/components/ui/LinkArrow';
+import { Grid } from '@/components/ui/Grid';
+import { Section } from '@/components/ui/Section';
 import { resolveMediaUrl } from '@/lib/api';
 
 interface Post {
@@ -11,61 +19,157 @@ interface Post {
   excerpt: string | null;
   featured: string | null;
   publishedAt: string | null;
-  categories: { category: { id: string; name: string } }[];
+  categories: { category: { id: string; name: string; slug: string } }[];
+}
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
 }
 
 interface Paginated<T> {
   data: T[];
+  total: number;
+  totalPages: number;
 }
+
+const PAGE_SIZE = 9;
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/content?status=PUBLISHED&take=50`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/categories?take=20`)
       .then((r) => r.json())
-      .then((res: Paginated<Post>) => setPosts(res.data))
-      .catch(() => setPosts([]))
-      .finally(() => setLoading(false));
+      .then((res) => setCategories(res.data || []))
+      .catch(() => setCategories([]));
   }, []);
 
-  return (
-    <div className="mx-auto max-w-7xl px-4 py-20">
-      <h1 className="text-4xl font-bold mb-12">Blog</h1>
+  const fetchPosts = useCallback(async (currentPage: number, q: string, categorySlug: string | null) => {
+    setLoading(true);
+    try {
+      const skip = (currentPage - 1) * PAGE_SIZE;
+      const params = new URLSearchParams({
+        skip: String(skip),
+        take: String(PAGE_SIZE),
+        status: 'PUBLISHED',
+      });
+      if (q) params.set('q', q);
+      if (categorySlug) params.set('category', categorySlug);
 
-      {loading ? (
-        <p className="text-gray-500">Carregando...</p>
-      ) : posts.length === 0 ? (
-        <p className="text-gray-500">Nenhum post publicado ainda.</p>
-      ) : (
-        <div className="grid gap-8 md:grid-cols-3">
-          {posts.map((post) => (
-            <Link
-              key={post.id}
-              href={`/blog/${post.slug}`}
-              className="block overflow-hidden rounded-lg border transition hover:shadow-lg"
-            >
-              {post.featured && (
-                <img
-                  src={resolveMediaUrl(post.featured)}
-                  alt={post.title}
-                  className="h-40 w-full object-cover"
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/content?${params}`);
+      const json: Paginated<Post> = await res.json();
+      setPosts(json.data || []);
+      setTotal(json.total || 0);
+      setTotalPages(json.totalPages || 1);
+    } catch {
+      setPosts([]);
+      setTotal(0);
+      setTotalPages(1);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPosts(page, query, activeCategory);
+  }, [fetchPosts, page, query, activeCategory]);
+
+  const handleSearch = (q: string) => {
+    setQuery(q);
+    setPage(1);
+  };
+
+  const handleCategoryChange = (slug: string | null) => {
+    setActiveCategory(slug);
+    setPage(1);
+  };
+
+  return (
+    <>
+      <ListingHero
+        badge="CONTEÚDO TÉCNICO"
+        title="Biblioteca Técnica"
+        description="Acesso a artigos científicos e materiais técnicos sobre lipídios, tecnologias e aplicações."
+      >
+        <SearchBar value={query} onChange={handleSearch} placeholder="Buscar artigos..." />
+      </ListingHero>
+
+      <Section>
+        <div className="space-y-12">
+          {categories.length > 0 && (
+            <div className="flex flex-wrap gap-3">
+              <FilterButton
+                label="Todos"
+                active={activeCategory === null}
+                onClick={() => handleCategoryChange(null)}
+              />
+              {categories.map((cat) => (
+                <FilterButton
+                  key={cat.id}
+                  label={cat.name}
+                  active={activeCategory === cat.slug}
+                  onClick={() => handleCategoryChange(cat.slug)}
                 />
-              )}
-              <div className="p-6">
-                {post.categories.length > 0 && (
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-blue-600">
-                    {post.categories.map((c) => c.category.name).join(', ')}
-                  </p>
-                )}
-                <h3 className="mb-2 text-xl font-semibold">{post.title}</h3>
-                <p className="text-gray-600">{post.excerpt}</p>
-              </div>
-            </Link>
-          ))}
+              ))}
+            </div>
+          )}
+
+          {loading ? (
+            <p className="py-12 text-center text-gray-400">Carregando...</p>
+          ) : posts.length === 0 ? (
+            <p className="py-12 text-center text-gray-500">Nenhum artigo encontrado.</p>
+          ) : (
+            <>
+              <p className="text-sm text-gray-500">
+                {total} artigo{total === 1 ? '' : 's'} {query && `para "${query}"`}
+              </p>
+
+              <Grid cols={3} gap="lg">
+                {posts.map((post) => (
+                  <Card key={post.id} className="flex flex-col">
+                    <div className="relative h-44 bg-gray-100">
+                      {post.featured && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={resolveMediaUrl(post.featured)}
+                          alt={post.title}
+                          className="absolute inset-0 h-full w-full object-cover"
+                        />
+                      )}
+                      <Badge variant="secondary" className="absolute left-4 top-4 bg-white">
+                        {post.categories[0]?.category.name || 'ARTIGO'}
+                      </Badge>
+                    </div>
+                    <div className="flex flex-1 flex-col gap-3 p-5">
+                      <h3 className="line-clamp-2 text-lg font-bold text-gray-900">{post.title}</h3>
+                      {post.excerpt && (
+                        <p className="line-clamp-3 flex-1 text-sm text-gray-600">{post.excerpt}</p>
+                      )}
+                      {post.publishedAt && (
+                        <p className="text-xs text-gray-400">
+                          {new Date(post.publishedAt).toLocaleDateString('pt-BR')}
+                        </p>
+                      )}
+                      <LinkArrow href={`/blog/${post.slug}`}>Ler artigo</LinkArrow>
+                    </div>
+                  </Card>
+                ))}
+              </Grid>
+
+              <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+            </>
+          )}
         </div>
-      )}
-    </div>
+      </Section>
+    </>
   );
 }
