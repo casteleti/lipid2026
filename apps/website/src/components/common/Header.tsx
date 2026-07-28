@@ -77,12 +77,14 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur">
-      <div className="container-main flex h-16 items-center justify-between md:h-20">
-        <Link href="/" className="flex items-center">
+      <div className="mx-auto grid h-16 max-w-[1600px] grid-cols-[auto_1fr_auto] items-center px-4 md:h-20 md:px-6 lg:px-8">
+        {/* Brand area — protected zone, never crowded by nav */}
+        <Link href="/" className="flex items-center pr-6 xl:pr-8">
           <Image src="/logo/lipid-horizontal.png" alt="LIPID Ingredients" width={140} height={42} priority />
         </Link>
 
-        <nav className="hidden lg:flex lg:items-center lg:gap-4 xl:gap-7">
+        {/* Navigation area — flexible, centered within the remaining space */}
+        <nav className="hidden xl:flex xl:items-center xl:justify-center">
           {menuItems.map((item) => {
             const active = isActive(item.href);
             const isOpen = item.dropdownKey ? openSection === item.dropdownKey : false;
@@ -90,7 +92,7 @@ export function Header() {
             return (
               <div
                 key={item.label}
-                className="relative"
+                className="relative shrink-0 px-2.5 2xl:px-3.5"
                 onMouseEnter={() => item.dropdownKey && openDropdown(item.dropdownKey)}
                 onMouseLeave={() => item.dropdownKey && scheduleClose()}
                 onKeyDown={(e) => {
@@ -110,7 +112,7 @@ export function Header() {
                     href={item.href}
                     onFocus={() => item.dropdownKey && openDropdown(item.dropdownKey)}
                     className={clsx(
-                      'py-2 text-sm transition-colors duration-150',
+                      'whitespace-nowrap py-2 text-sm transition-colors duration-150',
                       active || isOpen ? 'font-semibold text-gray-900' : 'font-medium text-gray-600 hover:text-gray-900',
                     )}
                   >
@@ -140,7 +142,7 @@ export function Header() {
                 <span
                   aria-hidden
                   className={clsx(
-                    'absolute left-0 top-full mt-0.5 h-1 w-1 rounded-full bg-primary-600 transition-opacity duration-150',
+                    'absolute left-1/2 top-full mt-0.5 h-1 w-1 -translate-x-1/2 rounded-full bg-primary-600 transition-opacity duration-150',
                     active ? 'opacity-100' : 'opacity-0',
                   )}
                 />
@@ -158,36 +160,39 @@ export function Header() {
           })}
         </nav>
 
-        <div className="hidden lg:block">
-          <div className="xl:hidden">
-            <Button href="/contato" variant="primary" size="sm">
-              Fale conosco
-            </Button>
-          </div>
+        {/* Conversion area — protected zone, never crowded by nav */}
+        <div className="flex items-center justify-end pl-6 xl:pl-8">
           <div className="hidden xl:block">
-            <Button href="/contato" variant="primary" size="md">
-              Fale com um especialista
-            </Button>
+            <div className="2xl:hidden">
+              <Button href="/contato" variant="primary" size="sm">
+                Fale com um especialista
+              </Button>
+            </div>
+            <div className="hidden 2xl:block">
+              <Button href="/contato" variant="primary" size="md">
+                Fale com um especialista
+              </Button>
+            </div>
           </div>
-        </div>
 
-        <button
-          ref={menuButtonRef}
-          type="button"
-          aria-expanded={isMobileMenuOpen}
-          aria-controls="mobile-nav-drawer"
-          aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-          className="flex h-10 w-10 items-center justify-center text-gray-900 lg:hidden"
-          onClick={() => setIsMobileMenuOpen((v) => !v)}
-        >
-          {isMobileMenuOpen ? <HiXMark className="h-6 w-6" /> : <HiBars3 className="h-6 w-6" />}
-        </button>
+          <button
+            ref={menuButtonRef}
+            type="button"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-nav-drawer"
+            aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+            className="flex h-10 w-10 items-center justify-center text-gray-900 xl:hidden"
+            onClick={() => setIsMobileMenuOpen((v) => !v)}
+          >
+            {isMobileMenuOpen ? <HiXMark className="h-6 w-6" /> : <HiBars3 className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile / tablet drawer */}
       <div
         className={clsx(
-          'fixed inset-0 z-[60] bg-gray-900/25 backdrop-blur-[2px] transition-opacity duration-300 lg:hidden motion-reduce:transition-none',
+          'fixed inset-0 z-[60] bg-gray-900/25 backdrop-blur-[2px] transition-opacity duration-300 xl:hidden motion-reduce:transition-none',
           isMobileMenuOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
         )}
         onClick={() => setIsMobileMenuOpen(false)}
@@ -207,7 +212,7 @@ export function Header() {
           }
         }}
         className={clsx(
-          'fixed inset-y-0 right-0 z-[70] flex w-full max-w-sm flex-col bg-white shadow-2xl transition-transform duration-300 ease-out lg:hidden motion-reduce:transition-none',
+          'fixed inset-y-0 right-0 z-[70] flex w-full max-w-sm flex-col bg-white shadow-2xl transition-transform duration-300 ease-out xl:hidden motion-reduce:transition-none',
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full',
         )}
       >
