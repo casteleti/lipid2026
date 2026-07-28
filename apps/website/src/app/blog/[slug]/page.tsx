@@ -22,13 +22,13 @@ interface Post {
 }
 
 async function getPost(slug: string): Promise<Post | null> {
-  const res = await fetch(`${API_URL}/api/v1/content/slug/${slug}`, { cache: 'no-store' });
+  const res = await fetch(`${API_URL}/api/v1/content/slug/${slug}`, { next: { revalidate: 300 } });
   if (!res.ok) return null;
   return res.json();
 }
 
 async function getRelated(currentSlug: string) {
-  const res = await fetch(`${API_URL}/api/v1/content?status=PUBLISHED&take=4`, { cache: 'no-store' });
+  const res = await fetch(`${API_URL}/api/v1/content?status=PUBLISHED&take=4`, { next: { revalidate: 300 } });
   if (!res.ok) return [];
   const json = await res.json();
   return (json.data as Post[]).filter((p) => p.slug !== currentSlug).slice(0, 3);

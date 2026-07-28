@@ -29,9 +29,10 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
 
       {pages.map((page, idx) => (
         <span key={page} className="flex items-center gap-2">
-          {idx > 0 && pages[idx - 1] !== page - 1 && <span className="text-gray-400">…</span>}
+          {idx > 0 && pages[idx - 1] !== page - 1 && <span className="text-gray-500">…</span>}
           <button
             onClick={() => onPageChange(page)}
+            aria-current={page === currentPage ? 'page' : undefined}
             className={clsx(
               'flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-colors',
               page === currentPage

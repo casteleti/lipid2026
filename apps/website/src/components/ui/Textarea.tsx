@@ -7,6 +7,8 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 }
 
 export function Textarea({ label, error, className, id, rows = 5, ...props }: TextareaProps) {
+  const errorId = id && error ? `${id}-error` : undefined;
+
   return (
     <div className="w-full space-y-2">
       {label && (
@@ -18,6 +20,8 @@ export function Textarea({ label, error, className, id, rows = 5, ...props }: Te
       <textarea
         id={id}
         rows={rows}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={errorId}
         className={clsx(
           'w-full resize-none rounded-xl border px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2',
           error
@@ -27,7 +31,11 @@ export function Textarea({ label, error, className, id, rows = 5, ...props }: Te
         )}
         {...props}
       />
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && (
+        <p id={errorId} className="text-sm text-red-500">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

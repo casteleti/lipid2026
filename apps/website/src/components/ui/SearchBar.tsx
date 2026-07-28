@@ -32,6 +32,7 @@ export function SearchBar({ value, onChange, placeholder = 'Buscar...' }: Search
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         placeholder={placeholder}
+        aria-label={placeholder}
         className="w-full rounded-full border border-gray-300 py-3 pl-11 pr-4 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
       />
     </div>

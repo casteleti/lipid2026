@@ -43,6 +43,8 @@ export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  const fieldOrder: (keyof FormData)[] = ['name', 'email', 'subject', 'message', 'privacy'];
+
   const validate = (): boolean => {
     const next: Partial<Record<keyof FormData, string>> = {};
     if (!form.name.trim()) next.name = 'Nome é obrigatório';
@@ -55,6 +57,14 @@ export function ContactForm() {
     if (!form.privacy) next.privacy = 'Você deve aceitar a política de privacidade';
 
     setErrors(next);
+
+    if (Object.keys(next).length > 0) {
+      const firstInvalid = fieldOrder.find((field) => next[field]);
+      if (firstInvalid) {
+        document.getElementById(firstInvalid)?.focus();
+      }
+    }
+
     return Object.keys(next).length === 0;
   };
 
@@ -92,7 +102,10 @@ export function ContactForm() {
 
   if (submitted) {
     return (
-      <div className="space-y-3 rounded-2xl border border-green-200 bg-green-50 p-8 text-center">
+      <div
+        role="status"
+        className="space-y-3 rounded-2xl border border-green-200 bg-green-50 p-8 text-center"
+      >
         <h3 className="text-lg font-bold text-green-900">Obrigado pelo contato!</h3>
         <p className="text-green-700">Recebemos sua mensagem e vamos retornar em breve.</p>
       </div>
@@ -100,7 +113,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} noValidate className="space-y-6">
       <Input
         id="name"
         label="Nome completo"
@@ -161,6 +174,7 @@ export function ContactForm() {
       />
 
       <Checkbox
+        id="privacy"
         label="Li e concordo com a Política de Privacidade"
         checked={form.privacy}
         onChange={handleChange('privacy')}
@@ -169,7 +183,7 @@ export function ContactForm() {
       />
 
       {submitError && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {submitError}
         </div>
       )}

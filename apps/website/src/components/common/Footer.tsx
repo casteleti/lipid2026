@@ -40,7 +40,7 @@ export function Footer() {
             </div>
 
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Navegação</h4>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-600 mb-4">Navegação</h4>
               <ul className="space-y-2.5">
                 {footerLinks.navegacao.map((link) => (
                   <li key={link.label}>
@@ -53,7 +53,7 @@ export function Footer() {
             </div>
 
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-600 mb-4">
                 Entre em contato
               </h4>
               <a

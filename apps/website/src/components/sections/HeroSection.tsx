@@ -12,7 +12,7 @@ export function HeroSection() {
 
           <h1 className="text-gray-900">
             Ciência que transforma <span className="text-primary-600">formulações</span> em{' '}
-            <em className="not-italic font-light text-gray-500">performance.</em>
+            <span className="font-light text-gray-500">performance.</span>
           </h1>
 
           <p className="max-w-lg text-lg text-gray-600">

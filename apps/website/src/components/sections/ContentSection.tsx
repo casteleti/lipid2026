@@ -47,7 +47,7 @@ export function ContentSection() {
       </div>
 
       {loading ? (
-        <p className="text-gray-400">Carregando...</p>
+        <p className="text-gray-500">Carregando...</p>
       ) : (
         <Grid cols={3} gap="lg">
           {posts.map((post) => (

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
 import { HiOutlineBeaker } from 'react-icons/hi2';
 import { ListingHero } from '@/components/ui/ListingHero';
 import { SearchBar } from '@/components/ui/SearchBar';
@@ -35,15 +36,18 @@ export default function AplicacoesPage() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const fetchApps = useCallback(async (currentPage: number, q: string) => {
     setLoading(true);
+    setError(false);
     try {
       const skip = (currentPage - 1) * PAGE_SIZE;
       const params = new URLSearchParams({ skip: String(skip), take: String(PAGE_SIZE) });
       if (q) params.set('q', q);
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications?${params}`);
+      if (!res.ok) throw new Error('Falha ao carregar aplicações');
       const json: Paginated<Application> = await res.json();
       setApps(json.data || []);
       setTotal(json.total || 0);
@@ -52,6 +56,7 @@ export default function AplicacoesPage() {
       setApps([]);
       setTotal(0);
       setTotalPages(1);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -78,7 +83,14 @@ export default function AplicacoesPage() {
 
       <Section>
         {loading ? (
-          <p className="py-12 text-center text-gray-400">Carregando...</p>
+          <p className="py-12 text-center text-gray-500">Carregando...</p>
+        ) : error ? (
+          <div className="space-y-4 py-12 text-center">
+            <p className="text-gray-600">Não foi possível carregar as aplicações agora.</p>
+            <Button variant="outline" onClick={() => fetchApps(page, query)}>
+              Tentar novamente
+            </Button>
+          </div>
         ) : apps.length === 0 ? (
           <p className="py-12 text-center text-gray-500">Nenhuma aplicação encontrada.</p>
         ) : (
@@ -89,14 +101,15 @@ export default function AplicacoesPage() {
 
             <Grid cols={3} gap="lg">
               {apps.map((app) => (
-                <Card key={app.id} className="flex flex-col">
-                  <div className="flex h-44 items-center justify-center bg-gray-50">
+                <Card key={app.id} href={`/aplicacoes/${app.slug}`} className="flex flex-col">
+                  <div className="relative flex h-44 items-center justify-center bg-gray-50">
                     {app.banner ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
+                      <Image
                         src={resolveMediaUrl(app.banner)}
                         alt={app.name}
-                        className="h-full w-full object-cover"
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                        className="object-cover"
                       />
                     ) : (
                       <HiOutlineBeaker className="h-10 w-10 text-primary-300" />
@@ -105,7 +118,7 @@ export default function AplicacoesPage() {
                   <div className="flex flex-1 flex-col gap-3 p-6">
                     <h3 className="text-lg font-bold text-gray-900">{app.name}</h3>
                     {app.excerpt && <p className="line-clamp-2 flex-1 text-sm text-gray-600">{app.excerpt}</p>}
-                    <LinkArrow href={`/aplicacoes/${app.slug}`}>Explorar</LinkArrow>
+                    <LinkArrow as="span">Explorar</LinkArrow>
                   </div>
                 </Card>
               ))}

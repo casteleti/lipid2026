@@ -77,7 +77,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur">
-      <div className="mx-auto grid h-16 max-w-[1600px] grid-cols-[auto_1fr_auto] items-center px-4 md:h-20 md:px-6 lg:px-8">
+      <div className="mx-auto grid h-16 max-w-7xl grid-cols-[auto_1fr_auto] items-center px-4 md:h-20 md:px-6 lg:px-8">
         {/* Brand area — protected zone, never crowded by nav */}
         <Link href="/" className="flex items-center pr-6 xl:pr-8">
           <Image src="/logo/lipid-horizontal.png" alt="LIPID Ingredients" width={140} height={42} priority />
@@ -181,7 +181,7 @@ export function Header() {
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-nav-drawer"
             aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-            className="flex h-10 w-10 items-center justify-center text-gray-900 xl:hidden"
+            className="flex h-11 w-11 items-center justify-center text-gray-900 xl:hidden"
             onClick={() => setIsMobileMenuOpen((v) => !v)}
           >
             {isMobileMenuOpen ? <HiXMark className="h-6 w-6" /> : <HiBars3 className="h-6 w-6" />}

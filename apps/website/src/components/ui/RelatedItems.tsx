@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { LinkArrow } from '@/components/ui/LinkArrow';
@@ -32,14 +33,15 @@ export function RelatedItems({ title, items, moreHref, moreLabel }: RelatedItems
 
       <Grid cols={3} gap="lg">
         {items.map((item) => (
-          <Card key={item.id} className="flex flex-col">
+          <Card key={item.id} href={item.href} className="flex flex-col">
             {item.image && (
-              <div className="h-40 bg-gray-100">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+              <div className="relative h-40 bg-gray-100">
+                <Image
                   src={resolveMediaUrl(item.image)}
                   alt={item.title}
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
                 />
               </div>
             )}
@@ -51,7 +53,7 @@ export function RelatedItems({ title, items, moreHref, moreLabel }: RelatedItems
               )}
               <h3 className="line-clamp-2 text-lg font-bold text-gray-900">{item.title}</h3>
               {item.excerpt && <p className="line-clamp-2 flex-1 text-sm text-gray-600">{item.excerpt}</p>}
-              <LinkArrow href={item.href}>Saiba mais</LinkArrow>
+              <LinkArrow as="span">Saiba mais</LinkArrow>
             </div>
           </Card>
         ))}

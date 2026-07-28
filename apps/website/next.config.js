@@ -4,6 +4,10 @@ const nextConfig = {
 
   images: {
     formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'api.daksa.app.br' },
+      { protocol: 'http', hostname: 'localhost', port: '3002' },
+    ],
   },
 
   headers: async () => {

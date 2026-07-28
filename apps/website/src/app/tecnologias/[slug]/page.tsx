@@ -19,13 +19,13 @@ interface Technology {
 }
 
 async function getTechnology(slug: string): Promise<Technology | null> {
-  const res = await fetch(`${API_URL}/api/v1/technologies/slug/${slug}`, { cache: 'no-store' });
+  const res = await fetch(`${API_URL}/api/v1/technologies/slug/${slug}`, { next: { revalidate: 300 } });
   if (!res.ok) return null;
   return res.json();
 }
 
 async function getRelated(currentSlug: string) {
-  const res = await fetch(`${API_URL}/api/v1/technologies?take=4`, { cache: 'no-store' });
+  const res = await fetch(`${API_URL}/api/v1/technologies?take=4`, { next: { revalidate: 300 } });
   if (!res.ok) return [];
   const json = await res.json();
   return (json.data as Technology[]).filter((t) => t.slug !== currentSlug).slice(0, 3);
