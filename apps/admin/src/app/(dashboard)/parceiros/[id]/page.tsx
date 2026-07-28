@@ -16,6 +16,8 @@ interface Partner {
   excerpt: string | null;
   logo: string | null;
   website: string | null;
+  country: string | null;
+  highlights: string | null;
   active: boolean;
 }
 
@@ -28,6 +30,8 @@ export default function EditarParceiroPage() {
   const [excerpt, setExcerpt] = useState('');
   const [logo, setLogo] = useState('');
   const [website, setWebsite] = useState('');
+  const [country, setCountry] = useState('');
+  const [highlights, setHighlights] = useState('');
   const [active, setActive] = useState(true);
 
   const [loadingData, setLoadingData] = useState(true);
@@ -44,6 +48,8 @@ export default function EditarParceiroPage() {
         setExcerpt(item.excerpt || '');
         setLogo(item.logo || '');
         setWebsite(item.website || '');
+        setCountry(item.country || '');
+        setHighlights(item.highlights || '');
         setActive(item.active);
       })
       .catch(() => setNotFound(true))
@@ -62,6 +68,8 @@ export default function EditarParceiroPage() {
         excerpt: excerpt || undefined,
         logo: logo || undefined,
         website: website || undefined,
+        country: country || undefined,
+        highlights: highlights || undefined,
       });
       router.push('/parceiros');
     } catch (err) {
@@ -141,6 +149,23 @@ export default function EditarParceiroPage() {
             type="url"
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
+            disabled={saving}
+          />
+
+          <Input
+            label="País de origem"
+            hint="Opcional — ex: Alemanha"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            disabled={saving}
+          />
+
+          <Textarea
+            label="Especializações"
+            hint="Opcional — um destaque por linha, exibido como lista na página do parceiro"
+            value={highlights}
+            onChange={(e) => setHighlights(e.target.value)}
+            rows={4}
             disabled={saving}
           />
 

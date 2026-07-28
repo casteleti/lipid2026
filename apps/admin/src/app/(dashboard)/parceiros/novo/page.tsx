@@ -16,6 +16,8 @@ export default function NovoParceiroPage() {
   const [excerpt, setExcerpt] = useState('');
   const [logo, setLogo] = useState('');
   const [website, setWebsite] = useState('');
+  const [country, setCountry] = useState('');
+  const [highlights, setHighlights] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -31,6 +33,8 @@ export default function NovoParceiroPage() {
         excerpt: excerpt || undefined,
         logo: logo || undefined,
         website: website || undefined,
+        country: country || undefined,
+        highlights: highlights || undefined,
       });
       router.push('/parceiros');
     } catch (err) {
@@ -95,6 +99,23 @@ export default function NovoParceiroPage() {
             type="url"
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
+            disabled={loading}
+          />
+
+          <Input
+            label="País de origem"
+            hint="Opcional — ex: Alemanha"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            disabled={loading}
+          />
+
+          <Textarea
+            label="Especializações"
+            hint="Opcional — um destaque por linha, exibido como lista na página do parceiro"
+            value={highlights}
+            onChange={(e) => setHighlights(e.target.value)}
+            rows={4}
             disabled={loading}
           />
 

@@ -65,6 +65,16 @@ export class PartnersService {
     return partner;
   }
 
+  async findBySlug(slug: string) {
+    const partner = await this.db.partner.findUnique({ where: { slug } });
+
+    if (!partner || !partner.active) {
+      throw new NotFoundException(`Parceiro ${slug} não encontrado`);
+    }
+
+    return partner;
+  }
+
   async create(data: CreatePartnerDto) {
     const slug = await this.generateSlug(data.name);
 

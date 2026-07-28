@@ -1,14 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
 import { ListingHero } from '@/components/ui/ListingHero';
 import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { LinkArrow } from '@/components/ui/LinkArrow';
 import { Grid } from '@/components/ui/Grid';
 import { Section } from '@/components/ui/Section';
 import { resolveMediaUrl } from '@/lib/api';
 
 interface Partner {
   id: string;
+  slug: string;
   name: string;
   excerpt: string | null;
   description: string;
@@ -19,14 +23,27 @@ interface Partner {
 export default function ParceirosPage() {
   const [items, setItems] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const fetchPartners = useCallback(async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/partners?take=50`);
+      if (!res.ok) throw new Error('Falha ao carregar parceiros');
+      const json = await res.json();
+      setItems(json.data || []);
+    } catch {
+      setItems([]);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/partners?take=50`)
-      .then((r) => r.json())
-      .then((res) => setItems(res.data || []))
-      .catch(() => setItems([]))
-      .finally(() => setLoading(false));
-  }, []);
+    fetchPartners();
+  }, [fetchPartners]);
 
   return (
     <>
@@ -38,41 +55,39 @@ export default function ParceirosPage() {
 
       <Section>
         {loading ? (
-          <p className="py-12 text-center text-gray-400">Carregando...</p>
+          <p className="py-12 text-center text-gray-500">Carregando...</p>
+        ) : error ? (
+          <div className="space-y-4 py-12 text-center">
+            <p className="text-gray-600">Não foi possível carregar os parceiros agora.</p>
+            <Button variant="outline" onClick={() => fetchPartners()}>
+              Tentar novamente
+            </Button>
+          </div>
         ) : items.length === 0 ? (
           <p className="py-12 text-center text-gray-500">Nenhum parceiro cadastrado ainda.</p>
         ) : (
           <Grid cols={3} gap="lg">
-            {items.map((item) => {
-              const card = (
-                <Card className="flex h-full flex-col gap-4 p-8 text-center">
-                  <div className="mx-auto flex h-16 w-full items-center justify-center">
-                    {item.logo ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={resolveMediaUrl(item.logo)}
-                        alt={item.name}
-                        className="max-h-16 max-w-full object-contain"
-                      />
-                    ) : (
-                      <p className="text-xl font-bold text-gray-900">{item.name}</p>
-                    )}
-                  </div>
-                  <p className="flex-1 text-sm text-gray-600">{item.excerpt || item.description}</p>
-                  {item.website && (
-                    <p className="text-sm font-semibold text-primary-600">Visitar site →</p>
+            {items.map((item) => (
+              <Card key={item.id} href={`/parceiros/${item.slug}`} className="flex h-full flex-col gap-4 p-8 text-center">
+                <div className="relative mx-auto flex h-16 w-full items-center justify-center">
+                  {item.logo ? (
+                    <Image
+                      src={resolveMediaUrl(item.logo)}
+                      alt={item.name}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      className="object-contain"
+                    />
+                  ) : (
+                    <p className="text-xl font-bold text-gray-900">{item.name}</p>
                   )}
-                </Card>
-              );
-
-              return item.website ? (
-                <a key={item.id} href={item.website} target="_blank" rel="noopener noreferrer">
-                  {card}
-                </a>
-              ) : (
-                <div key={item.id}>{card}</div>
-              );
-            })}
+                </div>
+                <p className="flex-1 text-sm text-gray-600">{item.excerpt || item.description}</p>
+                <div className="mx-auto">
+                  <LinkArrow as="span">Conhecer parceiro</LinkArrow>
+                </div>
+              </Card>
+            ))}
           </Grid>
         )}
       </Section>

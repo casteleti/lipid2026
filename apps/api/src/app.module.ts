@@ -14,6 +14,9 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { ContentModule } from './modules/content/content.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { InstitutionalPageModule } from './modules/institutional-page/institutional-page.module';
+import { InstitutionalBlocksModule } from './modules/institutional-blocks/institutional-blocks.module';
+import { SeoPagesModule } from './modules/seo-pages/seo-pages.module';
 
 @Module({
   imports: [
@@ -31,6 +34,9 @@ import { AdminModule } from './modules/admin/admin.module';
     ContentModule,
     UploadModule,
     AdminModule,
+    InstitutionalPageModule,
+    InstitutionalBlocksModule,
+    SeoPagesModule,
   ],
   controllers: [AppController],
   providers: [

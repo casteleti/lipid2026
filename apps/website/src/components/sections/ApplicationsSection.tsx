@@ -15,7 +15,17 @@ interface Application {
   banner: string | null;
 }
 
-export function ApplicationsSection() {
+interface ApplicationsSectionProps {
+  eyebrow?: string;
+  heading?: string;
+  description?: string;
+}
+
+export function ApplicationsSection({
+  eyebrow = 'WHERE SCIENCE MEETS PERFORMANCE',
+  heading = 'Soluções que impulsionam inovação em diversas indústrias',
+  description = 'Atuamos com ingredientes especializados e tecnologias avançadas que elevam o desempenho, a estabilidade e a eficácia de formulações em múltiplos segmentos.',
+}: ApplicationsSectionProps = {}) {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,20 +43,17 @@ export function ApplicationsSection() {
     <Section variant="light">
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-end mb-12">
         <div className="space-y-5">
-          <p className="eyebrow">WHERE SCIENCE MEETS PERFORMANCE</p>
-          <h2 className="text-gray-900">Soluções que impulsionam inovação em diversas indústrias</h2>
+          <p className="eyebrow">{eyebrow}</p>
+          <h2 className="text-gray-900">{heading}</h2>
         </div>
         <div className="space-y-5 md:pb-1">
-          <p className="text-lg text-gray-600">
-            Atuamos com ingredientes especializados e tecnologias avançadas que elevam o desempenho, a
-            estabilidade e a eficácia de formulações em múltiplos segmentos.
-          </p>
+          <p className="text-lg text-gray-600">{description}</p>
           <LinkArrow href="/aplicacoes">Conheça nossas aplicações</LinkArrow>
         </div>
       </div>
 
       {loading ? (
-        <p className="text-gray-400">Carregando...</p>
+        <p className="text-gray-500">Carregando...</p>
       ) : (
         <Grid cols={4} gap="md">
           {applications.map((app, idx) => (

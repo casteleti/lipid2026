@@ -14,7 +14,17 @@ interface Technology {
   excerpt: string | null;
 }
 
-export function TechnologiesSection() {
+interface TechnologiesSectionProps {
+  eyebrow?: string;
+  heading?: string;
+  description?: string;
+}
+
+export function TechnologiesSection({
+  eyebrow = 'PLATAFORMAS CIENTÍFICAS',
+  heading = 'Tecnologias de ponta baseadas em lipídios',
+  description = 'Plataformas tecnológicas que garantem estabilidade, biodisponibilidade e eficácia para sistemas de entrega avançados e formulações de alta performance.',
+}: TechnologiesSectionProps = {}) {
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,20 +42,17 @@ export function TechnologiesSection() {
     <Section>
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-end mb-12">
         <div className="space-y-5">
-          <Badge variant="primary">PLATAFORMAS CIENTÍFICAS</Badge>
-          <h2 className="text-gray-900">Tecnologias de ponta baseadas em lipídios</h2>
+          <Badge variant="primary">{eyebrow}</Badge>
+          <h2 className="text-gray-900">{heading}</h2>
         </div>
         <div className="space-y-5 md:pb-1">
-          <p className="text-lg text-gray-600">
-            Plataformas tecnológicas que garantem estabilidade, biodisponibilidade e eficácia para
-            sistemas de entrega avançados e formulações de alta performance.
-          </p>
+          <p className="text-lg text-gray-600">{description}</p>
           <LinkArrow href="/tecnologias">Ver todas as tecnologias</LinkArrow>
         </div>
       </div>
 
       {loading ? (
-        <p className="text-gray-400">Carregando...</p>
+        <p className="text-gray-500">Carregando...</p>
       ) : (
         <Grid cols={3} gap="lg">
           {technologies.map((tech, idx) => (
@@ -54,7 +61,7 @@ export function TechnologiesSection() {
                 <div className="h-14 w-14 rounded-full bg-white/40 shadow-inner backdrop-blur-sm" />
               </div>
               <div className="space-y-2">
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-500">
                   T · {String(idx + 1).padStart(2, '0')}
                 </p>
                 <h3 className="text-xl font-bold text-gray-900">{tech.name}</h3>

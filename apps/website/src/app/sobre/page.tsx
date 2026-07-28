@@ -1,80 +1,122 @@
-import { HiOutlineFlag, HiOutlineRocketLaunch, HiOutlineSparkles } from 'react-icons/hi2';
-import { ListingHero } from '@/components/ui/ListingHero';
-import { ValueCard } from '@/components/ui/ValueCard';
-import { Grid } from '@/components/ui/Grid';
-import { Section } from '@/components/ui/Section';
-import { Button } from '@/components/ui/Button';
+import type { Metadata } from 'next';
+import { HeroInstitucional } from '@/components/sections/institucional/HeroInstitucional';
+import { QuemSomosSection } from '@/components/sections/institucional/QuemSomosSection';
+import { ComoAjudamosSection } from '@/components/sections/institucional/ComoAjudamosSection';
+import { MercadosSection } from '@/components/sections/institucional/MercadosSection';
+import { CompetenciasSection } from '@/components/sections/institucional/CompetenciasSection';
+import { ModeloParceriaSection } from '@/components/sections/institucional/ModeloParceriaSection';
+import { ParceirosGlobaisSection } from '@/components/sections/institucional/ParceirosGlobaisSection';
+import { QualidadeSection } from '@/components/sections/institucional/QualidadeSection';
+import { EvidenciasSection } from '@/components/sections/institucional/EvidenciasSection';
+import { HistoriaSection } from '@/components/sections/institucional/HistoriaSection';
+import { FaqSection } from '@/components/sections/institucional/FaqSection';
+import { CtaFinalSection } from '@/components/sections/institucional/CtaFinalSection';
+import type { InstitutionalPageData } from '@/components/sections/institucional/types';
 
-export const metadata = {
-  title: 'Sobre - Daksa',
-  description: 'Conheça a missão, visão e valores da Daksa em tecnologias de lipídios.',
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+
+const EMPTY_BLOCKS: InstitutionalPageData['blocks'] = {
+  FACT: [],
+  PROCESS_STEP: [],
+  QUALITY_ITEM: [],
+  METRIC: [],
+  PRINCIPLE: [],
+  FAQ: [],
 };
 
-export default function SobrePage() {
+async function getInstitutionalPage(): Promise<InstitutionalPageData> {
+  try {
+    const res = await fetch(`${API_URL}/api/v1/institutional-page`, { next: { revalidate: 60 } });
+    if (!res.ok) throw new Error('Falha ao carregar página institucional');
+    return res.json();
+  } catch {
+    return {
+      heroEyebrow: null,
+      heroTitle: null,
+      heroDescription: null,
+      heroImage: null,
+      heroCtaPrimaryLabel: null,
+      heroCtaPrimaryHref: null,
+      heroCtaSecondaryLabel: null,
+      heroCtaSecondaryHref: null,
+      quemSomosIntro: null,
+      comoAjudamosCta: null,
+      parceriaText: null,
+      qualidadeText: null,
+      historiaText: null,
+      ctaFinalHeading: null,
+      ctaFinalText: null,
+      ctaFinalPrimaryLabel: null,
+      ctaFinalPrimaryHref: null,
+      ctaFinalSecondaryLabel: null,
+      ctaFinalSecondaryHref: null,
+      blocks: EMPTY_BLOCKS,
+    };
+  }
+}
+
+interface SeoPage {
+  title: string | null;
+  description: string | null;
+  keywords: string | null;
+  ogImage: string | null;
+}
+
+async function getSeo(): Promise<SeoPage | null> {
+  try {
+    const res = await fetch(`${API_URL}/api/v1/seo-pages?route=%2Fsobre`, { next: { revalidate: 60 } });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo();
+
+  return {
+    title: seo?.title || 'Sobre - Daksa',
+    description: seo?.description || 'Conheça a missão, visão e valores da Daksa em tecnologias de lipídios.',
+    keywords: seo?.keywords || undefined,
+    openGraph: seo?.ogImage ? { images: [seo.ogImage] } : undefined,
+  };
+}
+
+export default async function SobrePage() {
+  const page = await getInstitutionalPage();
+  const blocks = page.blocks || EMPTY_BLOCKS;
+
   return (
     <>
-      <ListingHero
-        badge="SOBRE"
-        title="Sobre a Daksa"
-        description="Inovação em lipídios. Ciência aplicada ao desempenho. Parcerias que transformam formulações em resultados de impacto."
+      <HeroInstitucional
+        heroEyebrow={page.heroEyebrow}
+        heroTitle={page.heroTitle}
+        heroDescription={page.heroDescription}
+        heroImage={page.heroImage}
+        heroCtaPrimaryLabel={page.heroCtaPrimaryLabel}
+        heroCtaPrimaryHref={page.heroCtaPrimaryHref}
+        heroCtaSecondaryLabel={page.heroCtaSecondaryLabel}
+        heroCtaSecondaryHref={page.heroCtaSecondaryHref}
       />
-
-      <Section>
-        <div className="mx-auto max-w-3xl space-y-6 text-lg leading-relaxed text-gray-700">
-          <p>
-            A Daksa é uma plataforma institucional especializada em tecnologias de lipídios,
-            conectando inovação e ciência para os mercados cosmético, farmacêutico e nutracêutico.
-          </p>
-          <p>
-            Nosso trabalho é dedicado a desenvolver e disponibilizar tecnologias de encapsulação e
-            entrega de ativos — como lipossomas e fosfolipídios — que ampliam a eficácia,
-            estabilidade e biodisponibilidade de formulações em diversos segmentos.
-          </p>
-          <p>
-            Atuamos em parceria com fornecedores e especialistas para oferecer soluções
-            personalizadas às necessidades de cada aplicação.
-          </p>
-        </div>
-      </Section>
-
-      <Section variant="light">
-        <div className="mb-16 text-center">
-          <h2 className="text-gray-900">Missão, Visão e Valores</h2>
-        </div>
-
-        <Grid cols={3} gap="lg">
-          <ValueCard
-            icon={HiOutlineFlag}
-            title="Missão"
-            description="Impulsionar a inovação em formulações através de tecnologias lipídicas avançadas e de alto desempenho para indústrias regulamentadas."
-          />
-
-          <ValueCard
-            icon={HiOutlineRocketLaunch}
-            title="Visão"
-            description="Ser referência em tecnologias lipídicas, conectando ciência, ingredientes e soluções que transformam formulações."
-          />
-
-          <ValueCard
-            icon={HiOutlineSparkles}
-            title="Valores"
-            description="Excelência científica, inovação contínua, integridade nas parcerias e compromisso com desempenho e qualidade."
-          />
-        </Grid>
-      </Section>
-
-      <Section variant="dark">
-        <div className="mx-auto max-w-2xl space-y-6 text-center">
-          <h2>Nosso compromisso com a excelência</h2>
-          <p className="text-lg text-white/70">
-            Cada tecnologia, cada ingrediente e cada parceria é desenvolvida com rigor científico e
-            foco em desempenho e qualidade.
-          </p>
-          <Button href="/contato" variant="secondary" size="lg">
-            Fale com nossos especialistas
-          </Button>
-        </div>
-      </Section>
+      <QuemSomosSection intro={page.quemSomosIntro} facts={blocks.FACT} />
+      <ComoAjudamosSection ctaText={page.comoAjudamosCta} steps={blocks.PROCESS_STEP} />
+      <MercadosSection />
+      <CompetenciasSection />
+      <ModeloParceriaSection text={page.parceriaText} />
+      <ParceirosGlobaisSection />
+      <QualidadeSection text={page.qualidadeText} items={blocks.QUALITY_ITEM} />
+      <EvidenciasSection metrics={blocks.METRIC} />
+      <HistoriaSection text={page.historiaText} principles={blocks.PRINCIPLE} />
+      <FaqSection items={blocks.FAQ} />
+      <CtaFinalSection
+        ctaFinalHeading={page.ctaFinalHeading}
+        ctaFinalText={page.ctaFinalText}
+        ctaFinalPrimaryLabel={page.ctaFinalPrimaryLabel}
+        ctaFinalPrimaryHref={page.ctaFinalPrimaryHref}
+        ctaFinalSecondaryLabel={page.ctaFinalSecondaryLabel}
+        ctaFinalSecondaryHref={page.ctaFinalSecondaryHref}
+      />
     </>
   );
 }

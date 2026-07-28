@@ -1,0 +1,1742 @@
+# Planejamento da nova página institucional da Lipid
+
+## 1. Diretriz estratégica
+
+A nova página institucional não deve seguir o modelo corporativo tradicional baseado em “história, missão, visão e valores” como blocos principais.
+
+Para a Lipid, o modelo mais eficiente é uma **página institucional orientada à decisão técnica e comercial**. Ela deve responder rapidamente:
+
+1. Quem é a Lipid?
+2. O que a empresa faz?
+3. Para quais indústrias trabalha?
+4. Como ajuda equipes de P&D e inovação?
+5. Quais tecnologias e ingredientes oferece?
+6. Quais marcas representa?
+7. Por que é uma empresa confiável?
+8. Como iniciar uma conversa técnica?
+
+Essa lógica corresponde melhor à arquitetura mental de pesquisadores, formuladores, gestores de inovação, profissionais de qualidade e compradores técnicos. A base de inteligência já determina que os conteúdos de maior valor — atuação, mercados, tecnologias, ingredientes, marcas, suporte técnico e contato — precisam estar acessíveis em zero ou um clique, enquanto história, missão e valores devem funcionar como atributos da entidade Lipid, não como páginas ou categorias independentes.  
+
+## 2. Função da página
+
+A página deverá cumprir simultaneamente cinco funções:
+
+| Função        | Resultado esperado                                             |
+| ------------- | -------------------------------------------------------------- |
+| Institucional | Explicar com precisão quem é a Lipid                           |
+| Comercial     | Gerar conversas técnicas qualificadas                          |
+| Educacional   | Facilitar a compreensão do modelo de atuação                   |
+| Reputacional  | Demonstrar procedência, competência e confiança                |
+| Semântica     | Consolidar a entidade “Lipid” para buscadores e sistemas de IA |
+
+Ela não deve ser uma apresentação autocentrada da empresa. Deve mostrar **como a Lipid conecta desafios da indústria brasileira a ingredientes, tecnologias e fabricantes especializados**.
+
+## 3. Posicionamento recomendado
+
+A página deve posicionar a Lipid como:
+
+> **Parceira brasileira para o desenvolvimento e fornecimento de ingredientes e tecnologias especializadas para Life Sciences.**
+
+Esse posicionamento é superior a expressões genéricas como “empresa de inovação” ou “distribuidora de matérias-primas”, porque comunica os quatro papéis reais da empresa:
+
+* representação de fabricantes internacionais;
+* fornecimento de ingredientes especializados;
+* suporte científico e técnico;
+* apoio ao desenvolvimento e à aplicação industrial.
+
+A Lipoid e a Readline devem aparecer como **fabricantes representados**, nunca como identidades confundidas com a Lipid.
+
+---
+
+# 4. Perguntas que a página deve responder
+
+## 4.1 Pesquisador ou formulador de P&D
+
+| Pergunta                                      | Onde responder               |
+| --------------------------------------------- | ---------------------------- |
+| A Lipid entende tecnicamente minha aplicação? | Hero e seção “Como ajudamos” |
+| Quais tecnologias domina?                     | Seção de competências        |
+| Pode ajudar a selecionar um ingrediente?      | Processo de trabalho         |
+| Existe suporte de formulação?                 | Diferenciais e CTA técnico   |
+| Trabalha com meu mercado?                     | Cards de mercados            |
+| De onde vêm os ingredientes?                  | Parceiros globais            |
+| Existe documentação técnica?                  | Qualidade e confiança        |
+
+## 4.2 Gestor de inovação
+
+| Pergunta                                 | Onde responder             |
+| ---------------------------------------- | -------------------------- |
+| A Lipid pode acelerar um projeto?        | Como ajudamos              |
+| Atua apenas como fornecedora?            | Modelo de parceria         |
+| Tem acesso a tecnologias internacionais? | Parceiros                  |
+| Pode apoiar do conceito à escala?        | Jornada de desenvolvimento |
+| Quais oportunidades de inovação oferece? | Tecnologias e mercados     |
+
+## 4.3 Qualidade e regulatório
+
+| Pergunta                            | Onde responder                  |
+| ----------------------------------- | ------------------------------- |
+| Qual é a procedência dos materiais? | Qualidade                       |
+| Há rastreabilidade e documentação?  | Qualidade                       |
+| Quem é o fabricante?                | Parceiros                       |
+| Quais certificações se aplicam?     | Qualidade e páginas específicas |
+| Como solicitar documentos?          | CTA contextual                  |
+
+## 4.4 Comprador técnico
+
+| Pergunta                               | Onde responder         |
+| -------------------------------------- | ---------------------- |
+| A empresa fornece no Brasil?           | Hero ou introdução     |
+| Quais linhas e fabricantes representa? | Parceiros              |
+| Há suporte comercial local?            | Como trabalhamos       |
+| Como solicitar informações ou amostra? | CTA                    |
+| Quem devo procurar?                    | Bloco final de contato |
+
+## 4.5 Diretor técnico ou industrial
+
+| Pergunta                                        | Onde responder                |
+| ----------------------------------------------- | ----------------------------- |
+| A empresa é confiável?                          | Provas, história e parceiros  |
+| Tem capacidade de acompanhar escala industrial? | Processo                      |
+| Reduz riscos técnicos e de fornecimento?        | Qualidade e modelo de atuação |
+| Atua em projetos estratégicos?                  | Competências e evidências     |
+
+---
+
+# 5. Arquitetura ideal da página
+
+## Estrutura macro recomendada
+
+```text
+A LIPID
+│
+├── 1. Breadcrumb
+├── 2. Hero institucional
+├── 3. Resposta direta: quem é a Lipid
+├── 4. Como a Lipid ajuda a indústria
+├── 5. Mercados atendidos
+├── 6. Competências e tecnologias
+├── 7. Modelo de parceria / jornada de trabalho
+├── 8. Parceiros globais
+├── 9. Qualidade, procedência e confiança
+├── 10. Evidências e números institucionais
+├── 11. História e propósito
+├── 12. Perguntas frequentes
+└── 13. CTA final: fale com um especialista
+```
+
+A base de inteligência propõe uma estrutura muito próxima: posicionamento, quem somos, como ajudamos, mercados, parceiros, qualidade, história e contato. Ela também recomenda que cada seção ofereça uma ação lógica para o próximo conteúdo e que a página conecte Mercados, Tecnologias, Ingredientes, Lipoid, Readline, Conteúdo e Contato.  
+
+---
+
+# 6. Especificação detalhada das seções
+
+## 6.1 Breadcrumb
+
+```text
+Início > A Lipid
+```
+
+### Objetivos
+
+* informar a posição do usuário;
+* facilitar a navegação;
+* reforçar a hierarquia do site;
+* suportar dados estruturados.
+
+O Schema.org define `BreadcrumbList` como uma sequência de páginas que ajuda a representar a posição da página na hierarquia, e o Google recomenda validar sua implementação. ([Schema.org][1])
+
+### Interface
+
+* discreto;
+* acima do hero;
+* fonte de 14–16 px;
+* contraste suficiente;
+* não competir com o H1.
+
+---
+
+## 6.2 Hero institucional
+
+### Objetivo
+
+Responder em poucos segundos:
+
+* quem é a Lipid;
+* qual o seu papel;
+* para quem trabalha;
+* qual o próximo passo.
+
+### Estrutura
+
+**Eyebrow**
+
+```text
+A Lipid
+```
+
+**H1 sugerido**
+
+```text
+Ciência, ingredientes e suporte técnico para transformar desafios em soluções.
+```
+
+**Descrição**
+
+```text
+A Lipid conecta empresas brasileiras a ingredientes especializados,
+tecnologias avançadas e fabricantes internacionais, oferecendo suporte
+técnico para projetos farmacêuticos, cosméticos, nutricionais e veterinários.
+```
+
+**CTAs**
+
+* Primário: `Fale com um especialista`
+* Secundário: `Conheça nossas tecnologias`
+
+### Elemento visual
+
+Recomendo uma composição que represente a interseção entre:
+
+* ciência;
+* ingredientes;
+* desenvolvimento;
+* aplicação industrial.
+
+Boas opções:
+
+1. fotografia real do laboratório ou da equipe;
+2. composição editorial com laboratório e macrotexturas;
+3. representação abstrata de estruturas lipídicas;
+4. diagrama elegante conectando desafio, tecnologia e aplicação.
+
+### O que evitar
+
+* fotografia genérica de cientista de banco de imagens;
+* tubos de ensaio sem relação com a empresa;
+* imagem excessivamente farmacêutica que exclua cosméticos, nutrição e veterinária;
+* animações moleculares pesadas;
+* frases vagas como “inovação que transforma o futuro”.
+
+### Layout desktop
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ Breadcrumb                                                  │
+│                                                             │
+│ Texto – 6 colunas             Visual – 6 colunas            │
+│ Eyebrow                                                     │
+│ H1                                                          │
+│ Descrição                                                   │
+│ CTA primário | CTA secundário                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Layout mobile
+
+```text
+Breadcrumb
+Eyebrow
+H1
+Descrição
+CTA primário
+CTA secundário
+Imagem
+```
+
+No mobile, os botões devem ocupar largura total ou quase total, sem ficarem lado a lado em telas estreitas.
+
+---
+
+## 6.3 Resposta direta: quem é a Lipid
+
+### H2 sugerido
+
+```text
+Uma parceira tecnológica para a indústria de Life Sciences
+```
+
+### Função
+
+A primeira seção após o hero deve conter uma explicação factual e facilmente extraível por buscadores e IA.
+
+### Estrutura textual
+
+Primeiro parágrafo, com aproximadamente 50–80 palavras:
+
+```text
+A Lipid é uma empresa brasileira especializada no fornecimento de
+ingredientes e tecnologias para os mercados farmacêutico, cosmético,
+nutricional e veterinário. Como representante de fabricantes internacionais,
+combina acesso a matérias-primas especializadas, conhecimento científico,
+suporte técnico e proximidade com a indústria nacional.
+```
+
+Segundo bloco:
+
+* o que fornece;
+* como atua;
+* em que mercados;
+* qual valor adiciona.
+
+### Componente recomendado
+
+Um bloco editorial dividido em:
+
+* texto principal;
+* quatro fatos objetivos;
+* link para mercados ou tecnologias.
+
+Exemplo:
+
+```text
+Atuação B2B
+Suporte técnico local
+Fabricantes internacionais
+Projetos da pesquisa à escala
+```
+
+Não usar números sem comprovação documental.
+
+---
+
+## 6.4 Como a Lipid ajuda a indústria
+
+### H2 sugerido
+
+```text
+Mais do que fornecer ingredientes: ajudamos a viabilizar aplicações
+```
+
+### Pergunta respondida
+
+> “Por que trabalhar com a Lipid em vez de comprar diretamente um ingrediente?”
+
+### Estrutura de conteúdo
+
+Quatro pilares:
+
+#### 1. Entendimento do desafio
+
+* aplicação desejada;
+* requisitos técnicos;
+* mercado;
+* rota de desenvolvimento;
+* limitações da formulação.
+
+#### 2. Seleção de ingredientes e tecnologias
+
+* identificação de alternativas;
+* compatibilidade com a aplicação;
+* apoio técnico do fabricante;
+* documentação disponível.
+
+#### 3. Desenvolvimento e avaliação
+
+* suporte de formulação;
+* interação com P&D;
+* orientação para testes;
+* aproximação com especialistas.
+
+#### 4. Continuidade e escala
+
+* acompanhamento técnico;
+* apoio documental;
+* fornecimento;
+* relacionamento de longo prazo.
+
+### Componente visual
+
+Desktop:
+
+```text
+[01 Entender] → [02 Selecionar] → [03 Desenvolver] → [04 Escalar]
+```
+
+Mobile:
+
+```text
+01 Entender
+   ↓
+02 Selecionar
+   ↓
+03 Desenvolver
+   ↓
+04 Escalar
+```
+
+### CTA contextual
+
+```text
+Apresente seu desafio ao nosso time
+```
+
+---
+
+## 6.5 Mercados atendidos
+
+### H2 sugerido
+
+```text
+Conhecimento especializado para diferentes mercados
+```
+
+### Cards recomendados
+
+#### Farmacêutico
+
+* fosfolipídios;
+* excipientes especializados;
+* sistemas lipídicos;
+* aplicações farmacêuticas;
+* suporte documental.
+
+#### Cosmético
+
+* ativos e extratos botânicos;
+* fosfolipídios;
+* ingredientes funcionais;
+* sistemas de entrega;
+* conceitos de formulação.
+
+#### Nutricional e alimentício
+
+* ingredientes funcionais;
+* lecitinas;
+* fosfolipídios;
+* soluções para nutrição especializada.
+
+#### Veterinário
+
+* ingredientes e tecnologias aplicáveis a produtos veterinários;
+* suporte ao desenvolvimento;
+* soluções adaptadas à aplicação.
+
+### Estrutura dos cards
+
+Cada card deve conter:
+
+* nome do mercado;
+* descrição curta;
+* 3 ou 4 temas relacionados;
+* link: `Conheça as soluções para o mercado farmacêutico`.
+
+### UX
+
+Não transformar os cards em simples ícones decorativos. Cada um deve funcionar como porta de entrada para uma página própria.
+
+### Mobile
+
+* um card por linha;
+* título sempre visível;
+* descrição limitada;
+* área clicável ampla;
+* não depender de hover.
+
+---
+
+## 6.6 Competências e tecnologias
+
+### H2 sugerido
+
+```text
+Tecnologias que conectam ingrediente, formulação e desempenho
+```
+
+### Objetivo
+
+Demonstrar profundidade técnica sem transformar a página institucional em catálogo.
+
+### Grupos possíveis
+
+* fosfolipídios e lecitinas;
+* sistemas lipídicos de liberação;
+* lipossomas;
+* nanopartículas lipídicas;
+* extratos e ativos botânicos;
+* ingredientes funcionais;
+* suporte ao desenvolvimento de formulações.
+
+### Formato recomendado
+
+Cards editoriais ou lista com descrições curtas:
+
+```text
+Fosfolipídios e lecitinas
+Ingredientes especializados para aplicações farmacêuticas,
+cosméticas, nutricionais e veterinárias.
+
+Sistemas lipídicos
+Tecnologias voltadas à incorporação, proteção, estabilidade
+e entrega de substâncias ativas.
+```
+
+### Regra de arquitetura
+
+Essa seção deve apresentar apenas a visão institucional. O aprofundamento deverá acontecer nas páginas de tecnologia, mercado ou ingrediente.
+
+### CTA
+
+```text
+Explore todas as tecnologias
+```
+
+---
+
+## 6.7 Modelo de parceria
+
+### H2 sugerido
+
+```text
+Uma atuação construída em colaboração
+```
+
+### Objetivo
+
+Explicar a relação entre:
+
+```text
+Cliente brasileiro
+        ↕
+       Lipid
+        ↕
+Fabricantes internacionais
+```
+
+### Mensagem central
+
+A Lipid deve aparecer como:
+
+* interlocutora técnica local;
+* ponte com os fabricantes;
+* facilitadora de acesso a conhecimento e ingredientes;
+* suporte ao projeto;
+* relacionamento comercial no Brasil.
+
+### Componente recomendado
+
+Um diagrama simples de três níveis, acompanhado por explicação textual.
+
+### Risco a evitar
+
+Não afirmar que a Lipid fabrica ingredientes caso isso não seja verdade. Os verbos precisam ser governados por papéis:
+
+| Entidade | Verbos adequados                                                     |
+| -------- | -------------------------------------------------------------------- |
+| Lipid    | representa, fornece, apoia, orienta, conecta, desenvolve em conjunto |
+| Lipoid   | fabrica, desenvolve, pesquisa, produz                                |
+| Readline | fabrica, desenvolve, pesquisa, produz                                |
+
+Essa distinção é crítica para clareza institucional, credibilidade e consistência semântica.
+
+---
+
+## 6.8 Parceiros globais
+
+### H2 sugerido
+
+```text
+Tecnologias internacionais com suporte próximo no Brasil
+```
+
+### Introdução
+
+Explicar por que a parceria com os fabricantes é relevante para o cliente, em vez de apenas exibir logotipos.
+
+### Card Lipoid
+
+Deve comunicar, de forma resumida:
+
+* especialização em fosfolipídios;
+* lecitinas;
+* sistemas lipídicos;
+* aplicações farmacêuticas e relacionadas;
+* atuação global.
+
+CTA:
+
+```text
+Conheça a Lipoid
+```
+
+### Card Readline
+
+Deve comunicar, de forma resumida:
+
+* ingredientes especializados;
+* pesquisa e desenvolvimento;
+* tecnologias de fabricação;
+* aplicações nos mercados atendidos.
+
+CTA:
+
+```text
+Conheça a Readline
+```
+
+### Recomendação arquitetural
+
+As marcas devem possuir páginas próprias no site da Lipid, por exemplo:
+
+```text
+/parceiros/lipoid
+/parceiros/readline
+```
+
+Essas páginas deverão explicar:
+
+* quem é o fabricante;
+* o que produz;
+* tecnologias relacionadas;
+* mercados atendidos;
+* ingredientes associados;
+* papel da Lipid no Brasil.
+
+### UI
+
+Os dois cards podem ter identidades visuais discretamente distintas, mas subordinadas ao design system da Lipid. O objetivo é reconhecer as marcas sem fazer a página parecer um mosaico de sites diferentes.
+
+---
+
+## 6.9 Qualidade, procedência e confiança
+
+### H2 sugerido
+
+```text
+Confiança construída com procedência, documentação e suporte
+```
+
+### Conteúdos recomendados
+
+* fabricantes qualificados;
+* origem e procedência dos ingredientes;
+* documentação técnica;
+* especificações;
+* certificados aplicáveis;
+* suporte para solicitações documentais;
+* relacionamento técnico;
+* acompanhamento comercial.
+
+### Importante
+
+As certificações devem ser atribuídas à entidade correta.
+
+Exemplo:
+
+```text
+A fábrica da marca X possui determinada certificação.
+```
+
+Não:
+
+```text
+A Lipid possui todas as certificações do fabricante.
+```
+
+### Componente
+
+Uma composição em duas áreas:
+
+```text
+Esquerda:
+Texto e compromissos da Lipid
+
+Direita:
+Lista estruturada de elementos de confiança
+✓ Procedência
+✓ Documentação
+✓ Suporte técnico
+✓ Fabricantes especializados
+```
+
+### CTA
+
+```text
+Solicite informações técnicas
+```
+
+---
+
+## 6.10 Evidências institucionais
+
+### Objetivo
+
+Transformar afirmações abstratas em evidências verificáveis.
+
+### Possíveis elementos
+
+* ano de fundação;
+* quantidade de mercados atendidos;
+* fabricantes representados;
+* infraestrutura própria;
+* projetos apoiados;
+* instituições parceiras;
+* publicações ou eventos;
+* experiência da equipe.
+
+### Condição
+
+Somente publicar números confirmados e atualizáveis.
+
+### Formato
+
+```text
+Desde [ano]
+Atuação em [número] mercados
+[número] fabricantes representados
+Suporte técnico no Brasil
+```
+
+Evitar contadores animados que atrasam a leitura ou dependem de JavaScript para mostrar a informação.
+
+---
+
+## 6.11 História e propósito
+
+### H2 sugerido
+
+```text
+Uma trajetória dedicada à ciência aplicada
+```
+
+### Papel da seção
+
+Humanizar e contextualizar a empresa, sem ocupar a parte mais importante da página.
+
+### Conteúdo
+
+* origem da Lipid;
+* motivação da empresa;
+* evolução da atuação;
+* aproximação entre ciência, indústria e fabricantes;
+* propósito atual.
+
+### Formato recomendado
+
+Uma narrativa curta de 2 a 4 parágrafos.
+
+Uma timeline só deve ser usada quando existirem pelo menos quatro marcos relevantes e comprovados. Caso contrário, ela adicionará volume visual sem entregar informação.
+
+### Missão, visão e valores
+
+Não recomendo três grandes cards genéricos.
+
+O melhor modelo é um bloco chamado:
+
+```text
+Princípios que orientam nossa atuação
+```
+
+Com princípios concretos, por exemplo:
+
+* rigor técnico;
+* colaboração;
+* transparência;
+* qualidade;
+* desenvolvimento responsável.
+
+Cada princípio deve ser explicado por um comportamento observável, não por uma palavra isolada.
+
+---
+
+## 6.12 FAQ institucional
+
+### H2 sugerido
+
+```text
+Perguntas frequentes sobre a Lipid
+```
+
+### Perguntas recomendadas
+
+1. O que a Lipid faz?
+2. Quais mercados a Lipid atende?
+3. Quais empresas a Lipid representa?
+4. A Lipid oferece suporte técnico para formulações?
+5. Como solicitar informações sobre um ingrediente?
+6. A Lipid fornece documentação técnica?
+7. A Lipid atende universidades e centros de pesquisa?
+8. Como falar com um especialista?
+
+### Função GEO
+
+O FAQ cria blocos claros de pergunta e resposta que podem ser compreendidos e recuperados por buscadores e sistemas generativos.
+
+Contudo, não se deve presumir que o uso de `FAQPage` produzirá um resultado rico no Google. A marcação deve refletir conteúdo realmente visível, seguir as políticas de dados estruturados e ser usada prioritariamente para clareza semântica. O Google recomenda JSON-LD e exige que o conteúdo marcado corresponda ao conteúdo da página. ([Google for Developers][2])
+
+---
+
+## 6.13 CTA final
+
+### H2 sugerido
+
+```text
+Vamos conversar sobre o seu próximo projeto?
+```
+
+### Texto
+
+```text
+Compartilhe sua aplicação, desafio técnico ou necessidade de ingrediente.
+Nossa equipe poderá direcionar sua solicitação e identificar as alternativas
+mais adequadas para o projeto.
+```
+
+### Botão primário
+
+```text
+Fale com um especialista
+```
+
+### Ação secundária
+
+```text
+Encontre um ingrediente
+```
+
+### Dados auxiliares
+
+* expectativa de retorno, caso exista SLA real;
+* telefone;
+* e-mail;
+* link para contato;
+* indicação dos tipos de solicitação atendidos.
+
+---
+
+# 7. Ordem narrativa recomendada
+
+A sequência deve seguir uma progressão de redução de incerteza:
+
+```text
+Identidade
+↓
+Relevância para o visitante
+↓
+Capacidade técnica
+↓
+Mercados
+↓
+Modo de trabalho
+↓
+Parceiros
+↓
+Confiança
+↓
+História
+↓
+Dúvidas
+↓
+Contato
+```
+
+Isso é superior ao modelo:
+
+```text
+História
+↓
+Missão
+↓
+Visão
+↓
+Valores
+↓
+Serviços
+↓
+Contato
+```
+
+O segundo modelo fala primeiro sobre a empresa. O modelo recomendado começa pela relação entre a empresa e o desafio do usuário.
+
+---
+
+# 8. Modelo de conteúdo eficiente
+
+## 8.1 Tom de voz
+
+A Lipid deve usar um tom:
+
+* técnico;
+* seguro;
+* consultivo;
+* claro;
+* objetivo;
+* próximo;
+* sem exageros promocionais.
+
+### Equilíbrio ideal
+
+```text
+Rigor científico + clareza comercial + proximidade local
+```
+
+### Evitar
+
+* “soluções revolucionárias”;
+* “inovação sem limites”;
+* “qualidade incomparável”;
+* “líder absoluta” sem prova;
+* textos excessivamente formais;
+* jargões sem explicação;
+* copiar a linguagem institucional da Lipoid ou da Readline.
+
+## 8.2 Estrutura das mensagens
+
+Cada seção deve seguir, quando aplicável:
+
+```text
+Pergunta do usuário
+↓
+Resposta direta
+↓
+Explicação
+↓
+Evidência
+↓
+Próxima ação
+```
+
+## 8.3 Comprimento
+
+A página completa pode ter aproximadamente 1.600–2.400 palavras, desde que:
+
+* o conteúdo seja dividido em módulos;
+* os parágrafos sejam curtos;
+* os títulos sejam informativos;
+* não haja repetições;
+* as informações técnicas profundas estejam nas páginas próprias.
+
+---
+
+# 9. SEO da página institucional
+
+## 9.1 URL
+
+Recomendação principal:
+
+```text
+/lipid
+```
+
+Alternativa:
+
+```text
+/a-lipid
+```
+
+Manter `/institucional` é possível se a URL já possui histórico e links, mas “institucional” é menos orientado à entidade e à linguagem do usuário.
+
+Caso a URL seja alterada:
+
+```text
+/institucional → redirecionamento 301 → /a-lipid
+```
+
+## 9.2 Title
+
+Sugestão:
+
+```text
+Sobre a Lipid | Ingredientes, tecnologias e suporte técnico
+```
+
+Variação:
+
+```text
+Lipid Brasil | Ingredientes e tecnologias para Life Sciences
+```
+
+## 9.3 Meta description
+
+```text
+Conheça a Lipid, parceira de empresas farmacêuticas, cosméticas,
+nutricionais e veterinárias no acesso a ingredientes especializados,
+tecnologias internacionais e suporte técnico no Brasil.
+```
+
+## 9.4 Hierarquia de headings
+
+```text
+H1 — Uma única vez
+H2 — Grandes perguntas da página
+H3 — Pilares, mercados, competências e parceiros
+```
+
+Exemplo:
+
+```text
+H1: Ciência, ingredientes e suporte técnico para transformar desafios em soluções
+
+H2: Uma parceira tecnológica para a indústria de Life Sciences
+H2: Como a Lipid ajuda a indústria
+  H3: Entendimento do desafio
+  H3: Seleção de tecnologias
+  H3: Desenvolvimento
+  H3: Escala
+H2: Mercados atendidos
+  H3: Farmacêutico
+  H3: Cosmético
+  H3: Nutricional
+  H3: Veterinário
+```
+
+## 9.5 Termos e entidades relevantes
+
+A página poderá consolidar naturalmente relações como:
+
+```text
+Lipid
+Lipid Brasil
+ingredientes especializados
+ingredientes farmacêuticos
+ingredientes cosméticos
+fosfolipídios
+lecitinas
+sistemas lipídicos
+lipossomas
+nanopartículas lipídicas
+extratos botânicos
+suporte técnico para formulações
+Lipoid
+Readline
+Life Sciences
+```
+
+Não se deve repetir termos mecanicamente. A prioridade é estabelecer relações semânticas claras entre entidade, oferta, mercado, tecnologia e fabricante.
+
+## 9.6 Links internos
+
+A página deve apontar para:
+
+* Mercados;
+* Tecnologias;
+* Ingredientes;
+* Lipoid;
+* Readline;
+* Conteúdo técnico;
+* Contato.
+
+A base determina explicitamente que a página institucional não pode ser isolada e deve oferecer esses caminhos de navegação cruzada. 
+
+## 9.7 Imagens e SEO
+
+* nomes de arquivos descritivos;
+* `alt` que descreva o conteúdo e a função;
+* não repetir palavras-chave artificialmente;
+* largura e altura declaradas;
+* formatos modernos;
+* variantes responsivas;
+* legenda quando agregar contexto científico;
+* imagem Open Graph própria.
+
+---
+
+# 10. GEO e visibilidade em IA
+
+## 10.1 Entidade central
+
+A página deve funcionar como fonte canônica da entidade **Lipid**.
+
+Ela precisa declarar de forma consistente:
+
+```text
+Nome oficial
+Descrição oficial
+Ano de fundação
+Localização
+Áreas de atuação
+Mercados
+Papel no Brasil
+Marcas representadas
+Tecnologias
+Canais de contato
+```
+
+A descrição oficial deve existir em uma única fonte de conteúdo no CMS e ser reutilizada, em versões controladas, na Home, página institucional, rodapé e metadados. A base recomenda essa fonte única para evitar duplicações e inconsistências. 
+
+## 10.2 Blocos answer-first
+
+Cada seção deve iniciar com uma resposta explícita.
+
+Exemplo:
+
+### O que a Lipid faz?
+
+> A Lipid fornece ingredientes especializados e conecta empresas brasileiras a tecnologias e fabricantes internacionais, oferecendo suporte técnico para projetos farmacêuticos, cosméticos, nutricionais e veterinários.
+
+Esse formato melhora:
+
+* compreensão humana;
+* escaneabilidade;
+* possibilidade de extração;
+* precisão de respostas geradas por IA.
+
+## 10.3 Relações semânticas explícitas
+
+Não depender apenas do layout para comunicar relações.
+
+Escrever claramente:
+
+* “A Lipid representa a Lipoid no Brasil.”
+* “A Lipid representa a Readline no Brasil.”
+* “A Lipoid é fabricante de…”
+* “A Readline é fabricante de…”
+* “A Lipid oferece suporte técnico local…”
+
+## 10.4 Conteúdo verificável
+
+A página deve usar:
+
+* nomes completos;
+* números confirmados;
+* datas;
+* atribuição correta;
+* links para fabricantes;
+* documentos quando disponíveis;
+* autores e responsáveis em conteúdos técnicos;
+* data de revisão.
+
+O tipo `WebPage` do Schema.org permite propriedades como `lastReviewed`, que podem ajudar a expressar governança e atualidade do conteúdo. ([Schema.org][3])
+
+## 10.5 Tabelas e listas
+
+Tabelas simples podem facilitar a compreensão de relações:
+
+| Mercado      | Como a Lipid contribui                                |
+| ------------ | ----------------------------------------------------- |
+| Farmacêutico | Ingredientes, tecnologias lipídicas e suporte técnico |
+| Cosmético    | Ativos, extratos, fosfolipídios e apoio à formulação  |
+| Nutricional  | Ingredientes funcionais e soluções especializadas     |
+| Veterinário  | Ingredientes e apoio ao desenvolvimento               |
+
+Não exagerar: tabelas devem ser usadas apenas quando comparações forem realmente úteis.
+
+---
+
+# 11. Schema.org recomendado
+
+## 11.1 Grafo principal
+
+A página pode utilizar um único bloco JSON-LD com um `@graph` contendo:
+
+```text
+Organization
+AboutPage
+WebSite
+BreadcrumbList
+Person ou ContactPoint, quando aplicável
+```
+
+O Google recomenda JSON-LD como formato e usa dados estruturados para compreender entidades e conteúdos, mas a marcação deve corresponder ao que está visível e não garante exibição de recursos especiais nos resultados. ([Google for Developers][2])
+
+## 11.2 Organization
+
+Propriedades potenciais:
+
+```json
+{
+  "@type": "Organization",
+  "@id": "https://www.lipid.com.br/#organization",
+  "name": "Lipid Ingredients & Technologies",
+  "url": "https://www.lipid.com.br/",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "URL_DO_LOGO"
+  },
+  "description": "DESCRIÇÃO OFICIAL VALIDADA",
+  "foundingDate": "ANO_VALIDADO",
+  "address": {
+    "@type": "PostalAddress"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint"
+  },
+  "sameAs": [
+    "PERFIS_OFICIAIS_VALIDADOS"
+  ]
+}
+```
+
+## 11.3 AboutPage
+
+```json
+{
+  "@type": "AboutPage",
+  "@id": "https://www.lipid.com.br/a-lipid/#webpage",
+  "url": "https://www.lipid.com.br/a-lipid/",
+  "name": "Sobre a Lipid",
+  "about": {
+    "@id": "https://www.lipid.com.br/#organization"
+  },
+  "isPartOf": {
+    "@id": "https://www.lipid.com.br/#website"
+  },
+  "breadcrumb": {
+    "@id": "https://www.lipid.com.br/a-lipid/#breadcrumb"
+  },
+  "dateModified": "DATA_REAL",
+  "lastReviewed": "DATA_REAL"
+}
+```
+
+## 11.4 Relacionamento com marcas
+
+Os parceiros não devem ser incluídos como `sameAs`, pois não são a mesma entidade que a Lipid.
+
+Podem ser expressos por conteúdo e, quando a modelagem permitir, por relações adequadas entre organizações. A associação precisa ser verdadeira, visível na página e consistente com os contratos e o papel comercial.
+
+## 11.5 Validação
+
+* Schema Markup Validator;
+* Rich Results Test;
+* Google Search Console;
+* inspeção de URL;
+* validação manual entre conteúdo visível e JSON-LD.
+
+---
+
+# 12. UI: direção visual recomendada
+
+## 12.1 Conceito visual
+
+A estética deve transmitir:
+
+```text
+Ciência
+Precisão
+Proximidade
+Tecnologia
+Credibilidade
+Sofisticação
+```
+
+Não deve parecer:
+
+* laboratório hospitalar;
+* e-commerce de insumos;
+* empresa química pesada;
+* startup de tecnologia genérica;
+* cópia da Lipoid.
+
+## 12.2 Sistema de layout
+
+### Desktop
+
+* grid de 12 colunas;
+* largura máxima entre 1.200 e 1.320 px;
+* margens laterais generosas;
+* textos principais entre 5 e 7 colunas;
+* seções com 96–144 px de espaçamento vertical;
+* alternância controlada entre texto, imagem, cards e diagramas.
+
+### Tablet
+
+* grid de 8 colunas;
+* seções com 72–96 px;
+* cards em duas colunas;
+* menos sobreposição gráfica;
+* redução de elementos puramente decorativos.
+
+### Mobile
+
+* grid de 4 colunas;
+* margens de 20–24 px;
+* seções com 56–72 px;
+* cards em uma coluna;
+* textos e imagens empilhados;
+* hierarquia linear;
+* CTAs facilmente alcançáveis.
+
+## 12.3 Tipografia
+
+Sugestão de escala fluida:
+
+```css
+H1: clamp(2.25rem, 5vw, 4.75rem);
+H2: clamp(1.75rem, 3.5vw, 3rem);
+H3: clamp(1.25rem, 2vw, 1.75rem);
+Body: clamp(1rem, 1.2vw, 1.125rem);
+```
+
+### Regras
+
+* comprimento ideal do texto entre 55 e 75 caracteres por linha;
+* altura de linha do corpo entre 1.5 e 1.7;
+* evitar corpos menores que 16 px;
+* pesos tipográficos limitados;
+* títulos fortes, mas não excessivamente condensados.
+
+## 12.4 Cores
+
+A paleta deverá combinar:
+
+* cor institucional principal;
+* tons neutros;
+* uma cor científica ou tecnológica de apoio;
+* cores de estado;
+* superfícies suaves para separar blocos.
+
+Não usar uma cor diferente para cada mercado sem um sistema consistente.
+
+## 12.5 Imagens
+
+Prioridade:
+
+1. imagens reais da Lipid;
+2. equipe e ambiente;
+3. aplicações e processos;
+4. abstrações científicas autorais;
+5. banco de imagens apenas como último recurso.
+
+## 12.6 Movimento
+
+Microinterações permitidas:
+
+* transição suave de cards;
+* feedback de botões;
+* entrada discreta de elementos;
+* progresso visual no processo.
+
+Evitar:
+
+* parallax pesado;
+* moléculas seguindo o cursor;
+* vídeos automáticos grandes;
+* animações que ocultam conteúdo;
+* scroll-jacking.
+
+---
+
+# 13. Responsividade e mobile-first
+
+## 13.1 Princípio
+
+Responsividade não é “encolher o desktop”. A versão mobile precisa ser uma reorganização deliberada da hierarquia.
+
+## 13.2 Ordem mobile ideal
+
+```text
+1. Identidade
+2. Proposta de valor
+3. CTA
+4. Explicação
+5. Mercados
+6. Como ajudamos
+7. Tecnologias
+8. Parceiros
+9. Qualidade
+10. História
+11. FAQ
+12. Contato
+```
+
+## 13.3 Cards
+
+Desktop:
+
+```text
+4 colunas ou 2 × 2
+```
+
+Tablet:
+
+```text
+2 colunas
+```
+
+Mobile:
+
+```text
+1 coluna
+```
+
+Evitar carrosséis horizontais para conteúdos essenciais. Eles escondem informação e tornam comparação mais difícil.
+
+## 13.4 Botões e áreas de toque
+
+* alvo de toque confortável;
+* espaçamento entre ações;
+* estados de foco visíveis;
+* não depender de hover;
+* CTA primário com largura ampla no mobile.
+
+WCAG 2.2 inclui critérios relacionados ao tamanho mínimo e à ativação segura de alvos de interação, especialmente relevantes para interfaces móveis. ([W3C][4])
+
+## 13.5 Imagens responsivas
+
+Usar:
+
+```html
+<picture>
+srcset
+sizes
+width
+height
+loading="lazy"
+```
+
+A imagem principal acima da dobra não deve ser carregada tardiamente. Imagens abaixo da dobra podem usar lazy loading.
+
+Servir imagens de desktop para dispositivos móveis pode consumir de duas a quatro vezes mais dados do que o necessário, segundo orientação do web.dev. ([web.dev][5])
+
+## 13.6 Tabelas
+
+Quando houver tabela:
+
+* converter em cards no mobile, se necessário;
+* permitir rolagem horizontal apenas para dados complexos;
+* preservar cabeçalhos;
+* não reduzir a fonte até ficar ilegível.
+
+## 13.7 Navegação por âncoras
+
+Uma navegação interna fixa só é recomendada se a página final ficar longa.
+
+Desktop:
+
+```text
+Visão geral | Como ajudamos | Mercados | Parceiros | Qualidade
+```
+
+Mobile:
+
+* seletor compacto;
+* menu horizontal rolável acessível;
+* ou simplesmente não usar, se a página for clara.
+
+---
+
+# 14. Acessibilidade
+
+Meta recomendada:
+
+```text
+WCAG 2.2 nível AA
+```
+
+A WCAG 2.2 é uma recomendação oficial do W3C e abrange percepção, operação, compreensão e robustez do conteúdo. ([W3C][6])
+
+## Requisitos
+
+* HTML semântico;
+* apenas um H1;
+* ordem lógica dos headings;
+* contraste adequado;
+* foco visível;
+* navegação completa por teclado;
+* textos alternativos;
+* links descritivos;
+* botões com nomes claros;
+* preferência de redução de movimento;
+* zoom sem perda de conteúdo;
+* reflow em telas estreitas;
+* formulários com labels;
+* mensagens de erro compreensíveis;
+* ícones nunca como única forma de comunicação.
+
+## Testes
+
+* teclado;
+* VoiceOver;
+* NVDA;
+* zoom de 200% e 400%;
+* contraste;
+* modo de alto contraste;
+* orientação retrato e paisagem;
+* dispositivo real.
+
+---
+
+# 15. Performance
+
+A página deve parecer sofisticada sem depender de peso visual excessivo.
+
+## Metas
+
+* LCP: até 2,5 s;
+* INP: até 200 ms;
+* CLS: até 0,1;
+* imagens dimensionadas;
+* fontes otimizadas;
+* JavaScript mínimo;
+* animações leves;
+* SSR ou SSG;
+* conteúdo essencial presente no HTML.
+
+Os Core Web Vitals medem carregamento, responsividade e estabilidade visual e são parte das orientações de qualidade de experiência do Google. ([web.dev][7])
+
+## Cuidados específicos
+
+* não usar vídeo pesado no hero;
+* reservar espaço para imagens;
+* não carregar bibliotecas de animação desnecessárias;
+* pré-carregar apenas a fonte ou imagem crítica;
+* evitar excesso de famílias e pesos tipográficos;
+* usar CDN e cache;
+* comprimir SVGs e imagens.
+
+---
+
+# 16. Componentes necessários
+
+| Componente        | Uso               |
+| ----------------- | ----------------- |
+| Breadcrumb        | Localização       |
+| InstitutionalHero | Posicionamento    |
+| DirectAnswerBlock | Resposta objetiva |
+| EvidenceStrip     | Números e provas  |
+| ValuePillarGrid   | Como ajudamos     |
+| MarketCard        | Mercados          |
+| TechnologyCard    | Competências      |
+| ProcessSteps      | Jornada           |
+| PartnerCard       | Lipoid e Readline |
+| TrustPanel        | Qualidade         |
+| EditorialStory    | História          |
+| FAQAccordion      | Dúvidas           |
+| ExpertCTA         | Conversão         |
+| RelatedLinks      | Navegação cruzada |
+
+Todos devem ser reutilizáveis e alimentados por conteúdo estruturado, em conformidade com a orientação da base de usar componentes configuráveis e uma fonte única de conteúdo.  
+
+---
+
+# 17. Estrutura no CMS
+
+## Entidade institucional
+
+```text
+Organization
+├── officialName
+├── shortName
+├── legalName
+├── officialDescription
+├── shortDescription
+├── foundingDate
+├── address
+├── contacts
+├── markets[]
+├── technologies[]
+├── representedBrands[]
+├── principles[]
+├── qualityStatements[]
+├── evidenceMetrics[]
+├── socialProfiles[]
+└── seo
+```
+
+## Página institucional
+
+```text
+AboutPage
+├── hero
+├── introduction
+├── valuePillars[]
+├── processSteps[]
+├── markets[]
+├── technologies[]
+├── partners[]
+├── qualitySection
+├── history
+├── faq[]
+├── relatedLinks[]
+├── finalCTA
+└── reviewDate
+```
+
+## Benefício
+
+Isso impede que:
+
+* a descrição da empresa varie entre páginas;
+* marcas sejam nomeadas de formas diferentes;
+* números fiquem desatualizados;
+* certificações sejam atribuídas incorretamente;
+* CTAs precisem ser editados manualmente em vários lugares.
+
+---
+
+# 18. Wireframe textual consolidado
+
+```text
+┌──────────────────────────────────────────────────────────────┐
+│ HEADER                                                       │
+├──────────────────────────────────────────────────────────────┤
+│ Breadcrumb: Início > A Lipid                                 │
+├──────────────────────────────────────────────────────────────┤
+│ HERO                                                         │
+│ Eyebrow: A Lipid                                             │
+│ H1: Ciência, ingredientes e suporte técnico...               │
+│ Texto                                                        │
+│ [Fale com especialista] [Conheça tecnologias]                │
+│ Imagem / composição científica                               │
+├──────────────────────────────────────────────────────────────┤
+│ RESPOSTA DIRETA                                              │
+│ Uma parceira tecnológica para Life Sciences                  │
+│ Texto + fatos institucionais                                 │
+├──────────────────────────────────────────────────────────────┤
+│ COMO AJUDAMOS                                                │
+│ Entender → Selecionar → Desenvolver → Escalar                │
+│ CTA contextual                                               │
+├──────────────────────────────────────────────────────────────┤
+│ MERCADOS                                                     │
+│ Farmacêutico | Cosmético | Nutricional | Veterinário         │
+├──────────────────────────────────────────────────────────────┤
+│ TECNOLOGIAS E COMPETÊNCIAS                                   │
+│ Fosfolipídios | Sistemas lipídicos | Botânicos | Outros      │
+├──────────────────────────────────────────────────────────────┤
+│ MODELO DE PARCERIA                                           │
+│ Cliente ↔ Lipid ↔ Fabricantes                                │
+├──────────────────────────────────────────────────────────────┤
+│ PARCEIROS GLOBAIS                                            │
+│ Lipoid                              Readline                  │
+├──────────────────────────────────────────────────────────────┤
+│ QUALIDADE E CONFIANÇA                                        │
+│ Procedência | Documentação | Suporte | Conformidade          │
+├──────────────────────────────────────────────────────────────┤
+│ EVIDÊNCIAS                                                   │
+│ Dados institucionais validados                               │
+├──────────────────────────────────────────────────────────────┤
+│ HISTÓRIA E PROPÓSITO                                         │
+│ Narrativa curta + princípios                                 │
+├──────────────────────────────────────────────────────────────┤
+│ FAQ                                                          │
+├──────────────────────────────────────────────────────────────┤
+│ CTA FINAL                                                    │
+│ Vamos conversar sobre seu próximo projeto?                   │
+│ [Fale com um especialista]                                   │
+├──────────────────────────────────────────────────────────────┤
+│ FOOTER                                                       │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+# 19. O que não recomendo
+
+## Não criar como estrutura principal
+
+```text
+Missão
+Visão
+Valores
+Nossa história
+Nossos diferenciais
+```
+
+isolados em cinco grandes blocos equivalentes.
+
+## Não fazer
+
+* um hero exclusivamente emocional;
+* uma página dominada pela história da empresa;
+* logos sem explicação;
+* excesso de moléculas decorativas;
+* cards com textos genéricos;
+* números sem fonte;
+* certificações sem atribuição;
+* formulário longo no meio da página;
+* sliders automáticos;
+* carrossel de mercados;
+* jargão técnico em todos os títulos;
+* copiar o tom da Lipoid ou da Readline;
+* apresentar a Lipid como fabricante quando ela está atuando como representante;
+* criar páginas separadas e fracas para missão, visão e valores.
+
+A própria base afirma que essas páginas tendem a ter baixa intenção de busca e gerar duplicação, recomendando que esses conteúdos sejam atributos da entidade Lipid. 
+
+---
+
+# 20. Critérios de aprovação
+
+A página só deve ser considerada pronta quando responder “sim” aos critérios abaixo.
+
+## Estratégia
+
+* Explica o papel da Lipid em até dez segundos?
+* Diferencia Lipid, Lipoid e Readline?
+* Mostra valor além da distribuição?
+* Atende P&D, inovação, qualidade e compras?
+
+## Conteúdo
+
+* Cada seção responde a uma pergunta real?
+* As afirmações têm comprovação?
+* O texto é técnico, mas compreensível?
+* Não há repetição desnecessária?
+* Todos os CTAs têm destino lógico?
+
+## UX
+
+* O usuário encontra mercados e tecnologias?
+* Pode chegar ao contato sem procurar?
+* Cada seção oferece um próximo passo?
+* A leitura funciona sem animação?
+* Não existem elementos dependentes de hover?
+
+## UI
+
+* A hierarquia visual é inequívoca?
+* O design transmite ciência e confiança?
+* Imagens são relevantes e autênticas?
+* Cards possuem função, não apenas decoração?
+* O ritmo visual evita monotonia?
+
+## Mobile
+
+* A ordem do conteúdo continua lógica?
+* Os botões são fáceis de tocar?
+* Não há rolagem horizontal involuntária?
+* Textos permanecem legíveis?
+* Imagens estão adaptadas ao dispositivo?
+
+## SEO e GEO
+
+* Há uma descrição oficial consistente?
+* Entidades e relações estão explícitas?
+* Existe um único H1?
+* Os H2s correspondem a perguntas e temas reais?
+* A página possui links internos?
+* O JSON-LD corresponde ao conteúdo visível?
+* A página informa data de revisão?
+
+## Performance e acessibilidade
+
+* Atende WCAG 2.2 AA?
+* Funciona por teclado?
+* Passa em testes com leitores de tela?
+* Mantém bons Core Web Vitals?
+* As imagens possuem dimensões e versões responsivas?
+* O conteúdo principal existe no HTML inicial?
+
+---
+
+# Recomendação final
+
+A arquitetura ideal para a nova página institucional da Lipid é uma **página única, narrativa, técnica e orientada a confiança e decisão**.
+
+Sua estrutura principal deve ser:
+
+```text
+1. Posicionamento
+2. Quem é a Lipid
+3. Como ajuda a indústria
+4. Mercados
+5. Tecnologias
+6. Modelo de parceria
+7. Lipoid e Readline
+8. Qualidade e confiança
+9. Evidências
+10. História e propósito
+11. FAQ
+12. Fale com um especialista
+```
+
+Essa solução preserva a função institucional, mas a transforma em uma experiência útil para as personas. Ela também consolida a Lipid como entidade, esclarece seu papel no ecossistema, cria caminhos para páginas técnicas e oferece conteúdo legível tanto para pessoas quanto para mecanismos de busca e sistemas de IA.
+
+[1]: https://schema.org/BreadcrumbList?utm_source=chatgpt.com "BreadcrumbList - Schema.org Type"
+[2]: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data?utm_source=chatgpt.com "Introduction to structured data markup in Google Search"
+[3]: https://schema.org/WebPage?utm_source=chatgpt.com "WebPage - Schema.org Type"
+[4]: https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum?utm_source=chatgpt.com "Understanding SC 2.5.8: Target Size (Minimum) (Level AA)"
+[5]: https://web.dev/articles/serve-responsive-images?utm_source=chatgpt.com "Serve responsive images | Articles"
+[6]: https://www.w3.org/WAI/standards-guidelines/wcag/?utm_source=chatgpt.com "WCAG 2 Overview | Web Accessibility Initiative (WAI)"
+[7]: https://web.dev/articles/vitals?utm_source=chatgpt.com "Web Vitals | Articles"

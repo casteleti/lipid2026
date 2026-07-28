@@ -1,18 +1,33 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { Section } from '@/components/ui/Section';
 import { resolveMediaUrl } from '@/lib/api';
 
 interface Partner {
   id: string;
+  slug: string;
   name: string;
   excerpt: string | null;
   logo: string | null;
   website: string | null;
 }
 
-export function PartnersSection() {
+interface PartnersSectionProps {
+  eyebrow?: string;
+  heading?: string;
+  description?: string;
+  /** When true, cards link to the partner's own page (/parceiros/[slug]) instead of the external website. */
+  internalLink?: boolean;
+}
+
+export function PartnersSection({
+  eyebrow = 'PARCERIAS GLOBAIS',
+  heading = 'Parcerias que geram valor',
+  description = 'Representamos com exclusividade no Brasil empresas globais líderes em ciência e inovação em lipídios.',
+  internalLink = false,
+}: PartnersSectionProps = {}) {
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,17 +45,14 @@ export function PartnersSection() {
     <Section variant="light">
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
         <div className="space-y-5">
-          <p className="eyebrow">PARCERIAS GLOBAIS</p>
-          <h2 className="text-gray-900">Parcerias que geram valor</h2>
-          <p className="text-lg text-gray-600">
-            Representamos com exclusividade no Brasil empresas globais líderes em ciência e inovação
-            em lipídios.
-          </p>
+          <p className="eyebrow">{eyebrow}</p>
+          <h2 className="text-gray-900">{heading}</h2>
+          <p className="text-lg text-gray-600">{description}</p>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-6 md:justify-end">
           {loading ? (
-            <p className="text-gray-400">Carregando...</p>
+            <p className="text-gray-500">Carregando...</p>
           ) : (
             partners.map((partner) => {
               const content = (
@@ -58,6 +70,14 @@ export function PartnersSection() {
                   {partner.excerpt && <p className="text-xs text-gray-500">{partner.excerpt}</p>}
                 </div>
               );
+
+              if (internalLink) {
+                return (
+                  <Link key={partner.id} href={`/parceiros/${partner.slug}`}>
+                    {content}
+                  </Link>
+                );
+              }
 
               return partner.website ? (
                 <a key={partner.id} href={partner.website} target="_blank" rel="noopener noreferrer">

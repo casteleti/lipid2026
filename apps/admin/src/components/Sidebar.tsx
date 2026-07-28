@@ -12,6 +12,7 @@ const sections: { title: string; items: { href: string; label: string }[] }[] = 
   {
     title: 'Conteúdo',
     items: [
+      { href: '/institucional', label: 'Página Institucional' },
       { href: '/aplicacoes', label: 'Aplicações' },
       { href: '/tecnologias', label: 'Tecnologias' },
       { href: '/ingredientes', label: 'Ingredientes' },

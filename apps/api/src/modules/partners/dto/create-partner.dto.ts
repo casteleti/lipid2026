@@ -23,4 +23,14 @@ export class CreatePartnerDto {
   @IsOptional()
   @IsUrl()
   website?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  country?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  highlights?: string;
 }

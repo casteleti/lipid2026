@@ -115,6 +115,9 @@ model IngredientOnApplication {
   @@map("ingredients_on_applications")
 }
 
+/// Fabricante internacional representado pela Lipid no Brasil (ex.: Lipoid, Readline).
+/// Partner é sempre o fabricante — nunca a própria Lipid. Não confundir/misturar as identidades
+/// na hora de exibir este conteúdo no site.
 model Partner {
   id          String   @id @default(cuid())
   name        String   @unique
@@ -123,6 +126,8 @@ model Partner {
   excerpt     String?
   logo        String?
   website     String?
+  country     String?
+  highlights  String?  @db.Text
   order       Int      @default(0)
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -130,6 +135,80 @@ model Partner {
 
   @@index([slug])
   @@map("partners")
+}
+
+/// Conteúdo singleton da página institucional (/sobre). Existe sempre exatamente uma linha,
+/// identificada pelo id fixo "singleton".
+model InstitutionalPage {
+  id String @id @default("singleton")
+
+  // 1. Hero institucional
+  heroEyebrow           String?
+  heroTitle             String?
+  heroDescription       String?  @db.Text
+  heroImage             String?
+  heroCtaPrimaryLabel   String?
+  heroCtaPrimaryHref    String?
+  heroCtaSecondaryLabel String?
+  heroCtaSecondaryHref  String?
+
+  // 2. Quem é a Lipid (fatos objetivos ficam em InstitutionalBlock/FACT)
+  quemSomosIntro String? @db.Text
+
+  // 3. Como a Lipid ajuda a indústria (passos ficam em InstitutionalBlock/PROCESS_STEP)
+  comoAjudamosCta String? @db.Text
+
+  // 6. Modelo de parceria (diagrama Cliente/Lipid/Fabricantes é fixo no front, só o texto é editável)
+  parceriaText String? @db.Text
+
+  // 8. Qualidade, procedência e confiança (bullets ficam em InstitutionalBlock/QUALITY_ITEM)
+  qualidadeText String? @db.Text
+
+  // 10. História e propósito (princípios ficam em InstitutionalBlock/PRINCIPLE)
+  historiaText String? @db.Text
+
+  // 12. CTA final
+  ctaFinalHeading        String?
+  ctaFinalText           String? @db.Text
+  ctaFinalPrimaryLabel   String?
+  ctaFinalPrimaryHref    String?
+  ctaFinalSecondaryLabel String?
+  ctaFinalSecondaryHref  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("institutional_page")
+}
+
+/// Blocos repetíveis e ordenados que pertencem à página institucional (nunca listados/roteados
+/// de forma independente). O significado de `title`/`description` varia por `section`:
+/// FACT: title=rótulo curto · PROCESS_STEP: title+description · QUALITY_ITEM: title=bullet
+/// METRIC: value+title (ex. value="2006", title="Desde") · PRINCIPLE: title+description
+/// FAQ: title=pergunta, description=resposta
+enum InstitutionalBlockSection {
+  FACT
+  PROCESS_STEP
+  QUALITY_ITEM
+  METRIC
+  PRINCIPLE
+  FAQ
+}
+
+model InstitutionalBlock {
+  id          String                    @id @default(cuid())
+  section     InstitutionalBlockSection
+  icon        String?
+  title       String?
+  value       String?
+  description String?                   @db.Text
+  order       Int                       @default(0)
+  active      Boolean                   @default(true)
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt
+
+  @@index([section, order])
+  @@map("institutional_blocks")
 }
 
 model Category {
