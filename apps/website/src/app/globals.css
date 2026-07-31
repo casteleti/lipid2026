@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 @layer base {
-  html,
-  body {
+  /* Only `html` gets overflow-x-hidden. Applying it to `body` too makes body compute
+     overflow-y: auto (the other axis defaults to `auto` once either is set), turning it
+     into its own scroll container — which silently breaks `position: sticky` on the
+     header (a body child), since it then sticks relative to body's own scroll offset
+     (always 0) instead of the page's real one. */
+  html {
     @apply overflow-x-hidden;
   }
 
@@ -37,10 +41,266 @@
   .eyebrow {
     @apply text-xs font-bold uppercase tracking-wider text-primary-600;
   }
+
+  /* Vidro sobre fundo claro: usado nos cards de ficha técnica. */
+  .glass {
+    @apply rounded-[20px] border border-white/70 bg-white/70 shadow-[0_20px_50px_-30px_rgba(15,23,42,0.35)] backdrop-blur-xl;
+  }
+
+  /* Vidro sobre fundo escuro: painel de CTA + formulário e chips do hero. */
+  .glass-dark {
+    @apply rounded-[20px] border border-white/[0.12] bg-white/[0.06] shadow-[0_30px_70px_-40px_rgba(0,0,0,0.9)] backdrop-blur-xl;
+  }
+
+  .glass-chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
+  }
+}
+
+/* Acabamento visual: reveal-on-mount, float ambiente e partículas.
+   Desativado sob prefers-reduced-motion (regra abaixo). */
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes particleFloat {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(20px, -30px);
+    opacity: 0.8;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: revealUp 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.reveal-delay-1 {
+  animation-delay: 0.12s;
+}
+.reveal-delay-2 {
+  animation-delay: 0.24s;
+}
+.reveal-delay-3 {
+  animation-delay: 0.36s;
+}
+
+.float-soft {
+  animation: floatY 7s ease-in-out infinite;
+}
+
+/* ---- Envio de formulário: pulsa enquanto envia, depois entra a confirmação com o
+   check se desenhando. O traço usa stroke-dasharray, então parece escrito à mão. ---- */
+@keyframes pulsoEnvio {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes entradaSucesso {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes anelPulso {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 22px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+@keyframes desenhaCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.form-enviando {
+  animation: pulsoEnvio 0.9s ease-in-out infinite;
+}
+
+.form-sucesso {
+  animation: entradaSucesso 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.check-pulso {
+  animation: anelPulso 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s 2;
+}
+
+.check-traco path {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: desenhaCheck 0.6s cubic-bezier(0.65, 0, 0.45, 1) 0.25s forwards;
+}
+
+/* Leitura do artigo. Espelha .editor-conteudo do painel: o preflight do Tailwind zera
+   h2/ul/strong, então sem estas regras o HTML salvo pelo editor sairia todo achatado no
+   site — o autor formataria uma coisa e publicaria outra. */
+.artigo-conteudo h2 {
+  @apply mb-4 mt-10 text-2xl font-bold leading-tight text-gray-900 md:text-3xl;
+}
+
+.artigo-conteudo h3 {
+  @apply mb-3 mt-8 text-xl font-bold leading-snug text-gray-900 md:text-2xl;
+}
+
+.artigo-conteudo h4 {
+  @apply mb-2 mt-6 text-lg font-semibold text-gray-900;
+}
+
+.artigo-conteudo p {
+  @apply mb-5 leading-relaxed;
+}
+
+.artigo-conteudo ul,
+.artigo-conteudo ol {
+  @apply mb-5 ml-6 space-y-2;
+}
+
+.artigo-conteudo ul {
+  @apply list-disc;
+}
+
+.artigo-conteudo ol {
+  @apply list-decimal;
+}
+
+.artigo-conteudo li {
+  @apply leading-relaxed;
+}
+
+.artigo-conteudo a {
+  @apply font-medium text-primary-600 underline underline-offset-2 transition-colors hover:text-primary-700;
+}
+
+.artigo-conteudo strong,
+.artigo-conteudo b {
+  @apply font-bold text-gray-900;
+}
+
+.artigo-conteudo em,
+.artigo-conteudo i {
+  @apply italic;
+}
+
+.artigo-conteudo blockquote {
+  @apply my-8 border-l-4 border-primary-200 pl-6 text-lg italic text-gray-600;
+}
+
+.artigo-conteudo pre {
+  @apply my-6 overflow-x-auto rounded-xl bg-gray-900 p-5 font-mono text-sm text-gray-100;
+}
+
+.artigo-conteudo code {
+  @apply rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm text-gray-800;
+}
+
+.artigo-conteudo pre code {
+  @apply bg-transparent p-0 text-gray-100;
+}
+
+.artigo-conteudo img {
+  @apply my-8 h-auto max-w-full rounded-2xl shadow-[0_20px_50px_-30px_rgba(15,23,42,0.35)];
+}
+
+.artigo-conteudo hr {
+  @apply my-10 border-gray-200;
+}
+
+.artigo-conteudo table {
+  @apply my-6 w-full border-collapse text-sm;
+}
+
+.artigo-conteudo th,
+.artigo-conteudo td {
+  @apply border border-gray-200 px-3 py-2 text-left;
+}
+
+.artigo-conteudo th {
+  @apply bg-gray-50 font-semibold text-gray-900;
+}
+
+/* Reveal disparado por IntersectionObserver (componente <Reveal/>). O `.reveal` de cima
+   anima no mount, o que numa página longa gastaria a animação com o bloco ainda fora da
+   tela; aqui a classe `.is-visible` só entra quando o elemento aparece de fato. */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .float-soft {
+    animation: none;
+  }
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .form-enviando,
+  .form-sucesso,
+  .check-pulso {
+    animation: none;
+  }
+  .check-traco path {
+    stroke-dashoffset: 0;
+    animation: none;
   }
 }

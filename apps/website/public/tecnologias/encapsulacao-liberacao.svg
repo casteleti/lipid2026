@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="img" aria-labelledby="t">
+  <title id="t">Perfis de liberação de sistemas encapsulados</title>
+  <defs>
+    <linearGradient id="fundo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e8eefb"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="560" fill="url(#fundo)"/>
+  <text x="60.0" y="62.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="11" font-weight="700" letter-spacing="1.6" fill="#1e3f99" text-anchor="start">ENCAPSULAÇÃO — PERFIL DE LIBERAÇÃO</text>
+  <text x="60.0" y="96.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#16205c" text-anchor="start">A estrutura escolhida define o tempo</text>
+  <rect x="60" y="136" width="730" height="328" rx="20" fill="#ffffff" opacity="0.7"/>
+  <path d="M 110 150 L 110 400 L 750 400" stroke="#cbd5e1" stroke-width="1.6" fill="none"/>
+  <path d="M 110 337.5 L 750 337.5" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 5" opacity="0.7" fill="none"/>
+  <path d="M 110 275.0 L 750 275.0" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 5" opacity="0.7" fill="none"/>
+  <path d="M 110 212.5 L 750 212.5" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 5" opacity="0.7" fill="none"/>
+  <text x="120.0" y="154.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12" font-weight="600" fill="#64748b" text-anchor="start">Ativo liberado</text>
+  <text x="750.0" y="426.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12" font-weight="600" fill="#64748b" text-anchor="end">Tempo</text>
+  <path d="M 110 400 C 170 185.0, 230 156, 750 153" stroke="#16205c" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+  <path d="M 110 400 C 300 315.0, 440 225.0, 750 185.0" stroke="#1e3f99" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+  <path d="M 110 400 L 310 400 C 430 375.0, 540 255.0, 750 225.0" stroke="#93aee0" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+  <rect x="110" y="440" width="26" height="5" rx="2.5" fill="#16205c"/>
+  <text x="146.0" y="447.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#16205c" text-anchor="start">Liberação imediata</text>
+  <rect x="292.79999999999995" y="440" width="26" height="5" rx="2.5" fill="#1e3f99"/>
+  <text x="328.8" y="447.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#16205c" text-anchor="start">Liberação prolongada</text>
+  <rect x="490.79999999999995" y="440" width="26" height="5" rx="2.5" fill="#93aee0"/>
+  <text x="526.8" y="447.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#16205c" text-anchor="start">Liberação retardada</text>
+  <text x="60.0" y="530.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="start">Curvas ilustrativas de comportamento — não representam dados de um produto específico.</text>
+</svg>

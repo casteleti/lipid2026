@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsUrl, MinLength, MaxLength } from 'class-validator';
+import { IsString, IsOptional, IsUrl, IsArray, ArrayMaxSize, MinLength, MaxLength } from 'class-validator';
 
 export class CreatePartnerDto {
   @IsString()
@@ -21,8 +21,14 @@ export class CreatePartnerDto {
   logo?: string;
 
   @IsOptional()
-  @IsUrl()
-  website?: string;
+  @IsString()
+  image?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(10)
+  @IsUrl({}, { each: true })
+  websites?: string[];
 
   @IsOptional()
   @IsString()

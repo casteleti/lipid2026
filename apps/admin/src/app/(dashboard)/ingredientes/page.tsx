@@ -1,84 +1,164 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { Card } from '@/components/Card';
 import { Button } from '@/components/Button';
+import { PageHeader, EstadoVazio } from '@/components/PageHeader';
+import { SearchInput, filtrarPorTexto } from '@/components/SearchInput';
+import { useTableSort, SortHead, PlainHead, type Acessores } from '@/components/DataTable';
 import { api } from '@/lib/api-client';
-import Link from 'next/link';
 
 interface Ingredient {
   id: string;
   name: string;
   slug: string;
   active: boolean;
+  partner: { id: string; name: string } | null;
+  category: { id: string; name: string } | null;
+  codes: { id: string; code: string }[];
 }
 
 interface Paginated<T> {
   data: T[];
+  total: number;
 }
+
+// O catálogo passa de 200 itens e o painel carrega tudo de uma vez para busca e ordenação
+// serem instantâneas. Se um dia passar de ~1000, vale trocar por busca no servidor.
+const LIMITE = 1000;
+
+const ACESSORES: Acessores<Ingredient> = {
+  nome: (i) => i.name,
+  fabricante: (i) => i.partner?.name,
+  categoria: (i) => i.category?.name,
+  codigos: (i) => i.codes[0]?.code,
+  status: (i) => (i.active ? 'Ativo' : 'Inativo'),
+};
 
 export default function IngredientesPage() {
   const [items, setItems] = useState<Ingredient[]>([]);
+  const [busca, setBusca] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     api
-      .get<Paginated<Ingredient>>('/ingredients?take=100')
+      .get<Paginated<Ingredient>>(`/ingredients?take=${LIMITE}`)
       .then((res) => setItems(res.data))
       .catch(() => setError('Não foi possível carregar os ingredientes'))
       .finally(() => setLoading(false));
   }, []);
 
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Ingredientes</h1>
-        <Link href="/ingredientes/novo">
-          <Button variant="primary">+ Novo Ingrediente</Button>
-        </Link>
-      </div>
+  const filtrados = useMemo(
+    () =>
+      filtrarPorTexto(items, busca, (i) => [
+        i.name,
+        i.partner?.name,
+        i.category?.name,
+        ...i.codes.map((c) => c.code),
+      ]),
+    [items, busca],
+  );
 
-      <Card>
+  const { dados, campo, direcao, alternar } = useTableSort(filtrados, ACESSORES, 'nome');
+
+  return (
+    <div className="painel-entra">
+      <PageHeader
+        titulo="Ingredientes"
+        descricao="Catálogo completo. Busque por nome, fabricante, categoria ou código comercial."
+        acao={
+          <Link href="/ingredientes/novo">
+            <Button variant="primary">+ Novo Ingrediente</Button>
+          </Link>
+        }
+      />
+
+      <Card flush>
+        <div className="border-b border-gray-100 px-6 py-4">
+          <SearchInput
+            value={busca}
+            onChange={setBusca}
+            placeholder="Buscar por nome, INCI, fabricante ou código..."
+            contagem={dados.length}
+          />
+        </div>
+
         {loading ? (
-          <p className="text-gray-500 py-8 text-center">Carregando...</p>
+          <p className="py-16 text-center text-sm text-gray-500">Carregando...</p>
         ) : error ? (
-          <p className="text-red-600 py-8 text-center">{error}</p>
+          <p className="py-16 text-center text-sm text-red-600">{error}</p>
         ) : items.length === 0 ? (
-          <p className="text-gray-500 py-8 text-center">Nenhum ingrediente cadastrado ainda.</p>
+          <EstadoVazio
+            titulo="Nenhum ingrediente cadastrado ainda"
+            descricao="Comece cadastrando o primeiro ingrediente do catálogo."
+            acao={
+              <Link href="/ingredientes/novo">
+                <Button variant="primary">+ Novo Ingrediente</Button>
+              </Link>
+            }
+          />
+        ) : dados.length === 0 ? (
+          <EstadoVazio
+            titulo={`Nada encontrado para "${busca}"`}
+            descricao="Tente outro termo ou limpe a busca."
+            acao={
+              <Button variant="secondary" onClick={() => setBusca('')}>
+                Limpar busca
+              </Button>
+            }
+          />
         ) : (
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Nome</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Slug</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {items.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-900">{item.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{item.slug}</td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        item.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                      }`}
-                    >
-                      {item.active ? 'Ativo' : 'Inativo'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <Link href={`/ingredientes/${item.id}`} className="text-primary-600 hover:underline">
-                      Editar
-                    </Link>
-                  </td>
+          <div className="max-h-[calc(100vh-19rem)] overflow-auto">
+            <table className="tabela-painel">
+              <thead>
+                <tr>
+                  <SortHead campo="nome" atual={campo} direcao={direcao} onClick={alternar}>
+                    Nome
+                  </SortHead>
+                  <SortHead campo="fabricante" atual={campo} direcao={direcao} onClick={alternar}>
+                    Fabricante
+                  </SortHead>
+                  <SortHead campo="categoria" atual={campo} direcao={direcao} onClick={alternar}>
+                    Categoria
+                  </SortHead>
+                  <SortHead campo="codigos" atual={campo} direcao={direcao} onClick={alternar}>
+                    Códigos
+                  </SortHead>
+                  <SortHead campo="status" atual={campo} direcao={direcao} onClick={alternar}>
+                    Status
+                  </SortHead>
+                  <PlainHead alinhamento="right">Ações</PlainHead>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {dados.map((item) => (
+                  <tr key={item.id}>
+                    <td className="font-medium text-gray-900">{item.name}</td>
+                    <td className="text-gray-600">{item.partner?.name || '—'}</td>
+                    <td className="text-gray-600">{item.category?.name || '—'}</td>
+                    <td className="font-mono text-xs text-gray-500">
+                      {item.codes.length > 0 ? item.codes.map((c) => c.code).join(', ') : '—'}
+                    </td>
+                    <td>
+                      <span className={`selo ${item.active ? 'selo-verde' : 'selo-vermelho'}`}>
+                        {item.active ? 'Ativo' : 'Inativo'}
+                      </span>
+                    </td>
+                    <td className="text-right">
+                      <Link
+                        href={`/ingredientes/${item.id}`}
+                        className="text-sm font-semibold text-primary-600 transition-colors hover:text-primary-800"
+                      >
+                        Editar
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </Card>
     </div>

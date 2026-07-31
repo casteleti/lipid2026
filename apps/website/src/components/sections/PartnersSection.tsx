@@ -9,24 +9,19 @@ interface Partner {
   id: string;
   slug: string;
   name: string;
-  excerpt: string | null;
   logo: string | null;
-  website: string | null;
 }
 
 interface PartnersSectionProps {
   eyebrow?: string;
   heading?: string;
   description?: string;
-  /** When true, cards link to the partner's own page (/parceiros/[slug]) instead of the external website. */
-  internalLink?: boolean;
 }
 
 export function PartnersSection({
   eyebrow = 'PARCERIAS GLOBAIS',
   heading = 'Parcerias que geram valor',
   description = 'Representamos com exclusividade no Brasil empresas globais líderes em ciência e inovação em lipídios.',
-  internalLink = false,
 }: PartnersSectionProps = {}) {
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,44 +45,40 @@ export function PartnersSection({
           <p className="text-lg text-gray-600">{description}</p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-6 md:justify-end">
-          {loading ? (
-            <p className="text-gray-500">Carregando...</p>
-          ) : (
-            partners.map((partner) => {
-              const content = (
-                <div className="flex h-28 w-44 flex-col items-center justify-center gap-1 rounded-2xl border border-gray-200 bg-white px-4 text-center transition-shadow hover:shadow-md">
+        {/* Grade de 2 colunas em vez de flex-wrap: garante cartões de largura idêntica.
+            Com flex-wrap cada cartão ficava do tamanho do próprio conteúdo, e os dois
+            saíam desiguais. */}
+        <div className="grid grid-cols-2 gap-5">
+          {loading
+            ? [0, 1].map((i) => (
+                <div key={i} className="h-36 animate-pulse rounded-2xl bg-white/60" />
+              ))
+            : partners.map((partner) => (
+                <Link
+                  key={partner.id}
+                  href={`/parceiros/${partner.slug}`}
+                  className="group flex h-36 items-center justify-center rounded-2xl border border-black/[0.05] bg-white px-8 transition-all duration-500 ease-brand hover:-translate-y-1 hover:border-black/[0.08] hover:shadow-[0_30px_50px_-30px_rgba(15,23,42,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                >
                   {partner.logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={resolveMediaUrl(partner.logo)}
-                      alt={partner.name}
-                      className="max-h-10 max-w-full object-contain"
-                    />
+                    <>
+                      {/* `w-full` com `object-contain` e teto de altura: os dois logos são
+                          largos (≈3:1 e ≈3,7:1), então limitar só pela altura fazia um
+                          encostar na borda e o outro sobrar. Assim ambos ocupam a mesma
+                          caixa e ficam com peso visual equivalente. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={resolveMediaUrl(partner.logo)}
+                        alt={partner.name}
+                        className="max-h-14 w-full object-contain opacity-90 transition-opacity duration-500 group-hover:opacity-100"
+                      />
+                      {/* O nome sai da tela, mas continua disponível para leitor de tela. */}
+                      <span className="sr-only">{partner.name}</span>
+                    </>
                   ) : (
-                    <p className="text-lg font-bold text-gray-900">{partner.name}</p>
+                    <p className="text-center text-lg font-bold text-gray-900">{partner.name}</p>
                   )}
-                  {partner.excerpt && <p className="text-xs text-gray-500">{partner.excerpt}</p>}
-                </div>
-              );
-
-              if (internalLink) {
-                return (
-                  <Link key={partner.id} href={`/parceiros/${partner.slug}`}>
-                    {content}
-                  </Link>
-                );
-              }
-
-              return partner.website ? (
-                <a key={partner.id} href={partner.website} target="_blank" rel="noopener noreferrer">
-                  {content}
-                </a>
-              ) : (
-                <div key={partner.id}>{content}</div>
-              );
-            })
-          )}
+                </Link>
+              ))}
         </div>
       </div>
     </Section>

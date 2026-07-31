@@ -1,14 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { HiOutlineEnvelope } from 'react-icons/hi2';
-import { FaLinkedin } from 'react-icons/fa6';
+import { HiOutlineEnvelope, HiOutlinePhone, HiOutlineMapPin } from 'react-icons/hi2';
+import { FaLinkedin, FaInstagram, FaFacebookF } from 'react-icons/fa6';
 import { Container } from './Container';
+import { CONTATO } from '@/lib/contato';
 
 const footerLinks = {
   navegacao: [
-    { label: 'Sobre', href: '/sobre' },
+    { label: 'Sobre a Lipid', href: '/sobre' },
     { label: 'Tecnologias', href: '/tecnologias' },
-    { label: 'Aplicações', href: '/aplicacoes' },
+    { label: 'Segmentos', href: '/segmentos' },
     { label: 'Ingredientes', href: '/ingredientes' },
     { label: 'Conteúdo', href: '/blog' },
     { label: 'Parceiros', href: '/parceiros' },
@@ -28,15 +29,24 @@ export function Footer() {
                 Ciência, tecnologia e ingredientes de alta performance para transformar formulações em
                 resultados.
               </p>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:border-primary-300 hover:text-primary-600"
-                aria-label="LinkedIn"
-              >
-                <FaLinkedin className="h-4 w-4" />
-              </a>
+              <div className="mt-4 flex items-center gap-2">
+                {[
+                  { href: CONTATO.redes.linkedin, rotulo: 'LinkedIn', Icone: FaLinkedin },
+                  { href: CONTATO.redes.instagram, rotulo: 'Instagram', Icone: FaInstagram },
+                  { href: CONTATO.redes.facebook, rotulo: 'Facebook', Icone: FaFacebookF },
+                ].map(({ href, rotulo, Icone }) => (
+                  <a
+                    key={rotulo}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300 hover:text-primary-600"
+                    aria-label={rotulo}
+                  >
+                    <Icone className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
             </div>
 
             <div>
@@ -56,14 +66,38 @@ export function Footer() {
               <h4 className="text-xs font-bold uppercase tracking-wider text-gray-600 mb-4">
                 Entre em contato
               </h4>
-              <a
-                href="mailto:contato@daksa.app.br"
-                className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary-600"
+              <div className="space-y-2.5">
+                <a
+                  href={`mailto:${CONTATO.email}`}
+                  className="flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-primary-600"
+                >
+                  <HiOutlineEnvelope className="h-4 w-4 flex-shrink-0" />
+                  {CONTATO.email}
+                </a>
+                <a
+                  href={`tel:${CONTATO.telefoneLink}`}
+                  className="flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-primary-600"
+                >
+                  <HiOutlinePhone className="h-4 w-4 flex-shrink-0" />
+                  {CONTATO.telefone}
+                </a>
+                <p className="flex items-start gap-2 text-sm text-gray-600">
+                  <HiOutlineMapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                  <span>
+                    {CONTATO.endereco.logradouro}
+                    <br />
+                    {CONTATO.endereco.complemento}
+                    <br />
+                    {CONTATO.endereco.bairro} · {CONTATO.endereco.cidade}/{CONTATO.endereco.estado}
+                    <br />
+                    CEP {CONTATO.endereco.cep}
+                  </span>
+                </p>
+              </div>
+              <Link
+                href="/contato"
+                className="mt-4 inline-block text-sm font-semibold text-primary-600 transition-colors hover:text-primary-700"
               >
-                <HiOutlineEnvelope className="h-4 w-4" />
-                contato@daksa.app.br
-              </a>
-              <Link href="/contato" className="mt-3 inline-block text-sm font-semibold text-primary-600">
                 Fale com um especialista →
               </Link>
             </div>

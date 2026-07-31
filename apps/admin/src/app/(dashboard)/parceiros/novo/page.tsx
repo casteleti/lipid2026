@@ -7,6 +7,7 @@ import { Card } from '@/components/Card';
 import { Input } from '@/components/Input';
 import { Textarea } from '@/components/Textarea';
 import { Button } from '@/components/Button';
+import { ImageUpload } from '@/components/ImageUpload';
 import { api } from '@/lib/api-client';
 
 export default function NovoParceiroPage() {
@@ -15,11 +16,22 @@ export default function NovoParceiroPage() {
   const [description, setDescription] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [logo, setLogo] = useState('');
-  const [website, setWebsite] = useState('');
+  const [image, setImage] = useState('');
+  const [websites, setWebsites] = useState<string[]>(['']);
   const [country, setCountry] = useState('');
   const [highlights, setHighlights] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const updateWebsite = (index: number, value: string) => {
+    setWebsites((prev) => prev.map((item, i) => (i === index ? value : item)));
+  };
+
+  const addWebsite = () => setWebsites((prev) => [...prev, '']);
+
+  const removeWebsite = (index: number) => {
+    setWebsites((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +44,8 @@ export default function NovoParceiroPage() {
         description,
         excerpt: excerpt || undefined,
         logo: logo || undefined,
-        website: website || undefined,
+        image: image || undefined,
+        websites: websites.map((w) => w.trim()).filter(Boolean),
         country: country || undefined,
         highlights: highlights || undefined,
       });
@@ -66,41 +79,65 @@ export default function NovoParceiroPage() {
           />
 
           <Textarea
-            label="Descrição"
+            label="Sobre o parceiro"
+            hint="Bloco de texto institucional exibido na página do parceiro"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
             minLength={10}
             maxLength={1000}
-            rows={5}
+            rows={6}
             disabled={loading}
           />
 
           <Input
             label="Resumo"
-            hint="Opcional"
+            hint="Opcional — usado em cards e SEO"
             value={excerpt}
             onChange={(e) => setExcerpt(e.target.value)}
             maxLength={500}
             disabled={loading}
           />
 
-          <Input
-            label="URL do logo"
-            hint="Opcional"
-            value={logo}
-            onChange={(e) => setLogo(e.target.value)}
-            disabled={loading}
-          />
+          <ImageUpload label="Logotipo" value={logo} onChange={setLogo} disabled={loading} />
 
-          <Input
-            label="Website"
-            hint="Opcional — ex: https://parceiro.com.br"
-            type="url"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-            disabled={loading}
-          />
+          <ImageUpload label="Imagem ilustrativa" value={image} onChange={setImage} disabled={loading} />
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-900">Site(s) oficial(is)</label>
+            <div className="space-y-3">
+              {websites.map((site, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  <Input
+                    value={site}
+                    onChange={(e) => updateWebsite(index, e.target.value)}
+                    placeholder="https://parceiro.com"
+                    type="url"
+                    disabled={loading}
+                    className="flex-1"
+                  />
+                  {websites.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeWebsite(index)}
+                      className="text-sm text-red-600 hover:underline"
+                      disabled={loading}
+                    >
+                      Remover
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={addWebsite}
+              className="mt-3 text-sm font-semibold text-primary-600 hover:underline"
+              disabled={loading}
+            >
+              + Adicionar outro site
+            </button>
+          </div>
 
           <Input
             label="País de origem"

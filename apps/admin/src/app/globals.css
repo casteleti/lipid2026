@@ -1,3 +1,194 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* Tabelas do painel. Centralizado aqui em vez de repetir dezenas de classes por página:
+     as 7 listagens ficam idênticas e mudar o padrão vira uma edição só. */
+  .tabela-painel {
+    @apply w-full border-collapse text-sm;
+  }
+
+  /* Cabeçalho grudado ao rolar — em 218 ingredientes, sem isso você perde de vista qual
+     coluna é qual antes da metade da lista. */
+  .tabela-painel thead th {
+    @apply sticky top-0 z-10 border-b border-gray-200 bg-gray-50/95 backdrop-blur;
+  }
+
+  .tabela-painel tbody tr {
+    @apply border-b border-gray-100 transition-colors duration-150 last:border-b-0;
+  }
+
+  .tabela-painel tbody tr:hover {
+    @apply bg-primary-50/40;
+  }
+
+  .tabela-painel tbody td {
+    @apply px-4 py-3 align-middle text-gray-700;
+  }
+
+  /* Etiqueta de estado (Ativo/Rascunho/Publicado). */
+  .selo {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold;
+  }
+
+  .selo-verde {
+    @apply bg-emerald-50 text-emerald-700;
+  }
+  .selo-ambar {
+    @apply bg-amber-50 text-amber-700;
+  }
+  .selo-cinza {
+    @apply bg-gray-100 text-gray-600;
+  }
+  .selo-vermelho {
+    @apply bg-red-50 text-red-700;
+  }
+  .selo-azul {
+    @apply bg-primary-50 text-primary-700;
+  }
+}
+
+/* Barra de rolagem discreta — a padrão do sistema pesa visualmente numa tela de trabalho. */
+@media (pointer: fine) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(203 213 225) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: rgb(203 213 225);
+    border-radius: 9999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(148 163 184);
+  }
+}
+
+/* Entrada suave das listas ao trocar de página. */
+@keyframes painelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.painel-entra {
+  animation: painelFadeIn 0.35s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .painel-entra {
+    animation: none;
+  }
+}
+
+/* Área do RichTextEditor. O preflight do Tailwind zera h2/ul/strong, então dentro do
+   editor tudo sairia com a mesma aparência e o autor não veria o que está formatando.
+   Aqui a formatação é devolvida — e o mesmo conjunto é espelhado na leitura do site
+   (.artigo-conteudo), para o que se edita ser o que se publica. */
+.editor-conteudo:empty::before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+}
+
+.editor-conteudo h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.editor-conteudo h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.editor-conteudo h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+}
+
+.editor-conteudo p {
+  margin: 0 0 0.9rem;
+}
+
+.editor-conteudo ul,
+.editor-conteudo ol {
+  margin: 0 0 1rem 1.5rem;
+}
+
+.editor-conteudo ul {
+  list-style: disc;
+}
+
+.editor-conteudo ol {
+  list-style: decimal;
+}
+
+.editor-conteudo li {
+  margin-bottom: 0.35rem;
+}
+
+.editor-conteudo a {
+  color: #1e3f99;
+  text-decoration: underline;
+}
+
+.editor-conteudo strong,
+.editor-conteudo b {
+  font-weight: 700;
+}
+
+.editor-conteudo em,
+.editor-conteudo i {
+  font-style: italic;
+}
+
+.editor-conteudo u {
+  text-decoration: underline;
+}
+
+.editor-conteudo blockquote {
+  border-left: 3px solid #bfcdf2;
+  padding-left: 1rem;
+  margin: 1.25rem 0;
+  color: #4b5563;
+  font-style: italic;
+}
+
+.editor-conteudo pre {
+  background: #f3f4f6;
+  border-radius: 0.5rem;
+  padding: 0.9rem;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+  margin: 1rem 0;
+}
+
+.editor-conteudo img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1rem 0;
+}

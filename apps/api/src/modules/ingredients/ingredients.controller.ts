@@ -20,8 +20,37 @@ export class IngredientsController {
   constructor(private readonly service: IngredientsService) {}
 
   @Get()
-  findAll(@Query('skip') skip = 0, @Query('take') take = 10, @Query('q') q?: string) {
-    return this.service.findAll(Number(skip), Number(take), q);
+  findAll(
+    @Query('skip') skip = 0,
+    @Query('take') take = 10,
+    @Query('q') q?: string,
+    @Query('categoria') categorySlug?: string,
+    @Query('tag') tagSlug?: string,
+    @Query('fabricante') partnerSlug?: string,
+  ) {
+    return this.service.findAll(Number(skip), Number(take), {
+      q,
+      categorySlug,
+      tagSlug,
+      partnerSlug,
+    });
+  }
+
+  @Get('slug/:slug')
+  findBySlug(@Param('slug') slug: string) {
+    return this.service.findBySlug(slug);
+  }
+
+  @Get('slug/:slug/similares')
+  findSimilares(@Param('slug') slug: string, @Query('limite') limite = 4) {
+    return this.service.findSimilares(slug, Number(limite));
+  }
+
+  /** Telemetria pública, chamada pela ficha. Sem guard: é visitante anônimo. */
+  @Post('slug/:slug/visita')
+  @HttpCode(204)
+  registrarVisita(@Param('slug') slug: string) {
+    return this.service.registrarVisita(slug);
   }
 
   @Get(':id')

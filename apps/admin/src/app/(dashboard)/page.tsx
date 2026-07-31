@@ -13,8 +13,9 @@ interface Stats {
   content: number;
 }
 
+// "Aplicações" saiu daqui junto com a tela: virou classificação interna, e um contador de
+// algo que não se edita mais pelo painel só gera pergunta.
 const cards: { key: keyof Stats; label: string }[] = [
-  { key: 'applications', label: 'Aplicações' },
   { key: 'technologies', label: 'Tecnologias' },
   { key: 'ingredients', label: 'Ingredientes' },
   { key: 'partners', label: 'Parceiros' },
@@ -38,7 +39,7 @@ export default function Dashboard() {
     <div>
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
 
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6 mb-8">
+      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5 mb-8">
         {cards.map((card) => (
           <Card key={card.key}>
             <p className="text-sm text-gray-500">{card.label}</p>
@@ -51,8 +52,8 @@ export default function Dashboard() {
 
       <Card title="Ações Rápidas">
         <div className="grid gap-2 md:grid-cols-2">
-          <a href="/aplicacoes/novo" className="block p-3 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700">
-            + Nova Aplicação
+          <a href="/segmentos" className="block p-3 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700">
+            Editar páginas por segmento
           </a>
           <a href="/tecnologias/novo" className="block p-3 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700">
             + Nova Tecnologia

@@ -2,33 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { CreatePartnerDto } from './dto/create-partner.dto';
 import { UpdatePartnerDto } from './dto/update-partner.dto';
+import { generateUniqueSlug } from '../../common/slugify';
 
 @Injectable()
 export class PartnersService {
   constructor(private db: DatabaseService) {}
 
-  private async generateSlug(name: string, excludeId?: string): Promise<string> {
-    const base = name
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-');
-
-    let slug = base;
-    let counter = 1;
-
-    while (
-      await this.db.partner.findFirst({
-        where: { slug, ...(excludeId ? { id: { not: excludeId } } : {}) },
-      })
-    ) {
-      slug = `${base}-${counter}`;
-      counter++;
-    }
-
-    return slug;
-  }
 
   async findAll(skip = 0, take = 10, q?: string) {
     const where = {
@@ -76,7 +55,8 @@ export class PartnersService {
   }
 
   async create(data: CreatePartnerDto) {
-    const slug = await this.generateSlug(data.name);
+    const slug = await generateUniqueSlug(data.name, async (slug) =>
+      !!(await this.db.partner.findFirst({ where: { slug } })));
 
     return this.db.partner.create({
       data: { ...data, slug },
@@ -88,7 +68,8 @@ export class PartnersService {
 
     const updateData: UpdatePartnerDto & { slug?: string } = { ...data };
     if (data.name) {
-      updateData.slug = await this.generateSlug(data.name, id);
+      updateData.slug = await generateUniqueSlug(data.name, async (slug) =>
+        !!(await this.db.partner.findFirst({ where: { slug, id: { not: id } } })));
     }
 
     return this.db.partner.update({

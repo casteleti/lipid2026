@@ -20,6 +20,9 @@ dist/
 .env.local
 .env.*.local
 
+# Contexto local de continuidade entre sessões — tem token vivo do Coolify, nunca commitar
+CONTEXTO_PROJETO.md
+
 # IDE
 .vscode/
 .idea/
@@ -42,3 +45,6 @@ yarn-debug.log*
 
 # Prisma
 apps/api/prisma/*.db
+
+# Mídia enviada pelo painel em runtime — vive no volume do servidor, não no repo
+apps/api/uploads/

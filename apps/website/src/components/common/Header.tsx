@@ -20,6 +20,36 @@ export function Header() {
   const [mountedSection, setMountedSection] = useState<DropdownKey | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedMobile, setExpandedMobile] = useState<DropdownKey | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [hasBackground, setHasBackground] = useState(false);
+
+  // Two thresholds, on purpose — they answer different questions.
+  //
+  // `hasBackground` (a few pixels): the moment the page moves, content starts sliding
+  // *under* the bar. With a transparent bar the dark nav labels sit straight on top of
+  // that content and both become unreadable. So the solid pill has to show up as soon as
+  // there is anything behind it, not halfway down the hero.
+  //
+  // `scrolled` (past the hero): purely the compact treatment — wordmark swaps for the
+  // symbol, bar gets shorter. That one is a deliberate design beat and stays where it was.
+  //
+  // Deliberately no DOM lookups (no sentinel, no IntersectionObserver) — just scrollY, so
+  // it can't silently no-op if some element isn't where expected. Same on every page.
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setHasBackground(y > 8);
+      setScrolled(y > window.innerHeight * 0.55);
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [pathname]);
 
   const openTimer = useRef<ReturnType<typeof setTimeout>>();
   const closeTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -76,15 +106,75 @@ export function Header() {
   const drawerTabIndex = isMobileMenuOpen ? 0 : -1;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur">
-      <div className="mx-auto grid h-16 max-w-7xl grid-cols-[auto_1fr_auto] items-center px-4 md:h-20 md:px-6 lg:px-8">
-        {/* Brand area — protected zone, never crowded by nav */}
-        <Link href="/" className="flex items-center pr-6 xl:pr-8">
-          <Image src="/logo/lipid-horizontal.png" alt="LIPID Ingredients" width={140} height={42} priority />
-        </Link>
+    <header
+      className={clsx(
+        'sticky top-0 z-50 transition-[padding] duration-500 ease-brand',
+        scrolled ? 'pt-2' : 'pt-4',
+      )}
+    >
+      <div className="px-3 md:px-4 lg:px-5">
+        <div
+          className={clsx(
+            'relative transition-all duration-500 ease-brand md:rounded-full',
+            // Vidro de verdade: translúcido + desfoque do que passa por trás. O
+            // `saturate` compensa a lavagem de cor que o blur causa — sem ele o conteúdo
+            // atrás fica acinzentado e parece sujeira, não vidro. Opacidade alta (80%)
+            // porque abaixo disso o texto do menu começa a competir com o conteúdo,
+            // que é justamente o problema que essa barra resolve.
+            hasBackground
+              ? 'border border-white/60 bg-white/80 shadow-[0_24px_60px_-20px_rgba(15,23,42,0.28),0_6px_20px_-8px_rgba(15,23,42,0.14)] backdrop-blur-2xl backdrop-saturate-150'
+              : 'border border-transparent bg-transparent shadow-none',
+          )}
+        >
+          {/* subtle inner highlight — only reads once the glass bar is actually there */}
+          <div
+            aria-hidden
+            className={clsx(
+              'pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent transition-opacity duration-500',
+              hasBackground ? 'opacity-100' : 'opacity-0',
+            )}
+          />
 
-        {/* Navigation area — flexible, centered within the remaining space */}
-        <nav className="hidden xl:flex xl:items-center xl:justify-center">
+          <div
+            className={clsx(
+              'relative grid grid-cols-[auto_1fr_auto] items-center px-3 transition-all duration-500 ease-brand md:px-5',
+              scrolled ? 'h-14 md:h-16' : 'h-16 md:h-20',
+            )}
+          >
+            {/* Brand area — protected zone, pinned to the far edge */}
+            <Link
+              href="/"
+              className={clsx(
+                'relative flex shrink-0 items-center transition-all duration-500 ease-brand',
+                scrolled ? 'h-8' : 'h-9 md:h-12 lg:h-14',
+              )}
+            >
+              <Image
+                src="/logo/lipid-horizontal.png"
+                alt="LIPID Ingredients"
+                width={1920}
+                height={582}
+                priority
+                className={clsx(
+                  'h-full w-auto transition-opacity duration-500 ease-brand',
+                  scrolled ? 'opacity-0' : 'opacity-100',
+                )}
+              />
+              <Image
+                src="/logo/lipid-mark.png"
+                alt="LIPID Ingredients"
+                width={560}
+                height={560}
+                className={clsx(
+                  'absolute left-0 h-full w-auto transition-opacity duration-500 ease-brand',
+                  scrolled ? 'opacity-100' : 'pointer-events-none opacity-0',
+                )}
+              />
+            </Link>
+
+            {/* Navigation area — truly centered on the whole bar (not just the leftover
+                space between logo/CTA, which shifts as those change width by state) */}
+            <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 xl:flex xl:items-center">
           {menuItems.map((item) => {
             const active = isActive(item.href);
             const isOpen = item.dropdownKey ? openSection === item.dropdownKey : false;
@@ -92,7 +182,7 @@ export function Header() {
             return (
               <div
                 key={item.label}
-                className="relative shrink-0 px-2.5 2xl:px-3.5"
+                className="relative shrink-0 px-4 2xl:px-6"
                 onMouseEnter={() => item.dropdownKey && openDropdown(item.dropdownKey)}
                 onMouseLeave={() => item.dropdownKey && scheduleClose()}
                 onKeyDown={(e) => {
@@ -112,7 +202,8 @@ export function Header() {
                     href={item.href}
                     onFocus={() => item.dropdownKey && openDropdown(item.dropdownKey)}
                     className={clsx(
-                      'whitespace-nowrap py-2 text-sm transition-colors duration-150',
+                      'whitespace-nowrap py-2 transition-all duration-300',
+                      scrolled ? 'text-[11px]' : 'text-[12px]',
                       active || isOpen ? 'font-semibold text-gray-900' : 'font-medium text-gray-600 hover:text-gray-900',
                     )}
                   >
@@ -160,19 +251,12 @@ export function Header() {
           })}
         </nav>
 
-        {/* Conversion area — protected zone, never crowded by nav */}
-        <div className="flex items-center justify-end pl-6 xl:pl-8">
+        {/* Conversion area — protected zone, pinned to the far edge */}
+        <div className="flex items-center justify-end pl-4 xl:pl-6">
           <div className="hidden xl:block">
-            <div className="2xl:hidden">
-              <Button href="/contato" variant="primary" size="sm">
-                Fale com um especialista
-              </Button>
-            </div>
-            <div className="hidden 2xl:block">
-              <Button href="/contato" variant="primary" size="md">
-                Fale com um especialista
-              </Button>
-            </div>
+            <Button href="/contato" variant="primary" size="sm" className="!px-8 !py-3.5 whitespace-nowrap">
+              Fale com um especialista
+            </Button>
           </div>
 
           <button
@@ -186,6 +270,8 @@ export function Header() {
           >
             {isMobileMenuOpen ? <HiXMark className="h-6 w-6" /> : <HiBars3 className="h-6 w-6" />}
           </button>
+        </div>
+          </div>
         </div>
       </div>
 

@@ -57,8 +57,11 @@ export function TechnologiesSection({
         <Grid cols={3} gap="lg">
           {technologies.map((tech, idx) => (
             <Card key={tech.id} className="p-6 space-y-4" hoverable>
-              <div className="flex h-32 items-center justify-center rounded-xl bg-gradient-to-br from-primary-100 via-primary-200 to-primary-400">
-                <div className="h-14 w-14 rounded-full bg-white/40 shadow-inner backdrop-blur-sm" />
+              <div className="relative flex h-32 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-primary-100 via-primary-200 to-primary-400">
+                <div className="h-14 w-14 rounded-full bg-white/40 shadow-inner backdrop-blur-sm transition-transform duration-700 ease-brand group-hover:scale-110" />
+                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
+                  <div className="absolute -bottom-6 -right-6 h-20 w-20 rounded-full bg-white/20 blur-xl" />
+                </div>
               </div>
               <div className="space-y-2">
                 <p className="text-xs font-bold uppercase tracking-wider text-gray-500">

@@ -14,16 +14,28 @@ async function safeFetch<T>(path: string): Promise<T[]> {
   }
 }
 
+async function safeFetchArray<T>(path: string): Promise<T[]> {
+  try {
+    const res = await fetch(`${API_URL}/api/v1${path}`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [applications, technologies, posts] = await Promise.all([
-    safeFetch<{ slug: string }>('/applications?take=100'),
+  // /aplicacoes saiu do sitemap: as URLs públicas por mercado agora são /segmentos/*, e
+  // as rotas antigas viraram redirect permanente (next.config).
+  const [technologies, posts, segments] = await Promise.all([
     safeFetch<{ slug: string }>('/technologies?take=100'),
     safeFetch<{ slug: string }>('/content?status=PUBLISHED&take=100'),
+    safeFetchArray<{ slug: string; active: boolean }>('/segment-pages'),
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL },
-    { url: `${SITE_URL}/aplicacoes` },
+    { url: `${SITE_URL}/segmentos` },
     { url: `${SITE_URL}/tecnologias` },
     { url: `${SITE_URL}/ingredientes` },
     { url: `${SITE_URL}/parceiros` },
@@ -34,8 +46,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticRoutes,
-    ...applications.map((a) => ({ url: `${SITE_URL}/aplicacoes/${a.slug}` })),
     ...technologies.map((t) => ({ url: `${SITE_URL}/tecnologias/${t.slug}` })),
     ...posts.map((p) => ({ url: `${SITE_URL}/blog/${p.slug}` })),
+    ...segments.filter((s) => s.active).map((s) => ({ url: `${SITE_URL}/segmentos/${s.slug}` })),
   ];
 }

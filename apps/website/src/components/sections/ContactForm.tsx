@@ -7,6 +7,7 @@ import { Select } from '@/components/ui/Select';
 import { Checkbox } from '@/components/ui/Checkbox';
 import { Button } from '@/components/ui/Button';
 import { submitContact } from '@/lib/api';
+import { maskTelefone } from '@/lib/mask';
 
 interface FormData {
   name: string;
@@ -90,6 +91,9 @@ export function ContactForm() {
         phone: form.phone || undefined,
         company: form.company || undefined,
         message: `Assunto: ${subjectLabel}\n\n${form.message}`,
+        // Todo formulário do site registra a página que converteu.
+        pageUrl: window.location.href,
+        pageTitle: document.title,
       });
       setSubmitted(true);
       setForm(initialForm);
@@ -138,10 +142,13 @@ export function ContactForm() {
       <Input
         id="phone"
         type="tel"
+        inputMode="numeric"
         label="Telefone"
         value={form.phone}
-        onChange={handleChange('phone')}
-        placeholder="(XX) XXXXX-XXXX"
+        onChange={(e) =>
+          setForm((prev) => ({ ...prev, phone: maskTelefone(e.target.value) }))
+        }
+        placeholder="(11) 90000-0000"
       />
 
       <Input

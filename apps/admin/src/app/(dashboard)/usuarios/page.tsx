@@ -1,10 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { Card } from '@/components/Card';
 import { Button } from '@/components/Button';
+import { PageHeader, EstadoVazio } from '@/components/PageHeader';
+import { SearchInput, filtrarPorTexto } from '@/components/SearchInput';
+import { useTableSort, SortHead, type Acessores } from '@/components/DataTable';
 import { api } from '@/lib/api-client';
-import Link from 'next/link';
 
 interface User {
   id: string;
@@ -14,8 +17,22 @@ interface User {
   active: boolean;
 }
 
+const ROTULO_PAPEL: Record<User['role'], { texto: string; selo: string }> = {
+  ADMIN: { texto: 'Administrador', selo: 'selo-azul' },
+  EDITOR: { texto: 'Editor', selo: 'selo-ambar' },
+  USER: { texto: 'Usuário', selo: 'selo-cinza' },
+};
+
+const ACESSORES: Acessores<User> = {
+  nome: (u) => u.name,
+  email: (u) => u.email,
+  papel: (u) => u.role,
+  status: (u) => (u.active ? 'Ativo' : 'Inativo'),
+};
+
 export default function UsuariosPage() {
   const [items, setItems] = useState<User[]>([]);
+  const [busca, setBusca] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -27,51 +44,89 @@ export default function UsuariosPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Usuários</h1>
-        <Link href="/usuarios/novo">
-          <Button variant="primary">+ Novo Usuário</Button>
-        </Link>
-      </div>
+  const filtrados = useMemo(
+    () => filtrarPorTexto(items, busca, (u) => [u.name, u.email, u.role]),
+    [items, busca],
+  );
 
-      <Card>
+  const { dados, campo, direcao, alternar } = useTableSort(filtrados, ACESSORES, 'nome');
+
+  return (
+    <div className="painel-entra">
+      <PageHeader
+        titulo="Usuários"
+        descricao="Quem tem acesso ao painel."
+        acao={
+          <Link href="/usuarios/novo">
+            <Button variant="primary">+ Novo Usuário</Button>
+          </Link>
+        }
+      />
+
+      <Card flush>
+        <div className="border-b border-gray-100 px-6 py-4">
+          <SearchInput
+            value={busca}
+            onChange={setBusca}
+            placeholder="Buscar por nome, e-mail ou papel..."
+            contagem={dados.length}
+          />
+        </div>
+
         {loading ? (
-          <p className="text-gray-500 py-8 text-center">Carregando...</p>
+          <p className="py-16 text-center text-sm text-gray-500">Carregando...</p>
         ) : error ? (
-          <p className="text-red-600 py-8 text-center">{error}</p>
+          <p className="py-16 text-center text-sm text-red-600">{error}</p>
         ) : items.length === 0 ? (
-          <p className="text-gray-500 py-8 text-center">Nenhum usuário cadastrado ainda.</p>
+          <EstadoVazio titulo="Nenhum usuário cadastrado ainda" />
+        ) : dados.length === 0 ? (
+          <EstadoVazio
+            titulo={`Nada encontrado para "${busca}"`}
+            acao={
+              <Button variant="secondary" onClick={() => setBusca('')}>
+                Limpar busca
+              </Button>
+            }
+          />
         ) : (
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Nome</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Papel</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {items.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-900">{item.name || '—'}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{item.email}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{item.role}</td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                        item.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                      }`}
-                    >
-                      {item.active ? 'Ativo' : 'Inativo'}
-                    </span>
-                  </td>
+          <div className="overflow-auto">
+            <table className="tabela-painel">
+              <thead>
+                <tr>
+                  <SortHead campo="nome" atual={campo} direcao={direcao} onClick={alternar}>
+                    Nome
+                  </SortHead>
+                  <SortHead campo="email" atual={campo} direcao={direcao} onClick={alternar}>
+                    E-mail
+                  </SortHead>
+                  <SortHead campo="papel" atual={campo} direcao={direcao} onClick={alternar}>
+                    Papel
+                  </SortHead>
+                  <SortHead campo="status" atual={campo} direcao={direcao} onClick={alternar}>
+                    Status
+                  </SortHead>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {dados.map((item) => (
+                  <tr key={item.id}>
+                    <td className="font-medium text-gray-900">{item.name || '—'}</td>
+                    <td className="text-gray-600">{item.email}</td>
+                    <td>
+                      <span className={`selo ${ROTULO_PAPEL[item.role].selo}`}>
+                        {ROTULO_PAPEL[item.role].texto}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`selo ${item.active ? 'selo-verde' : 'selo-vermelho'}`}>
+                        {item.active ? 'Ativo' : 'Inativo'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </Card>
     </div>

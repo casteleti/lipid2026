@@ -2,33 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { generateUniqueSlug } from '../../common/slugify';
 
 @Injectable()
 export class CategoriesService {
   constructor(private db: DatabaseService) {}
 
-  private async generateSlug(name: string, excludeId?: string): Promise<string> {
-    const base = name
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-');
-
-    let slug = base;
-    let counter = 1;
-
-    while (
-      await this.db.category.findFirst({
-        where: { slug, ...(excludeId ? { id: { not: excludeId } } : {}) },
-      })
-    ) {
-      slug = `${base}-${counter}`;
-      counter++;
-    }
-
-    return slug;
-  }
 
   async findAll(skip = 0, take = 50) {
     const [data, total] = await Promise.all([
@@ -55,7 +34,8 @@ export class CategoriesService {
   }
 
   async create(data: CreateCategoryDto) {
-    const slug = await this.generateSlug(data.name);
+    const slug = await generateUniqueSlug(data.name, async (slug) =>
+      !!(await this.db.category.findFirst({ where: { slug } })));
 
     return this.db.category.create({
       data: { ...data, slug },
@@ -67,7 +47,8 @@ export class CategoriesService {
 
     const updateData: UpdateCategoryDto & { slug?: string } = { ...data };
     if (data.name) {
-      updateData.slug = await this.generateSlug(data.name, id);
+      updateData.slug = await generateUniqueSlug(data.name, async (slug) =>
+        !!(await this.db.category.findFirst({ where: { slug, id: { not: id } } })));
     }
 
     return this.db.category.update({

@@ -32,6 +32,9 @@ module.exports = {
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },
+      transitionTimingFunction: {
+        brand: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
+      },
     },
   },
   plugins: [],

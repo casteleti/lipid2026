@@ -2,33 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { CreateTechnologyDto } from './dto/create-technology.dto';
 import { UpdateTechnologyDto } from './dto/update-technology.dto';
+import { generateUniqueSlug } from '../../common/slugify';
 
 @Injectable()
 export class TechnologiesService {
   constructor(private db: DatabaseService) {}
 
-  private async generateSlug(name: string, excludeId?: string): Promise<string> {
-    const base = name
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-');
-
-    let slug = base;
-    let counter = 1;
-
-    while (
-      await this.db.technology.findFirst({
-        where: { slug, ...(excludeId ? { id: { not: excludeId } } : {}) },
-      })
-    ) {
-      slug = `${base}-${counter}`;
-      counter++;
-    }
-
-    return slug;
-  }
 
   async findAll(skip = 0, take = 10, q?: string) {
     const where = {
@@ -64,7 +43,9 @@ export class TechnologiesService {
       },
     });
 
-    if (!technology || !technology.active) {
+    // Sem filtro de `active` de propósito: é por id, e o painel precisa abrir (e
+    // reativar) uma tecnologia desativada. A rota pública é por slug e essa, sim, filtra.
+    if (!technology) {
       throw new NotFoundException(`Tecnologia ${id} não encontrada`);
     }
 
@@ -88,19 +69,28 @@ export class TechnologiesService {
   }
 
   async create(data: CreateTechnologyDto) {
-    const slug = await this.generateSlug(data.name);
+    const slug = await generateUniqueSlug(data.name, async (slug) =>
+      !!(await this.db.technology.findFirst({ where: { slug } })));
 
     return this.db.technology.create({
       data: { ...data, slug },
     });
   }
 
+  /** Existência sem o filtro de `active`: o painel precisa poder editar (e reativar) uma
+   * tecnologia desativada, e `findOne` trata inativa como inexistente. */
+  private async ensureExists(id: string) {
+    const found = await this.db.technology.findUnique({ where: { id }, select: { id: true } });
+    if (!found) throw new NotFoundException(`Tecnologia ${id} não encontrada`);
+  }
+
   async update(id: string, data: UpdateTechnologyDto) {
-    await this.findOne(id);
+    await this.ensureExists(id);
 
     const updateData: UpdateTechnologyDto & { slug?: string } = { ...data };
     if (data.name) {
-      updateData.slug = await this.generateSlug(data.name, id);
+      updateData.slug = await generateUniqueSlug(data.name, async (slug) =>
+        !!(await this.db.technology.findFirst({ where: { slug, id: { not: id } } })));
     }
 
     return this.db.technology.update({

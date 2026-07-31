@@ -15,7 +15,8 @@ interface Partner {
   description: string;
   excerpt: string | null;
   logo: string | null;
-  website: string | null;
+  image: string | null;
+  websites: string[];
   country: string | null;
   highlights: string | null;
 }
@@ -30,9 +31,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const partner = await getPartner(params.slug);
   if (!partner) return { title: 'Parceiro não encontrado' };
 
+  const description = partner.excerpt || partner.description.slice(0, 160);
   return {
-    title: `${partner.name} - Daksa`,
-    description: partner.excerpt || partner.description.slice(0, 160),
+    title: partner.name,
+    description,
+    keywords: [partner.name, 'fabricante representado pela Lipid Ingredients'],
+    openGraph: { title: partner.name, description },
   };
 }
 
@@ -56,8 +60,22 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
 
       <Section>
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="prose prose-lg max-w-none whitespace-pre-line text-gray-700">
-            {partner.description}
+          <div className="space-y-8">
+            {partner.image && (
+              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
+                <Image
+                  src={resolveMediaUrl(partner.image)}
+                  alt={partner.name}
+                  fill
+                  sizes="(min-width: 1024px) 60vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
+
+            <div className="prose prose-lg max-w-none whitespace-pre-line text-gray-700">
+              {partner.description}
+            </div>
           </div>
 
           <aside className="space-y-8">
@@ -93,15 +111,21 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
               </div>
             )}
 
-            {partner.website && (
-              <a
-                href={partner.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-sm font-semibold text-primary-600 hover:text-primary-700"
-              >
-                Visitar site oficial →
-              </a>
+            {partner.websites.length > 0 && (
+              <div className="space-y-2">
+                {partner.websites.length > 1 && <p className="eyebrow">Sites oficiais</p>}
+                {partner.websites.map((site) => (
+                  <a
+                    key={site}
+                    href={site}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-sm font-semibold text-primary-600 hover:text-primary-700"
+                  >
+                    {partner.websites.length > 1 ? site.replace(/^https?:\/\//, '') : 'Visitar site oficial →'}
+                  </a>
+                ))}
+              </div>
             )}
 
             <Button href="/contato" variant="primary" size="lg" className="w-full">

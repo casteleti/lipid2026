@@ -12,10 +12,11 @@ interface CardProps {
 
 export function Card({ children, className, hoverable = true, href }: CardProps) {
   const classes = clsx(
-    'bg-white rounded-2xl border border-gray-200 overflow-hidden',
-    hoverable && 'transition-shadow duration-300 hover:shadow-xl',
+    'group bg-white rounded-[20px] border border-black/[0.05] overflow-hidden',
+    hoverable &&
+      'transition-all duration-700 ease-brand hover:-translate-y-1.5 hover:border-black/[0.08] hover:shadow-[0_40px_60px_-30px_rgba(15,23,42,0.22),0_8px_20px_-12px_rgba(15,23,42,0.08)]',
     href &&
-      'group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
+      'block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2',
     className,
   );
 

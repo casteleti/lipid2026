@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="img" aria-labelledby="t">
+  <title id="t">Estrutura anfifílica de um fosfolipídio</title>
+  <defs>
+    <linearGradient id="fundo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e8eefb"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="560" fill="url(#fundo)"/>
+  <text x="60.0" y="62.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="11" font-weight="700" letter-spacing="1.6" fill="#1e3f99" text-anchor="start">FOSFOLIPÍDIO — ESTRUTURA</text>
+  <text x="60.0" y="96.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#16205c" text-anchor="start">Uma molécula, duas afinidades</text>
+  <rect x="60" y="140" width="780" height="250" rx="20" fill="#ffffff" opacity="0.7"/>
+  <circle cx="250" cy="265" r="46" fill="#1e3f99"/>
+  <text x="250.0" y="271.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">P</text>
+  <rect x="296" y="239" width="54" height="52" rx="12" fill="#93aee0"/>
+  <path d="M 350 250 C 420 216, 480 284, 550 238" stroke="#16205c" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M 350 280 C 420 314, 480 246, 550 292" stroke="#16205c" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <text x="204.0" y="193.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="11" font-weight="700" letter-spacing="1.6" fill="#1e3f99" text-anchor="start">REGIÃO POLAR</text>
+  <text x="204.0" y="215.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="#64748b" text-anchor="start">Afinidade por água</text>
+  <text x="400.0" y="193.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="11" font-weight="700" letter-spacing="1.6" fill="#1e3f99" text-anchor="start">CADEIAS APOLARES</text>
+  <text x="400.0" y="215.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="#64748b" text-anchor="start">Afinidade por óleo</text>
+  <text x="204.0" y="361.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="500" fill="#16205c" text-anchor="start">É essa dupla natureza que organiza interfaces,</text>
+  <text x="204.0" y="383.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="500" fill="#16205c" text-anchor="start">emulsões, bicamadas e vesículas.</text>
+  <text x="60.0" y="440.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="15" font-weight="700" fill="#16205c" text-anchor="start">Classes com comportamentos distintos</text>
+  <rect x="60.0" y="458.0" width="134.0" height="34" rx="17" fill="#ffffff" stroke="#93aee0" stroke-width="1.4"/>
+  <text x="127.0" y="480.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#1e3f99" text-anchor="middle">Fosfatidilcolina</text>
+  <rect x="204.0" y="458.0" width="171.5" height="34" rx="17" fill="#ffffff" stroke="#93aee0" stroke-width="1.4"/>
+  <text x="289.8" y="480.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#1e3f99" text-anchor="middle">Fosfatidiletanolamina</text>
+  <rect x="385.5" y="458.0" width="149.0" height="34" rx="17" fill="#ffffff" stroke="#93aee0" stroke-width="1.4"/>
+  <text x="460.0" y="480.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#1e3f99" text-anchor="middle">Fosfatidilglicerol</text>
+  <rect x="544.5" y="458.0" width="134.0" height="34" rx="17" fill="#ffffff" stroke="#93aee0" stroke-width="1.4"/>
+  <text x="611.5" y="480.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#1e3f99" text-anchor="middle">Fosfatidilserina</text>
+  <text x="60.0" y="538.0" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="start">Representação esquemática da molécula, sem escala.</text>
+</svg>

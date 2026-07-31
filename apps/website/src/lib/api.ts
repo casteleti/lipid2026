@@ -41,6 +41,8 @@ export async function submitContact(data: {
   phone?: string;
   company?: string;
   message?: string;
+  pageUrl?: string;
+  pageTitle?: string;
 }) {
   return api.post('/leads', data);
 }

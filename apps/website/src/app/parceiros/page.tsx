@@ -17,7 +17,7 @@ interface Partner {
   excerpt: string | null;
   description: string;
   logo: string | null;
-  website: string | null;
+  websites: string[];
 }
 
 export default function ParceirosPage() {

@@ -26,13 +26,32 @@ export class ContentController {
     @Query('status') status?: string,
     @Query('q') q?: string,
     @Query('category') category?: string,
+    @Query('tipo') tipo?: string,
   ) {
-    return this.service.findAll(Number(skip), Number(take), status, q, category);
+    return this.service.findAll(Number(skip), Number(take), status, q, category, tipo);
   }
 
   @Get('slug/:slug')
   findBySlug(@Param('slug') slug: string) {
     return this.service.findBySlug(slug);
+  }
+
+  @Get('slug/:slug/relacionados')
+  findRelacionados(@Param('slug') slug: string, @Query('limite') limite = 3) {
+    return this.service.findRelacionados(slug, Number(limite));
+  }
+
+  /** Libera as URLs do material contra um lead já gravado para este conteúdo. */
+  @Get('slug/:slug/arquivos')
+  arquivosLiberados(@Param('slug') slug: string, @Query('lead') leadId: string) {
+    return this.service.arquivosLiberados(slug, leadId);
+  }
+
+  /** Telemetria pública, chamada pela leitura. */
+  @Post('slug/:slug/visita')
+  @HttpCode(204)
+  registrarVisita(@Param('slug') slug: string) {
+    return this.service.registrarVisita(slug);
   }
 
   @Get(':id')

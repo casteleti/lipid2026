@@ -7,6 +7,8 @@ import {
   HiOutlineSparkles,
   HiOutlineGlobeAlt,
 } from 'react-icons/hi2';
+// hi2 não tem ícone de veterinária; o fa6 já é usado no rodapé.
+import { FaPaw } from 'react-icons/fa6';
 
 export interface NavSubItem {
   name: string;
@@ -50,29 +52,35 @@ export const megamenuContent = {
       },
     ],
   },
-  APLICAÇÕES: {
+  SEGMENTOS: {
     title: 'Soluções para múltiplas indústrias.',
-    description: 'Ingredientes especializados para cosméticos, farmacêutica e nutracêuticos.',
-    ctaText: 'Ver todas as aplicações',
-    ctaHref: '/aplicacoes',
+    description: 'Tecnologia lipídica aplicada ao que cada segmento precisa provar.',
+    ctaText: 'Ver todos os segmentos',
+    ctaHref: '/segmentos',
     items: [
       {
         name: 'Farmacêutica',
-        desc: 'Entrega controlada de ativos.',
-        href: '/aplicacoes/pharma',
+        desc: 'Formulações de maior valor terapêutico.',
+        href: '/segmentos/farmaceutica',
         icon: HiOutlineHeart,
       },
       {
-        name: 'Cosméticos',
-        desc: 'Fórmulas premium de alta performance.',
-        href: '/aplicacoes/cosmeticos',
+        name: 'Cosmética',
+        desc: 'Tecnologia que vira experiência de uso.',
+        href: '/segmentos/cosmetica',
         icon: HiOutlineSparkles,
       },
       {
-        name: 'Nutracêutico',
-        desc: 'Nutrientes com maior biodisponibilidade.',
-        href: '/aplicacoes/nutraceutico',
+        name: 'Nutricional',
+        desc: 'Mais função e mais valor percebido.',
+        href: '/segmentos/nutricional',
         icon: HiOutlineGlobeAlt,
+      },
+      {
+        name: 'Veterinária',
+        desc: 'Saúde e nutrição animal competitivas.',
+        href: '/segmentos/veterinaria',
+        icon: FaPaw,
       },
     ],
   },
@@ -87,9 +95,9 @@ export interface NavItem {
 }
 
 export const menuItems: NavItem[] = [
-  { label: 'SOBRE', href: '/sobre' },
+  { label: 'SOBRE A LIPID', href: '/sobre' },
   { label: 'TECNOLOGIAS', href: '/tecnologias', dropdownKey: 'TECNOLOGIAS' },
-  { label: 'APLICAÇÕES', href: '/aplicacoes', dropdownKey: 'APLICAÇÕES' },
+  { label: 'SEGMENTOS', href: '/segmentos', dropdownKey: 'SEGMENTOS' },
   { label: 'INGREDIENTES', href: '/ingredientes' },
   { label: 'CONTEÚDO TÉCNICO', href: '/blog' },
   { label: 'PARCEIROS', href: '/parceiros' },

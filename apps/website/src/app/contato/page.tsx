@@ -1,12 +1,19 @@
-import { HiOutlineEnvelope } from 'react-icons/hi2';
+import { HiOutlineEnvelope, HiOutlinePhone, HiOutlineMapPin } from 'react-icons/hi2';
 import { ListingHero } from '@/components/ui/ListingHero';
 import { ContactForm } from '@/components/sections/ContactForm';
 import { Card } from '@/components/ui/Card';
 import { Section } from '@/components/ui/Section';
+import { CONTATO } from '@/lib/contato';
 
 export const metadata = {
-  title: 'Contato - Daksa',
-  description: 'Entre em contato com nossos especialistas em tecnologias lipídicas.',
+  title: 'Fale com um Especialista',
+  description:
+    'Apresente sua formulação, aplicação e requisitos técnicos. A equipe da Lipid Ingredients responde com leitura técnica, não só catálogo — ingredientes farmacêuticos, cosméticos, nutricionais e veterinários.',
+  keywords: ['contato Lipid Ingredients', 'suporte técnico formulação', 'atendimento técnico ingredientes'],
+  openGraph: {
+    title: 'Fale com um Especialista | Lipid Ingredients',
+    description: 'Apresente sua formulação e requisitos técnicos — a equipe da Lipid retorna com leitura técnica especializada.',
+  },
 };
 
 export default function ContatoPage() {
@@ -31,14 +38,43 @@ export default function ContatoPage() {
               <Card className="space-y-2 p-6">
                 <div className="flex items-center gap-2 font-semibold text-gray-900">
                   <HiOutlineEnvelope className="h-5 w-5 text-primary-600" />
-                  Email
+                  E-mail
                 </div>
                 <a
-                  href="mailto:contato@daksa.app.br"
-                  className="block text-gray-600 hover:text-primary-600"
+                  href={`mailto:${CONTATO.email}`}
+                  className="block text-gray-600 transition-colors hover:text-primary-600"
                 >
-                  contato@daksa.app.br
+                  {CONTATO.email}
                 </a>
+              </Card>
+
+              <Card className="space-y-2 p-6">
+                <div className="flex items-center gap-2 font-semibold text-gray-900">
+                  <HiOutlinePhone className="h-5 w-5 text-primary-600" />
+                  Telefone
+                </div>
+                <a
+                  href={`tel:${CONTATO.telefoneLink}`}
+                  className="block text-gray-600 transition-colors hover:text-primary-600"
+                >
+                  {CONTATO.telefone}
+                </a>
+              </Card>
+
+              <Card className="space-y-2 p-6">
+                <div className="flex items-center gap-2 font-semibold text-gray-900">
+                  <HiOutlineMapPin className="h-5 w-5 text-primary-600" />
+                  Endereço
+                </div>
+                <address className="not-italic leading-relaxed text-gray-600">
+                  {CONTATO.endereco.logradouro}
+                  <br />
+                  {CONTATO.endereco.complemento}
+                  <br />
+                  {CONTATO.endereco.bairro} · {CONTATO.endereco.cidade}/{CONTATO.endereco.estado}
+                  <br />
+                  CEP {CONTATO.endereco.cep}
+                </address>
               </Card>
             </div>
 

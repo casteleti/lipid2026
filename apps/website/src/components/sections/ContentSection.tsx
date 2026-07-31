@@ -52,16 +52,16 @@ export function ContentSection() {
         <Grid cols={3} gap="lg">
           {posts.map((post) => (
             <Card key={post.id} className="flex flex-col">
-              <div className="relative h-44 bg-gray-100">
+              <div className="relative h-44 overflow-hidden bg-gray-100">
                 {post.featured && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={resolveMediaUrl(post.featured)}
                     alt={post.title}
-                    className="absolute inset-0 h-full w-full object-cover"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06]"
                   />
                 )}
-                <Badge variant="secondary" className="absolute left-4 top-4 bg-white">
+                <Badge variant="secondary" className="absolute left-4 top-4 bg-white/85 backdrop-blur-sm">
                   ARTIGO
                 </Badge>
               </div>

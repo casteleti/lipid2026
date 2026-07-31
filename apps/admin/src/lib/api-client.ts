@@ -55,6 +55,8 @@ export const api = {
 export interface UploadResult {
   url: string;
   filename: string;
+  /** Nome original enviado — o `filename` gravado no disco é um uuid. */
+  originalName: string;
   size: number;
   mimetype: string;
 }

@@ -8,6 +8,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ApplicationsModule } from './modules/applications/applications.module';
 import { TechnologiesModule } from './modules/technologies/technologies.module';
 import { IngredientsModule } from './modules/ingredients/ingredients.module';
+import { IngredientCategoriesModule } from './modules/ingredient-categories/ingredient-categories.module';
+import { TagsModule } from './modules/tags/tags.module';
 import { LeadsModule } from './modules/leads/leads.module';
 import { PartnersModule } from './modules/partners/partners.module';
 import { CategoriesModule } from './modules/categories/categories.module';
@@ -16,6 +18,9 @@ import { UploadModule } from './modules/upload/upload.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { InstitutionalPageModule } from './modules/institutional-page/institutional-page.module';
 import { InstitutionalBlocksModule } from './modules/institutional-blocks/institutional-blocks.module';
+import { InstitutionalSectionsModule } from './modules/institutional-sections/institutional-sections.module';
+import { SegmentPagesModule } from './modules/segment-pages/segment-pages.module';
+import { PageViewsModule } from './modules/page-views/page-views.module';
 import { SeoPagesModule } from './modules/seo-pages/seo-pages.module';
 
 @Module({
@@ -28,6 +33,8 @@ import { SeoPagesModule } from './modules/seo-pages/seo-pages.module';
     ApplicationsModule,
     TechnologiesModule,
     IngredientsModule,
+    IngredientCategoriesModule,
+    TagsModule,
     LeadsModule,
     PartnersModule,
     CategoriesModule,
@@ -36,6 +43,9 @@ import { SeoPagesModule } from './modules/seo-pages/seo-pages.module';
     AdminModule,
     InstitutionalPageModule,
     InstitutionalBlocksModule,
+    InstitutionalSectionsModule,
+    SegmentPagesModule,
+    PageViewsModule,
     SeoPagesModule,
   ],
   controllers: [AppController],
