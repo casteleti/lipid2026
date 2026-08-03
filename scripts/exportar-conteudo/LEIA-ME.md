@@ -57,3 +57,14 @@ Lê o banco local (`lipid_development`) e regrava `saida/`.
   o relatório comercial com registros de teste.
 - Não mexe em `technologies_on_applications`: produção já tem os próprios vínculos,
   e os ids de tecnologia/aplicação **diferem** entre os ambientes.
+
+## Compatibilidade do dump
+
+O `pg_dump` recente emite `\restrict`/`\unrestrict` — meta-comandos do psql que um
+cliente mais antigo no destino (ex.: `postgres:15-alpine`) não reconhece, derrubando
+a carga no meio. O `exportar.sh` remove essas linhas na origem; elas não carregam
+dado, são só um envelope de sessão. O tar também sai sem os `._*` do macOS, que
+virariam lixo servido como mídia pela API.
+
+Ambos foram encontrados na primeira migração para produção (03/08/2026) e corrigidos
+no script — regerar o pacote hoje já sai limpo.

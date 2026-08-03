@@ -69,13 +69,20 @@ for tabela in "${TABELAS[@]}"; do
     echo "-- ----------------------------------------------------- $tabela ($linhas)"
   } >> "$SQL"
 
-  # Descarta só o preâmbulo de sessão do pg_dump (SET/SELECT pg_catalog/comentários).
-  # Filtrar por "linha que começa com INSERT" quebraria os INSERTs que o pg_dump
-  # distribui em mais de uma linha — o statement chegaria pela metade no destino.
+  # Descarta o preâmbulo de sessão do pg_dump (SET/SELECT pg_catalog/comentários) e
+  # as meta-instruções do psql que começam com "\".
+  #
+  # As `\restrict`/`\unrestrict` importam: versões recentes do pg_dump as emitem, e
+  # um psql mais antigo no destino (ex.: postgres:15-alpine) não as reconhece — o
+  # script morre no meio de uma carga em produção. Elas não carregam dado nenhum,
+  # são só um envelope de segurança da sessão, então saem aqui na origem.
+  #
+  # Filtrar por "linha que começa com INSERT" não serve: quebraria os INSERTs que o
+  # pg_dump distribui em mais de uma linha, e o statement chegaria pela metade.
   pg_dump -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" \
     --data-only --column-inserts --on-conflict-do-nothing --no-owner --no-privileges \
     -t "public.$tabela" \
-    | sed -E '/^(SET |SELECT pg_catalog|--|$)/d' >> "$SQL" || true
+    | sed -E '/^(SET |SELECT pg_catalog|\\|--|$)/d' >> "$SQL" || true
 done
 
 cat >> "$SQL" <<RODAPE
@@ -93,7 +100,11 @@ RODAPE
 
 # ---------------------------------------------------------------- mídia
 if [ -d "$RAIZ/apps/api/uploads" ]; then
-  tar -czf "$SAIDA/uploads.tar.gz" -C "$RAIZ/apps/api" uploads
+  # COPYFILE_DISABLE evita que o tar do macOS empacote os AppleDouble "._arquivo"
+  # (metadado de extended attributes). Eles viram lixo no volume do servidor e, pior,
+  # a API passa a servi-los como se fossem mídia.
+  COPYFILE_DISABLE=1 tar -czf "$SAIDA/uploads.tar.gz" \
+    --exclude '._*' --exclude '.DS_Store' -C "$RAIZ/apps/api" uploads
   echo "  uploads: $(ls "$RAIZ/apps/api/uploads" | wc -l | tr -d ' ') arquivo(s)"
 fi
 
