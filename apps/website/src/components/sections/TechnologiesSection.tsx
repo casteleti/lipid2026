@@ -20,6 +20,25 @@ interface TechnologiesSectionProps {
   description?: string;
 }
 
+/**
+ * Arte do card, por slug. São três tecnologias fixas e a mesma peça serve a home e a listagem
+ * de /tecnologias — asset versionado do site, não upload do CMS.
+ */
+export const ARTES_TECNOLOGIA: Record<string, { src: string; alt: string }> = {
+  lipossomas: {
+    src: '/tecnologias/card-lipossomas.webp',
+    alt: 'Vesícula lipossomal em corte, com núcleo aquoso e bicamada fosfolipídica',
+  },
+  fosfolipidios: {
+    src: '/tecnologias/card-fosfolipidios.webp',
+    alt: 'Fosfolipídios alinhados em bicamada, com uma molécula em destaque',
+  },
+  encapsulacao: {
+    src: '/tecnologias/card-encapsulacao.webp',
+    alt: 'Vesícula lipídica protegendo um ativo alojado no núcleo',
+  },
+};
+
 export function TechnologiesSection({
   eyebrow = 'PLATAFORMAS CIENTÍFICAS',
   heading = 'Tecnologias de ponta baseadas em lipídios',
@@ -58,10 +77,17 @@ export function TechnologiesSection({
           {technologies.map((tech, idx) => (
             <Card key={tech.id} className="p-6 space-y-4" hoverable>
               <div className="relative flex h-32 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-primary-100 via-primary-200 to-primary-400">
-                <div className="h-14 w-14 rounded-full bg-white/40 shadow-inner backdrop-blur-sm transition-transform duration-700 ease-brand group-hover:scale-110" />
-                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
-                  <div className="absolute -bottom-6 -right-6 h-20 w-20 rounded-full bg-white/20 blur-xl" />
-                </div>
+                {ARTES_TECNOLOGIA[tech.slug] ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={ARTES_TECNOLOGIA[tech.slug].src}
+                    alt={ARTES_TECNOLOGIA[tech.slug].alt}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-brand group-hover:scale-[1.04]"
+                  />
+                ) : (
+                  <div className="h-14 w-14 rounded-full bg-white/40 shadow-inner backdrop-blur-sm transition-transform duration-700 ease-brand group-hover:scale-110" />
+                )}
               </div>
               <div className="space-y-2">
                 <p className="text-xs font-bold uppercase tracking-wider text-gray-500">

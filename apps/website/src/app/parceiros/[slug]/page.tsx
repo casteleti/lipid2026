@@ -1,10 +1,9 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { DetailHero } from '@/components/ui/DetailHero';
 import { Button } from '@/components/ui/Button';
 import { Section } from '@/components/ui/Section';
-import { resolveMediaUrl } from '@/lib/api';
+import { resolveAssetUrl } from '@/lib/api';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
@@ -63,12 +62,11 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
           <div className="space-y-8">
             {partner.image && (
               <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
-                <Image
-                  src={resolveMediaUrl(partner.image)}
-                  alt={partner.name}
-                  fill
-                  sizes="(min-width: 1024px) 60vw, 100vw"
-                  className="object-cover"
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={resolveAssetUrl(partner.image)}
+                  alt={`${partner.name} — registro institucional`}
+                  className="h-full w-full object-cover"
                 />
               </div>
             )}
@@ -81,12 +79,11 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
           <aside className="space-y-8">
             {partner.logo && (
               <div className="relative h-16 w-full">
-                <Image
-                  src={resolveMediaUrl(partner.logo)}
-                  alt={partner.name}
-                  fill
-                  sizes="320px"
-                  className="object-contain object-left"
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={resolveAssetUrl(partner.logo)}
+                  alt={`Logo ${partner.name}`}
+                  className="h-full w-full object-contain object-left"
                 />
               </div>
             )}

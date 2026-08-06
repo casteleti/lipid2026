@@ -48,3 +48,7 @@ apps/api/prisma/*.db
 
 # Mídia enviada pelo painel em runtime — vive no volume do servidor, não no repo
 apps/api/uploads/
+
+# Artes em resolução de produção (91 MB). O site consome os WebP derivados, versionados
+# em apps/website/public/. Ver Docs/plans/imagens-otimizacao-2026-08-06.md
+img/imagens-originais/

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { HiOutlinePhoto } from 'react-icons/hi2';
-import { resolveMediaUrl } from '@/lib/api';
+import { resolveAssetUrl } from '@/lib/api';
 import { GridBackdrop } from '@/components/ui/GridBackdrop';
 
 interface ImageSlotProps {
@@ -29,7 +29,7 @@ export function ImageSlot({ imageUrl, imageHint, alt, className, float = true }:
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={resolveMediaUrl(imageUrl)}
+          src={resolveAssetUrl(imageUrl)}
           alt={alt}
           className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
         />

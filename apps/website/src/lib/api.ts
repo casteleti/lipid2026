@@ -51,3 +51,14 @@ export function resolveMediaUrl(path?: string | null): string {
   if (!path) return '';
   return path.startsWith('http') ? path : `${API_URL}${path}`;
 }
+
+/**
+ * Um campo de imagem do CMS pode apontar para um upload da API (`/uploads/…`) ou para um
+ * asset versionado no próprio site (`/sobre/…`, `/tecnologias/…`). Só o primeiro precisa do
+ * prefixo da API; `resolveMediaUrl` prefixaria os dois e quebraria o segundo.
+ */
+export function resolveAssetUrl(path?: string | null): string {
+  if (!path) return '';
+  if (path.startsWith('http') || !path.startsWith('/uploads')) return path;
+  return `${API_URL}${path}`;
+}

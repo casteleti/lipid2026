@@ -1,14 +1,13 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import Image from 'next/image';
 import { ListingHero } from '@/components/ui/ListingHero';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { LinkArrow } from '@/components/ui/LinkArrow';
 import { Grid } from '@/components/ui/Grid';
 import { Section } from '@/components/ui/Section';
-import { resolveMediaUrl } from '@/lib/api';
+import { resolveAssetUrl } from '@/lib/api';
 
 interface Partner {
   id: string;
@@ -71,12 +70,15 @@ export default function ParceirosPage() {
               <Card key={item.id} href={`/parceiros/${item.slug}`} className="flex h-full flex-col gap-4 p-8 text-center">
                 <div className="relative mx-auto flex h-16 w-full items-center justify-center">
                   {item.logo ? (
-                    <Image
-                      src={resolveMediaUrl(item.logo)}
-                      alt={item.name}
-                      fill
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      className="object-contain"
+                    /* <img> em vez de next/image: o otimizador rejeita a origem da API
+                       (400 "url parameter is not allowed") e o logo já chega leve. Mesmo
+                       padrão de PartnersSection na home. */
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={resolveAssetUrl(item.logo)}
+                      alt={`Logo ${item.name}`}
+                      loading="lazy"
+                      className="max-h-16 w-full object-contain"
                     />
                   ) : (
                     <p className="text-xl font-bold text-gray-900">{item.name}</p>

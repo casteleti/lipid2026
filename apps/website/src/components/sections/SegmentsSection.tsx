@@ -29,6 +29,29 @@ const NOMES: Record<string, string> = {
 };
 
 /**
+ * Arte do card. São quatro segmentos fixos, então a peça é um asset versionado do site em vez
+ * de um campo do CMS — `SegmentPage` não tem coluna de imagem.
+ */
+const ARTES: Record<string, { src: string; alt: string }> = {
+  farmaceutica: {
+    src: '/segmentos/card-farmaceutica.webp',
+    alt: 'Frasco-ampola, cápsulas e vesícula lipossomal em corte',
+  },
+  cosmetica: {
+    src: '/segmentos/card-cosmetica.webp',
+    alt: 'Creme cosmético, frasco de sérum e vesícula lipossomal em corte',
+  },
+  nutricional: {
+    src: '/segmentos/card-nutricional.webp',
+    alt: 'Lecitina em pó, leite e grãos de soja em vidraria de laboratório',
+  },
+  veterinaria: {
+    src: '/segmentos/card-veterinaria.webp',
+    alt: 'Bovino leiteiro em ambiente laboratorial, ao lado de ração e frasco de suplemento',
+  },
+};
+
+/**
  * Bloco de segmentos da home e da institucional. Substituiu o antigo ApplicationsSection:
  * as páginas públicas por mercado agora são as landings de /segmentos.
  */
@@ -72,9 +95,20 @@ export function SegmentsSection({
       ) : (
         <Grid cols={4} gap="md">
           {segmentos.map((s, idx) => (
-            <Card key={s.id} className="flex flex-col">
-              <div className="flex h-40 items-end bg-gradient-to-br from-primary-100 to-primary-300 p-5">
-                <span className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-primary-700">
+            <Card key={s.id} className="group flex flex-col">
+              <div className="relative flex h-40 items-end overflow-hidden bg-gradient-to-br from-primary-100 to-primary-300 p-5">
+                {ARTES[s.slug] && (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={ARTES[s.slug].src}
+                    alt={ARTES[s.slug].alt}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-brand group-hover:scale-[1.04]"
+                  />
+                )}
+                {/* Véu inferior: as artes têm fundo claro e o badge branco sumiria sobre elas. */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-primary-900/25 to-transparent" />
+                <span className="relative rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-primary-700">
                   {String(idx + 1).padStart(2, '0')}
                 </span>
               </div>

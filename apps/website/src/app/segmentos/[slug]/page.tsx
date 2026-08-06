@@ -11,6 +11,29 @@ import { SegmentProjectForm } from '@/components/segmentos/SegmentProjectForm';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
+/**
+ * Composição de produtos do segmento, exibida na dobra 1. Asset versionado do site: são quatro
+ * segmentos fixos e `SegmentPage` não tem coluna de imagem.
+ */
+const ARTES_SEGMENTO: Record<string, { src: string; alt: string }> = {
+  farmaceutica: {
+    src: '/segmentos/farmaceutica.webp',
+    alt: 'Linha farmacêutica: frascos conta-gotas, blísteres, cápsulas e solução oral em vidro âmbar',
+  },
+  cosmetica: {
+    src: '/segmentos/cosmetica.webp',
+    alt: 'Linha cosmética: perfume, batom, potes de creme, máscara de cílios e sérum',
+  },
+  nutricional: {
+    src: '/segmentos/nutricional.webp',
+    alt: 'Linha nutricional: whey protein, creatina, cápsulas e barra proteica ao lado de vesícula lipossomal em corte',
+  },
+  veterinaria: {
+    src: '/segmentos/veterinaria.webp',
+    alt: 'Linha veterinária: frascos, sachês e embalagens ao lado de vesícula lipossomal em corte',
+  },
+};
+
 interface SegmentPageData {
   id: string;
   slug: string;
@@ -75,6 +98,7 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
   if (!page || !page.active) notFound();
 
   const outros = (await getAllSegmentPages()).filter((p) => p.slug !== page.slug && p.active);
+  const arte = ARTES_SEGMENTO[page.slug];
 
   return (
     <>
@@ -82,8 +106,8 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
 
       {/* ---------------------------------------------------------------- HERO */}
       <section className="relative overflow-hidden bg-gradient-to-b from-primary-50/60 via-white to-white py-20 md:py-28">
-        <div className="container-main relative">
-          <div className="reveal max-w-3xl">
+        <div className="container-main relative grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className={arte ? 'reveal lg:col-span-7' : 'reveal max-w-3xl lg:col-span-12'}>
             {page.eyebrow && <Badge variant="primary">{page.eyebrow}</Badge>}
             <h1 className="mt-6 text-gray-900">{page.h1}</h1>
             {page.subheadline && <p className="mt-6 max-w-2xl text-lg text-gray-600">{page.subheadline}</p>}
@@ -93,6 +117,17 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
               </Button>
             </div>
           </div>
+
+          {arte && (
+            <div className="reveal lg:col-span-5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={arte.src}
+                alt={arte.alt}
+                className="w-full rounded-2xl drop-shadow-[0_28px_36px_rgba(15,23,42,0.10)]"
+              />
+            </div>
+          )}
         </div>
       </section>
 

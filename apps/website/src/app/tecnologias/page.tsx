@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/Button';
 import { LinkArrow } from '@/components/ui/LinkArrow';
 import { Grid } from '@/components/ui/Grid';
 import { Section } from '@/components/ui/Section';
+import { ARTES_TECNOLOGIA } from '@/components/sections/TechnologiesSection';
 
 interface Technology {
   id: string;
@@ -102,10 +103,20 @@ export default function TecnologiasPage() {
                 <Card
                   key={tech.id}
                   href={`/tecnologias/${tech.slug}`}
-                  className="flex flex-col gap-4 p-6"
+                  className="group flex flex-col gap-4 p-6"
                 >
-                  <div className="flex h-32 items-center justify-center rounded-xl bg-gray-50">
-                    <HiOutlineCube className="h-10 w-10 text-primary-300" />
+                  <div className="relative flex h-32 items-center justify-center overflow-hidden rounded-xl bg-gray-50">
+                    {ARTES_TECNOLOGIA[tech.slug] ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
+                        src={ARTES_TECNOLOGIA[tech.slug].src}
+                        alt={ARTES_TECNOLOGIA[tech.slug].alt}
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-brand group-hover:scale-[1.04]"
+                      />
+                    ) : (
+                      <HiOutlineCube className="h-10 w-10 text-primary-300" />
+                    )}
                   </div>
                   <Badge variant="secondary" className="w-fit">
                     T-{String(idx + 1).padStart(2, '0')}

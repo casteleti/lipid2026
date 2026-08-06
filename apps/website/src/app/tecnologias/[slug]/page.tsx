@@ -13,6 +13,16 @@ import { hrefDaAplicacao } from '@/lib/segmentos';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
+/**
+ * Ambientação do hero: render 3D esmaecido ao fundo, puramente decorativo. Quem explica a
+ * tecnologia é o diagrama vetorial de `imageOneUrl` — este só dá profundidade à dobra.
+ */
+const AMBIENTE_HERO: Record<string, string> = {
+  lipossomas: '/tecnologias/hero-lipossomas.webp',
+  fosfolipidios: '/tecnologias/hero-fosfolipidios.webp',
+  encapsulacao: '/tecnologias/hero-encapsulacao.webp',
+};
+
 interface Technology {
   id: string;
   slug: string;
@@ -136,6 +146,19 @@ export default async function TechnologyDetailPage({ params }: { params: { slug:
 
       {/* ============================================================ DOBRA 1 — HERO */}
       <section className="relative overflow-hidden bg-gradient-to-b from-primary-50/60 via-white to-white py-20 md:py-24">
+        {AMBIENTE_HERO[tech.slug] && (
+          <div className="pointer-events-none absolute inset-0" aria-hidden>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={AMBIENTE_HERO[tech.slug]}
+              alt=""
+              className="h-full w-full object-cover opacity-[0.16]"
+            />
+            {/* Esmaece sobre a coluna de texto — a arte entra como profundidade, não como cena. */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/45" />
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent" />
+          </div>
+        )}
         <div className="container-main relative grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
           <div className="reveal lg:col-span-6">
             <Link
