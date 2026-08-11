@@ -35,6 +35,7 @@ COPY --from=builder /app/apps/website/node_modules ./apps/website/node_modules
 COPY --from=builder /app/apps/website/.next ./apps/website/.next
 COPY --from=builder /app/apps/website/public ./apps/website/public
 COPY --from=builder /app/apps/website/package.json ./apps/website/package.json
+COPY --from=builder /app/apps/website/next.config.js ./apps/website/next.config.js
 
 WORKDIR /app/apps/website
 

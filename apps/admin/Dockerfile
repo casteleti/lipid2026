@@ -35,6 +35,7 @@ COPY --from=builder /app/apps/admin/node_modules ./apps/admin/node_modules
 COPY --from=builder /app/apps/admin/.next ./apps/admin/.next
 COPY --from=builder /app/apps/admin/public ./apps/admin/public
 COPY --from=builder /app/apps/admin/package.json ./apps/admin/package.json
+COPY --from=builder /app/apps/admin/next.config.js ./apps/admin/next.config.js
 
 WORKDIR /app/apps/admin
 
