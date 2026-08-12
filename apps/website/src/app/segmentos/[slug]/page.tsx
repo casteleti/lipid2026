@@ -13,8 +13,17 @@ import { SegmentProjectForm } from '@/components/segmentos/SegmentProjectForm';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
-/** Os 3 beats da seção comercial — iguais nos quatro segmentos, por desenho. */
-const ETAPAS_VENDA = ['O contexto', 'Como trabalhamos', 'O que muda'] as const;
+/**
+ * Os 3 beats da seção comercial — iguais nos quatro segmentos, por desenho, e por isso
+ * fixos aqui em vez de virem do CMS: os parágrafos mudam por segmento, a estrutura não.
+ *
+ * Os rótulos são escritos em caixa baixa e sobem para maiúsculas no CSS (`uppercase`),
+ * como o resto dos eyebrows do site.
+ */
+const ETAPAS_VENDA = ['O contexto do mercado', 'Nosso papel', 'Seu produto diferenciado'] as const;
+
+/** Chapéu do bloco comercial. Mesmo texto nas quatro páginas — é a promessa da marca. */
+const TITULO_BLOCO_VENDA = 'Sua indústria + Lipid';
 
 /**
  * Artes da dobra, por segmento. São duas composições da mesma linha de produto — uma
@@ -211,6 +220,17 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
       {page.salesParagraphs && page.salesParagraphs.length > 0 && (
         <section className="py-20 md:py-28">
           <div className="container-main">
+            {/* Chapéu do bloco: letra fina em caixa alta, bem espaçada, dentro de um
+                retângulo vazado de borda cinza. `inline-block` para a moldura acompanhar o
+                texto em vez de atravessar a coluna. O espaçamento entre letras cria uma
+                folga fantasma depois do último caractere — o `pl` maior que o `pr`
+                compensa, senão o texto fica visivelmente descentrado dentro da borda. */}
+            <div className="mb-12 text-center md:mb-14">
+              <span className="inline-block rounded-xl border border-gray-300 py-3 pl-6 pr-[1.15rem] text-[11px] font-light uppercase tracking-[0.28em] text-gray-500">
+                {TITULO_BLOCO_VENDA}
+              </span>
+            </div>
+
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-10 md:grid-cols-3 md:gap-12">
               {page.salesParagraphs.map((p, i) => {
                 const rotulo = page.salesParagraphs?.length === 3 ? ETAPAS_VENDA[i] : null;
@@ -219,7 +239,7 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
                     {rotulo && (
                       <div className="flex items-baseline gap-2">
                         <span className="font-mono text-xs font-bold text-primary-400">
-                          {String(i + 1).padStart(2, '0')}
+                          {String(i + 1).padStart(2, '0')}.
                         </span>
                         <span className="text-xs font-bold uppercase tracking-wider text-gray-900">
                           {rotulo}
