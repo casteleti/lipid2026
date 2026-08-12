@@ -41,8 +41,12 @@ export async function submitContact(data: {
   phone?: string;
   company?: string;
   message?: string;
+  /** Enum `LeadSector` da API (ex.: 'FARMACEUTICA') — quem qualifica o setor no quiz envia. */
+  sector?: string;
   pageUrl?: string;
   pageTitle?: string;
+  /** Rota normalizada da landing que converteu, ex.: '/especialista'. */
+  landingRoute?: string;
 }) {
   return api.post('/leads', data);
 }

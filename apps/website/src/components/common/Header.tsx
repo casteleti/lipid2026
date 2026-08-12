@@ -7,6 +7,8 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { HiBars3, HiXMark, HiChevronDown } from 'react-icons/hi2';
 import { Button } from '@/components/ui/Button';
+import { BotaoEspecialista } from '@/components/ui/BotaoEspecialista';
+import { LogoLipid } from './LogoLipid';
 import { Megamenu } from './Megamenu';
 import { menuItems, megamenuContent, type DropdownKey } from './nav-data';
 
@@ -141,35 +143,12 @@ export function Header() {
               scrolled ? 'h-14 md:h-16' : 'h-16 md:h-20',
             )}
           >
-            {/* Brand area — protected zone, pinned to the far edge */}
-            <Link
-              href="/"
-              className={clsx(
-                'relative flex shrink-0 items-center transition-all duration-500 ease-brand',
-                scrolled ? 'h-8' : 'h-9 md:h-12 lg:h-14',
-              )}
-            >
-              <Image
-                src="/logo/lipid-horizontal.png"
-                alt="LIPID Ingredients"
-                width={1920}
-                height={582}
-                priority
-                className={clsx(
-                  'h-full w-auto transition-opacity duration-500 ease-brand',
-                  scrolled ? 'opacity-0' : 'opacity-100',
-                )}
-              />
-              <Image
-                src="/logo/lipid-mark.png"
-                alt="LIPID Ingredients"
-                width={560}
-                height={560}
-                className={clsx(
-                  'absolute left-0 h-full w-auto transition-opacity duration-500 ease-brand',
-                  scrolled ? 'opacity-100' : 'pointer-events-none opacity-0',
-                )}
-              />
+            {/* Brand area — protected zone, pinned to the far edge.
+                A altura do <Link> deixou de mudar com o scroll: o handoff do logo é
+                explícito em que o símbolo não reduz nem se desloca — quem colapsa é o
+                wordmark ao lado dele. */}
+            <Link href="/" className="relative flex shrink-0 items-center">
+              <LogoLipid colapsado={scrolled} />
             </Link>
 
             {/* Navigation area — truly centered on the whole bar (not just the leftover
@@ -182,7 +161,11 @@ export function Header() {
             return (
               <div
                 key={item.label}
-                className="relative shrink-0 px-4 2xl:px-6"
+                // Grupo NOMEADO de propósito: o Megamenu renderiza aqui dentro e cada item
+                // dele tem seu próprio `group`. Um `group` anônimo neste ancestral faria o
+                // hover em qualquer ponto do item acender todos os ícones do submenu de uma
+                // vez — `group/nav` mantém o efeito restrito à seta desta palavra.
+                className="group/nav relative shrink-0 px-4 2xl:px-6"
                 onMouseEnter={() => item.dropdownKey && openDropdown(item.dropdownKey)}
                 onMouseLeave={() => item.dropdownKey && scheduleClose()}
                 onKeyDown={(e) => {
@@ -202,9 +185,14 @@ export function Header() {
                     href={item.href}
                     onFocus={() => item.dropdownKey && openDropdown(item.dropdownKey)}
                     className={clsx(
-                      'whitespace-nowrap py-2 transition-all duration-300',
+                      // Azul do hover é o mesmo dos links do resto do site (primary-600).
+                      // `isOpen` também pinta de azul: nos itens com dropdown, o hover que
+                      // colore o texto é o mesmo que abre o submenu — sem tratar os dois
+                      // juntos, TECNOLOGIAS e SEGMENTOS ficariam de fora do efeito.
+                      'whitespace-nowrap py-2 transition-all duration-300 hover:text-primary-600',
                       scrolled ? 'text-[11px]' : 'text-[12px]',
-                      active || isOpen ? 'font-semibold text-gray-900' : 'font-medium text-gray-600 hover:text-gray-900',
+                      active || isOpen ? 'font-semibold' : 'font-medium',
+                      isOpen ? 'text-primary-600' : active ? 'text-gray-900' : 'text-gray-600',
                     )}
                   >
                     {item.label}
@@ -221,7 +209,13 @@ export function Header() {
                       aria-controls={`megamenu-${item.dropdownKey}`}
                       aria-label={`${isOpen ? 'Fechar' : 'Abrir'} submenu de ${item.label.toLowerCase()}`}
                       onClick={() => (isOpen ? closeNow() : openDropdown(item.dropdownKey!))}
-                      className="ml-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-gray-400 transition-colors duration-150 hover:bg-gray-100 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+                      className={clsx(
+                        // A seta acompanha a palavra no hover, um tom mais claro para não
+                        // competir com ela. `group-hover` cobre a janela do hover-intent,
+                        // entre o mouse entrar e o submenu de fato abrir.
+                        'ml-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-150 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500',
+                        isOpen ? 'text-primary-500' : 'text-gray-400 group-hover/nav:text-primary-400',
+                      )}
                     >
                       <HiChevronDown
                         className={clsx('h-3.5 w-3.5 transition-transform duration-200', isOpen && 'rotate-180')}
@@ -254,9 +248,7 @@ export function Header() {
         {/* Conversion area — protected zone, pinned to the far edge */}
         <div className="flex items-center justify-end pl-4 xl:pl-6">
           <div className="hidden xl:block">
-            <Button href="/contato" variant="primary" size="sm" className="!px-8 !py-3.5 whitespace-nowrap">
-              Fale com um especialista
-            </Button>
+            <BotaoEspecialista href="/especialista">Fale com um especialista</BotaoEspecialista>
           </div>
 
           <button
@@ -400,7 +392,7 @@ export function Header() {
 
         <div className="flex-shrink-0 border-t border-gray-100 p-4">
           <Button
-            href="/contato"
+            href="/especialista"
             variant="primary"
             size="md"
             className="w-full"

@@ -5,6 +5,7 @@ import { HiOutlineArrowRight } from 'react-icons/hi2';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
+import { FraseRevelada } from '@/components/ui/FraseRevelada';
 import { GridBackdrop } from '@/components/ui/GridBackdrop';
 import { PageViewTracker } from '@/components/segmentos/PageViewTracker';
 import { TechnologyProjectForm } from '@/components/tecnologias/TechnologyProjectForm';
@@ -15,7 +16,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
 /**
  * Ambientação do hero: render 3D esmaecido ao fundo, puramente decorativo. Quem explica a
- * tecnologia é o diagrama vetorial de `imageOneUrl` — este só dá profundidade à dobra.
+ * tecnologia são os diagramas vetoriais (`imageOneUrl` / `imageTwoUrl`), que ganharam dobras
+ * próprias no corpo da página — o banner ficou só com a promessa, sem concorrência visual.
  */
 const AMBIENTE_HERO: Record<string, string> = {
   lipossomas: '/tecnologias/hero-lipossomas.webp',
@@ -104,30 +106,44 @@ function urlDaFigura(url: string): string {
   return resolveMediaUrl(url);
 }
 
-/** Ilustração da página. A legenda fica fora do quadro, como figura de material técnico. */
-function Figura({
+/**
+ * Dobra dedicada a uma ilustração técnica. Cada diagrama ocupa uma dobra inteira, centrado e
+ * sem texto concorrente ao lado: o vetor já carrega rótulo e título internos, então a única
+ * coisa que o acompanha é a legenda — a leitura da figura é o assunto da dobra.
+ *
+ * O desenho flutua: sem moldura, sem borda, sem sombra. Os SVGs também são transparentes
+ * (ver `documento()` em scripts/gerar-ilustracoes-tecnologias/gerar.py) — qualquer caixa
+ * aqui voltaria a espremer a arte contra o quadro dela.
+ *
+ * Os SVGs são 900×560, e `max-w-4xl` (896px) os entrega praticamente em tamanho nativo.
+ */
+function PranchaTecnica({
   url,
   alt,
   caption,
-  className = '',
 }: {
   url: string;
   alt: string | null;
   caption: string | null;
-  className?: string;
 }) {
   return (
-    <figure className={className}>
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
-        {/* Vetor servido pelo próprio site — <img> evita o pipeline do next/image, que não
-            traz ganho algum para SVG. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={urlDaFigura(url)} alt={alt || ''} className="w-full" loading="lazy" />
+    <section className="bg-white py-16 md:py-24">
+      <div className="container-main">
+        <Reveal className="mx-auto max-w-4xl">
+          <figure>
+            {/* Vetor servido pelo próprio site — <img> evita o pipeline do next/image, que não
+                traz ganho algum para SVG. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={urlDaFigura(url)} alt={alt || ''} className="w-full" loading="lazy" />
+            {caption && (
+              <figcaption className="mx-auto mt-7 max-w-2xl text-center text-[15px] leading-relaxed text-gray-500">
+                {caption}
+              </figcaption>
+            )}
+          </figure>
+        </Reveal>
       </div>
-      {caption && (
-        <figcaption className="mt-3 text-sm leading-relaxed text-gray-500">{caption}</figcaption>
-      )}
-    </figure>
+    </section>
   );
 }
 
@@ -145,22 +161,34 @@ export default async function TechnologyDetailPage({ params }: { params: { slug:
       <PageViewTracker route={route} />
 
       {/* ============================================================ DOBRA 1 — HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary-50/60 via-white to-white py-20 md:py-24">
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary-50/60 via-white to-white py-24 md:py-32">
         {AMBIENTE_HERO[tech.slug] && (
           <div className="pointer-events-none absolute inset-0" aria-hidden>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={AMBIENTE_HERO[tech.slug]}
               alt=""
-              className="h-full w-full object-cover opacity-[0.16]"
+              className="h-full w-full object-cover opacity-[0.45]"
             />
-            {/* Esmaece sobre a coluna de texto — a arte entra como profundidade, não como cena. */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/45" />
+            {/* No celular a elipse do véu cobre uma fração muito menor da tela (o recorte do
+                object-cover é vertical), e a arte subia por trás do parágrafo. Esta camada
+                chapada só existe abaixo de md. */}
+            <div className="absolute inset-0 bg-white/45 md:bg-transparent" />
+            {/* Sem o diagrama ao lado, o texto passou a ocupar o centro — então o véu deixou
+                de ser um degradê da esquerda para a direita e virou radial: opaco onde a frase
+                está, aberto nas bordas, onde a arte pode aparecer inteira. */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  'radial-gradient(ellipse 72% 68% at 50% 46%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.88) 42%, rgba(255,255,255,0.30) 100%)',
+              }}
+            />
             <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent" />
           </div>
         )}
-        <div className="container-main relative grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
-          <div className="reveal lg:col-span-6">
+        <div className="container-main relative">
+          <div className="reveal mx-auto flex max-w-3xl flex-col items-center text-center">
             <Link
               href="/tecnologias"
               className="mb-6 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-gray-500 transition-colors hover:text-primary-600"
@@ -168,11 +196,9 @@ export default async function TechnologyDetailPage({ params }: { params: { slug:
               ← Tecnologias
             </Link>
             {tech.eyebrow && <Badge variant="primary">{tech.eyebrow}</Badge>}
-            {/* Menor que o h1 padrão de propósito: aqui o título é uma frase inteira, e no
-                tamanho global ele vira um bloco de 4 linhas que desequilibra a dobra. */}
-            <h1 className="mt-6 text-[2.1rem] leading-[1.12] text-gray-900 md:text-[2.6rem]">
-              {tech.h1 || tech.name}
-            </h1>
+            {/* Sem tamanho local: a escala global do h1 encolheu e já é a medida que este
+                título precisava — manter o override aqui só criaria duas escalas parecidas. */}
+            <h1 className="mt-6 text-gray-900">{tech.h1 || tech.name}</h1>
             {tech.subheadline && (
               <p className="mt-6 text-lg leading-relaxed text-gray-600">{tech.subheadline}</p>
             )}
@@ -182,22 +208,22 @@ export default async function TechnologyDetailPage({ params }: { params: { slug:
               </Button>
             </div>
           </div>
-
-          {tech.imageOneUrl && (
-            <Figura
-              url={tech.imageOneUrl}
-              alt={tech.imageOneAlt}
-              caption={tech.imageOneCaption}
-              className="reveal lg:col-span-6"
-            />
-          )}
         </div>
       </section>
 
-      {/* ==================================================== DOBRA 2 — ESSÊNCIA TÉCNICA */}
+      {/* ================================================ DOBRA 2 — A FIGURA, SOZINHA */}
+      {tech.imageOneUrl && (
+        <PranchaTecnica
+          url={tech.imageOneUrl}
+          alt={tech.imageOneAlt}
+          caption={tech.imageOneCaption}
+        />
+      )}
+
+      {/* ==================================================== DOBRA 3 — ESSÊNCIA TÉCNICA */}
       <section className="bg-gray-50 py-20 md:py-24">
         <div className="container-main">
-          <div className="max-w-3xl">
+          <div className="mx-auto max-w-3xl text-center">
             {tech.essenceTitle && <h2 className="text-gray-900">{tech.essenceTitle}</h2>}
             {tech.essenceIntro && (
               <p className="mt-5 text-lg leading-relaxed text-gray-600">{tech.essenceIntro}</p>
@@ -205,7 +231,7 @@ export default async function TechnologyDetailPage({ params }: { params: { slug:
           </div>
 
           {pillars.length > 0 && (
-            <div className="mt-14 grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2">
+            <div className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2">
               {pillars.map((pilar, i) => (
                 <Reveal key={i} className="border-t border-gray-200 pt-6">
                   <span className="font-mono text-xs font-bold text-primary-400">
@@ -219,52 +245,49 @@ export default async function TechnologyDetailPage({ params }: { params: { slug:
               ))}
             </div>
           )}
-
-          {(tech.imageTwoUrl || criteria.length > 0) && (
-            <div className="mt-20 grid grid-cols-1 items-start gap-14 lg:grid-cols-12 lg:gap-16">
-              {tech.imageTwoUrl && (
-                <Figura
-                  url={tech.imageTwoUrl}
-                  alt={tech.imageTwoAlt}
-                  caption={tech.imageTwoCaption}
-                  className="lg:col-span-7"
-                />
-              )}
-
-              {criteria.length > 0 && (
-                <div className="lg:col-span-5">
-                  <p className="eyebrow">{tech.criteriaTitle || 'O que colocamos na mesa'}</p>
-                  <dl className="mt-6 space-y-6">
-                    {criteria.map((item, i) => (
-                      <div key={i} className="border-l-2 border-primary-200 pl-5">
-                        <dt className="font-bold text-gray-900">{item.label}</dt>
-                        <dd className="mt-1.5 text-sm leading-relaxed text-gray-600">
-                          {item.description}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </section>
+
+      {/* ============================================ DOBRA 4 — A SEGUNDA FIGURA, SOZINHA */}
+      {tech.imageTwoUrl && (
+        <PranchaTecnica
+          url={tech.imageTwoUrl}
+          alt={tech.imageTwoAlt}
+          caption={tech.imageTwoCaption}
+        />
+      )}
+
+      {/* ========================================================= DOBRA 5 — CRITÉRIOS */}
+      {criteria.length > 0 && (
+        <section className="bg-gray-50 py-20 md:py-24">
+          <div className="container-main">
+            <p className="eyebrow text-center">{tech.criteriaTitle || 'O que colocamos na mesa'}</p>
+            <dl className="mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2">
+              {criteria.map((item, i) => (
+                <Reveal key={i} className="border-l-2 border-primary-200 pl-5">
+                  <dt className="font-bold text-gray-900">{item.label}</dt>
+                  <dd className="mt-1.5 text-sm leading-relaxed text-gray-600">
+                    {item.description}
+                  </dd>
+                </Reveal>
+              ))}
+            </dl>
+          </div>
+        </section>
+      )}
 
       {/* ------------------------------------------------------- FRASE DE AUTORIDADE */}
       {tech.authorityStatement && (
         <section className="py-20 md:py-24">
           <div className="container-main">
-            <Reveal className="mx-auto max-w-3xl text-center">
-              <p className="text-2xl font-medium leading-snug text-gray-900 md:text-3xl">
-                {tech.authorityStatement}
-              </p>
-            </Reveal>
+            {/* Sem o <Reveal/> em volta: a própria FraseRevelada observa a dobra, e as duas
+                animações somadas fariam o bloco inteiro subir enquanto as palavras sobem. */}
+            <FraseRevelada texto={tech.authorityStatement} />
           </div>
         </section>
       )}
 
-      {/* ========================================================== DOBRA 3 — CONVERSÃO */}
+      {/* ========================================================== DOBRA 6 — CONVERSÃO */}
       <section id="projeto" className="relative isolate overflow-hidden bg-white py-20 md:py-24">
         <GridBackdrop />
         <div className="container-main relative grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">

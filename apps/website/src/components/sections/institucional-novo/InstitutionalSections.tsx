@@ -15,6 +15,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Reveal } from '@/components/ui/Reveal';
+import { FraseRevelada } from '@/components/ui/FraseRevelada';
 import { GridBackdrop } from '@/components/ui/GridBackdrop';
 import { ImageSlot } from './ImageSlot';
 import { InstitutionalContactForm } from './InstitutionalContactForm';
@@ -72,41 +73,59 @@ function SectionHeading({ eyebrow, title, dark }: { eyebrow?: string | null; tit
   );
 }
 
+/**
+ * Dobra de entrada do institucional. Enxugada em 2026-08-11: antes trazia selo, h1, subtítulo,
+ * uma frase em destaque, um parágrafo de apoio, dois CTAs e uma foto flutuando numa moldura à
+ * direita — sete elementos disputando a mesma tela. Ficaram o selo, o título, uma linha de
+ * apoio e um CTA, sobre a planta como marca d'água.
+ *
+ * `highlight`, `body` e o CTA secundário continuam no banco e seguem editáveis: eles apenas
+ * deixaram de ser renderizados AQUI. Se voltarem a ser necessários, o lugar deles é uma dobra
+ * própria, não o hero.
+ */
 function Hero({ section }: { section: InstitutionalSectionData }) {
   return (
-    <section id={section.slug} className="relative overflow-hidden bg-gradient-to-b from-primary-50/60 via-white to-white py-20 md:py-28">
-      <div className="container-main grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
-        <div className="reveal lg:col-span-7">
-          <Badge variant="primary">{section.eyebrow}</Badge>
+    <section
+      id={section.slug}
+      className="relative flex items-center overflow-hidden bg-gradient-to-b from-primary-50/60 via-white to-white py-24 md:min-h-[620px] md:py-32"
+    >
+      {/* A arte tem canal alfa e já nasce dissolvida à esquerda (ver
+          scripts/gerar-hero-institucional/gerar.py), então assenta sobre o degradê da seção
+          sem trazer fundo próprio. `object-right` mantém o prédio na direita em qualquer
+          largura — a metade esquerda é o espaço de leitura. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/institucional/hero-planta.webp"
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-right"
+      />
+
+      {/* A dissolução da arte é horizontal e pressupõe texto à esquerda, prédio à direita. No
+          celular o texto ocupa a largura toda e o recorte cai justamente sobre a construção.
+          Esta camada chapada só existe abaixo de md. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-white/60 md:bg-transparent" />
+
+      {/* `w-full` não é decoração: a seção é flex, e sem ele o container vira item flexível,
+          encolhe até o conteúdo e o `mx-auto` o centraliza — o texto saía no meio da tela em
+          vez de na borda esquerda, como em todo o resto do site. */}
+      <div className="container-main relative w-full">
+        <div className="reveal max-w-xl">
+          {section.eyebrow && <Badge variant="primary">{section.eyebrow}</Badge>}
           <h1 className="mt-6 text-gray-900">{section.title}</h1>
-          <p className="mt-6 max-w-xl text-lg text-gray-600">{section.subtitle}</p>
-          {section.highlight && (
-            <p className="mt-4 max-w-xl border-l-2 border-primary-300 pl-4 text-sm font-medium text-primary-700">
-              {section.highlight}
-            </p>
+          {/* Subtítulo como parágrafo, não como <h2>: a escala global de h2 chega a 48px e
+              empataria com o h1 ao lado. Aqui ele é linha de apoio, não outro nível de
+              título. */}
+          {section.subtitle && (
+            <p className="mt-6 text-xl leading-relaxed text-gray-600">{section.subtitle}</p>
           )}
-          {section.body && <p className="mt-4 max-w-xl text-sm text-gray-500">{section.body}</p>}
-          <div className="mt-9 flex flex-wrap items-center gap-4">
-            {section.ctaLabel && (
+          {section.ctaLabel && (
+            <div className="mt-10">
               <Button href={section.ctaHref || '/contato'} variant="primary" size="lg">
                 {section.ctaLabel}
               </Button>
-            )}
-            {section.secondaryCtaLabel && (
-              <Link
-                href={section.secondaryCtaHref || '#'}
-                className="group inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-900 transition-colors hover:text-primary-600"
-              >
-                {section.secondaryCtaLabel}
-                <HiOutlineArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            )}
-          </div>
-        </div>
-        <div className="reveal reveal-delay-2 lg:col-span-5">
-          <div className="float-soft">
-            <ImageSlot imageUrl={section.imageUrl} imageHint={section.imageHint} alt={section.title || 'Lipid Ingredients'} />
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -265,10 +284,15 @@ function StatementBreak({ section }: { section: InstitutionalSectionData }) {
   return (
     <section id={section.slug} className="py-20 md:py-24">
       <div className="container-main">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <p className="text-2xl font-medium leading-snug text-gray-900 md:text-3xl">{section.body}</p>
-          {section.subtitle && <p className="mt-5 text-gray-500">{section.subtitle}</p>}
-        </Reveal>
+        {/* Sem o <Reveal/> em volta da frase: a própria FraseRevelada observa a dobra, e as
+            duas animações somadas fariam o bloco subir enquanto as palavras sobem. O
+            subtítulo, que não faz parte do efeito, mantém o reveal de sempre. */}
+        {section.body && <FraseRevelada texto={section.body} />}
+        {section.subtitle && (
+          <Reveal className="mx-auto mt-5 max-w-[860px] text-center">
+            <p className="text-gray-500">{section.subtitle}</p>
+          </Reveal>
+        )}
       </div>
     </section>
   );

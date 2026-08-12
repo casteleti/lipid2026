@@ -30,15 +30,14 @@ FONTE = "system-ui, -apple-system, 'Segoe UI', sans-serif"
 
 
 def documento(largura: int, altura: int, corpo: str, titulo: str) -> str:
+    """
+    O SVG é transparente de propósito: o desenho flutua sobre o fundo da dobra, sem placa
+    nem moldura. Até 2026-08-11 havia um retângulo de fundo em degradê ocupando a arte
+    inteira, e ele empilhava com a moldura da página — a ilustração aparecia espremida
+    dentro de duas caixas. Se precisar de fundo, o lugar é a seção que hospeda a figura.
+    """
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {largura} {altura}" role="img" aria-labelledby="t">
   <title id="t">{titulo}</title>
-  <defs>
-    <linearGradient id="fundo" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="{BRANCO}"/>
-      <stop offset="100%" stop-color="{AZUL_LAVADO}"/>
-    </linearGradient>
-  </defs>
-  <rect width="{largura}" height="{altura}" fill="url(#fundo)"/>
 {corpo}
 </svg>
 """
@@ -122,7 +121,8 @@ def lipossomas_arquitetura() -> str:
     p = [
         caixa_alta(60, 62, "Lipossoma — corte esquemático"),
         rotulo(60, 96, "Uma arquitetura, três lugares para o ativo", 22, AZUL_ESCURO, 700),
-        f'  <circle cx="{cx}" cy="{cy}" r="150" fill="{BRANCO}" opacity="0.75"/>',
+        # O halo branco que existia aqui só servia para descolar a vesícula do antigo fundo
+        # em degradê. Sem ele, seria uma mancha branca sobre qualquer seção com cor.
         f'  <circle cx="{cx}" cy="{cy}" r="118" fill="{AZUL_LAVADO}"/>',
         bicamada_circular(cx, cy, 122, 30, 54),
     ]
@@ -178,7 +178,6 @@ def lipossomas_populacao() -> str:
         (400, 235, "Multilamelar", "Camadas concêntricas."),
         (630, 235, "Heterogênea", "Populações coexistindo."),
     ]
-    p.append(f'  <rect x="60" y="140" width="780" height="200" rx="20" fill="{BRANCO}" opacity="0.7"/>')
 
     cx, cy, _, _ = 170, 235, None, None
     p.append(f'  <circle cx="{cx}" cy="{cy}" r="52" fill="{AZUL_LAVADO}"/>')
@@ -214,7 +213,6 @@ def fosfolipidios_molecula() -> str:
     p = [
         caixa_alta(60, 62, "Fosfolipídio — estrutura"),
         rotulo(60, 96, "Uma molécula, duas afinidades", 22, AZUL_ESCURO, 700),
-        f'  <rect x="60" y="140" width="780" height="250" rx="20" fill="{BRANCO}" opacity="0.7"/>',
     ]
 
     cx, cy = 250, 265
@@ -252,7 +250,6 @@ def fosfolipidios_organizacao() -> str:
     p = [
         caixa_alta(60, 62, "Auto-organização"),
         rotulo(60, 96, "A mesma família, quatro estruturas de trabalho", 22, AZUL_ESCURO, 700),
-        f'  <rect x="60" y="140" width="780" height="250" rx="20" fill="{BRANCO}" opacity="0.7"/>',
     ]
 
     cy = 218
@@ -305,7 +302,6 @@ def encapsulacao_protecao() -> str:
     ]
 
     # Painel esquerdo — ativo exposto
-    p.append(f'  <rect x="60" y="140" width="360" height="290" rx="20" fill="{BRANCO}" opacity="0.7"/>')
     cx, cy = 240, 290
     p.append(f'  <circle cx="{cx}" cy="{cy}" r="26" fill="{AZUL_ESCURO}"/>')
     agressores = ["Oxigênio", "Luz", "Umidade", "pH", "Enzimas"]
@@ -321,7 +317,6 @@ def encapsulacao_protecao() -> str:
     p.append(rotulo(240, 421, "Degrada no ritmo do ambiente.", 13, CINZA, 400, ancora="middle"))
 
     # Painel direito — ativo encapsulado
-    p.append(f'  <rect x="480" y="140" width="360" height="290" rx="20" fill="{BRANCO}" opacity="0.9"/>')
     cx = 660
     p.append(f'  <circle cx="{cx}" cy="{cy}" r="74" fill="{AZUL_LAVADO}"/>')
     p.append(bicamada_circular(cx, cy, 58, 16, 34, raio_cabeca=3.6))
@@ -351,8 +346,6 @@ def encapsulacao_liberacao() -> str:
     p = [
         caixa_alta(60, 62, "Encapsulação — perfil de liberação"),
         rotulo(60, 96, "A estrutura escolhida define o tempo", 22, AZUL_ESCURO, 700),
-        f'  <rect x="{x0 - 50}" y="{y0 - 14}" width="{largura + 90}" height="{altura + 78}" rx="20" '
-        f'fill="{BRANCO}" opacity="0.7"/>',
     ]
 
     # eixos

@@ -5,6 +5,8 @@ import { HiOutlineArrowRight } from 'react-icons/hi2';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
+import { FraseRevelada } from '@/components/ui/FraseRevelada';
+import { CardSegmento } from '@/components/segmentos/CardSegmento';
 import { GridBackdrop } from '@/components/ui/GridBackdrop';
 import { PageViewTracker } from '@/components/segmentos/PageViewTracker';
 import { SegmentProjectForm } from '@/components/segmentos/SegmentProjectForm';
@@ -14,22 +16,40 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 /**
  * Composição de produtos do segmento, exibida na dobra 1. Asset versionado do site: são quatro
  * segmentos fixos e `SegmentPage` não tem coluna de imagem.
+ *
+ * Dois recortes do mesmo material. `banner` (2800×1120) é a versão panorâmica, usada como
+ * fundo de largura inteira a partir de `xl` — a composição encosta à direita e o texto ocupa
+ * a esquerda. `src` é o original 1400×901, que continua sendo o que aparece abaixo disso:
+ * numa tela estreita o panorâmico teria de ser ampliado tanto que os frascos sairiam do
+ * quadro, e a coluna de texto ficaria estreita demais para um h1 de 72px.
+ *
+ * O panorâmico é gerado por scripts/gerar-banners-segmentos/gerar.py a partir do original.
  */
-const ARTES_SEGMENTO: Record<string, { src: string; alt: string }> = {
+/** Os 3 beats da seção comercial — iguais nos quatro segmentos, por desenho. */
+const ETAPAS_VENDA = ['O contexto', 'Como trabalhamos', 'O que muda'] as const;
+
+const ARTES_SEGMENTO: Record<string, { src: string; banner: string; alt: string }> = {
   farmaceutica: {
     src: '/segmentos/farmaceutica.webp',
+    banner: '/segmentos/banner-farmaceutica.webp',
     alt: 'Linha farmacêutica: frascos conta-gotas, blísteres, cápsulas e solução oral em vidro âmbar',
   },
   cosmetica: {
-    src: '/segmentos/cosmetica.webp',
-    alt: 'Linha cosmética: perfume, batom, potes de creme, máscara de cílios e sérum',
+    // Linha nova (2026-08-11). A composição anterior — perfume, batom, máscara de cílios —
+    // continua versionada em /segmentos/cosmetica.webp e ainda alimenta o card de
+    // /segmentos (card-cosmetica.webp), que não foi trocado.
+    src: '/segmentos/cosmetica-pack.webp',
+    banner: '/segmentos/banner-cosmetica.webp',
+    alt: 'Linha de skincare em frascos azul-claro com logo LIPID em dourado: bisnaga, sérum conta-gotas, tônico, loção com pump e pote de creme',
   },
   nutricional: {
     src: '/segmentos/nutricional.webp',
+    banner: '/segmentos/banner-nutricional.webp',
     alt: 'Linha nutricional: whey protein, creatina, cápsulas e barra proteica ao lado de vesícula lipossomal em corte',
   },
   veterinaria: {
     src: '/segmentos/veterinaria.webp',
+    banner: '/segmentos/banner-veterinaria.webp',
     alt: 'Linha veterinária: frascos, sachês e embalagens ao lado de vesícula lipossomal em corte',
   },
 };
@@ -105,42 +125,91 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
       <PageViewTracker route={`/segmentos/${page.slug}`} sector={page.sector} />
 
       {/* ---------------------------------------------------------------- HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary-50/60 via-white to-white py-20 md:py-28">
-        <div className="container-main relative grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className={arte ? 'reveal lg:col-span-7' : 'reveal max-w-3xl lg:col-span-12'}>
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary-50/60 via-white to-white">
+        {/* A partir de xl o banner sangra de borda a borda. Ele ocupa a largura inteira e é
+            ancorado embaixo, com a proporção natural do arquivo (2.5:1) — de propósito, em
+            vez de `object-cover` sobre a dobra toda.
+            Motivo: com `cover`, a altura da imagem passa a ser a da dobra, e a dobra cresce
+            conforme o tamanho do h1. Na nutricional, cujo título ocupa cinco linhas, isso
+            ampliava a foto a ponto de o pote de creatina encostar no texto. Assim o tamanho
+            do produto depende só da largura da tela, e os frascos ficam sempre em 63%..94%. */}
+        {arte && (
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 hidden -translate-y-1/2 xl:block">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={arte.banner} alt={arte.alt} className="w-full" />
+            {/* Dissolve as bordas da foto no branco da dobra. Quando a dobra é mais baixa que
+                a imagem, estas faixas saem junto no corte — e aí não há emenda nenhuma. */}
+            <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent" />
+          </div>
+        )}
+
+        {/* A largura do texto é conferida, não estimada: `container-main` é max-w-7xl com
+            px-8, e os frascos começam em 63% da tela — agora independente da altura da dobra.
+            Em 1280 isso põe o produto em 806px e o texto termina em 704px; em 1600, 1008 e
+            864. `max-w-2xl` cabe com folga nos dois extremos. */}
+        <div className="container-main relative flex items-center py-20 md:py-28 xl:min-h-[620px]">
+          <div className="reveal max-w-2xl">
             {page.eyebrow && <Badge variant="primary">{page.eyebrow}</Badge>}
             <h1 className="mt-6 text-gray-900">{page.h1}</h1>
-            {page.subheadline && <p className="mt-6 max-w-2xl text-lg text-gray-600">{page.subheadline}</p>}
+            {page.subheadline && <p className="mt-6 text-lg text-gray-600">{page.subheadline}</p>}
             <div className="mt-9">
               <Button href="#projeto" variant="primary" size="lg">
                 {page.formCtaLabel || 'Compartilhar meu projeto'}
               </Button>
             </div>
           </div>
-
-          {arte && (
-            <div className="reveal lg:col-span-5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={arte.src}
-                alt={arte.alt}
-                className="w-full rounded-2xl drop-shadow-[0_28px_36px_rgba(15,23,42,0.10)]"
-              />
-            </div>
-          )}
         </div>
+
+        {/* Abaixo de xl a dobra volta a ser empilhada: texto em cima, composição original
+            embaixo. O corte é em xl, e não em lg, porque entre 1024 e 1279 o próprio header
+            já está em modo hambúrguer e o h1 de 72px não cabe numa coluna de metade da tela
+            — sobrariam seis linhas de título ao lado do banner. */}
+        {arte && (
+          <div className="reveal px-4 pb-14 md:px-6 xl:hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={arte.src}
+              alt={arte.alt}
+              className="mx-auto w-full max-w-3xl rounded-2xl drop-shadow-[0_28px_36px_rgba(15,23,42,0.10)]"
+            />
+          </div>
+        )}
       </section>
 
       {/* ---------------------------------------------------------------- 3 PARÁGRAFOS COMERCIAIS */}
+      {/* Os três parágrafos sempre contam a mesma história, nos quatro segmentos:
+          o contexto do setor → como a Lipid trabalha → o que o cliente ganha.
+          Rotular cada coluna deixa isso explícito e permite ler só o que
+          interessa, em vez de encarar três blocos iguais de texto corrido.
+          A numeração em mono reaproveita a linguagem já usada nos cards de
+          aplicações logo abaixo — mesma família visual, sem inventar estilo.
+          Os rótulos só aparecem quando há exatamente 3 parágrafos: com outra
+          quantidade a semântica não vale, e rótulo errado é pior que nenhum. */}
       {page.salesParagraphs && page.salesParagraphs.length > 0 && (
-        <section className="py-16 md:py-20">
+        <section className="py-20 md:py-28">
           <div className="container-main">
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
-              {page.salesParagraphs.map((p, i) => (
-                <p key={i} className="text-[15px] leading-relaxed text-gray-600">
-                  {p}
-                </p>
-              ))}
+            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-10 md:grid-cols-3 md:gap-12">
+              {page.salesParagraphs.map((p, i) => {
+                const rotulo = page.salesParagraphs?.length === 3 ? ETAPAS_VENDA[i] : null;
+                return (
+                  <div key={i} className="border-t border-gray-200 pt-5">
+                    {rotulo && (
+                      <div className="flex items-baseline gap-2">
+                        <span className="font-mono text-xs font-bold text-primary-400">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span className="text-xs font-bold uppercase tracking-wider text-gray-900">
+                          {rotulo}
+                        </span>
+                      </div>
+                    )}
+                    <p className={`text-base leading-relaxed text-gray-600 ${rotulo ? 'mt-3' : ''}`}>
+                      {p}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -171,11 +240,9 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
       {page.floatingHighlight && (
         <section className="py-20 md:py-24">
           <div className="container-main">
-            <Reveal className="mx-auto max-w-3xl text-center">
-              <p className="text-2xl font-medium leading-snug text-gray-900 md:text-3xl">
-                {page.floatingHighlight}
-              </p>
-            </Reveal>
+            {/* Sem o <Reveal/> em volta: a própria FraseRevelada observa a dobra, e as duas
+                animações somadas fariam o bloco inteiro subir enquanto as palavras sobem. */}
+            <FraseRevelada texto={page.floatingHighlight} />
           </div>
         </section>
       )}
@@ -240,19 +307,11 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
         <section className="py-16 md:py-20">
           <div className="container-main">
             <p className="eyebrow mb-6">Outros segmentos atendidos</p>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {/* Mesmo card da home — arte, numerador e "Explorar" — em vez da caixa só de
+                texto que havia aqui. O componente é o mesmo, então os dois não divergem. */}
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {outros.map((o) => (
-                <Link
-                  key={o.slug}
-                  href={`/segmentos/${o.slug}`}
-                  className="group rounded-2xl border border-gray-200 p-5 transition-all duration-300 hover:border-primary-300 hover:shadow-[0_20px_45px_-30px_rgba(15,23,42,0.2)]"
-                >
-                  <p className="font-bold text-gray-900 group-hover:text-primary-600">{o.h1}</p>
-                  <span className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-gray-500 group-hover:text-primary-600">
-                    Ver segmento
-                    <HiOutlineArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </Link>
+                <CardSegmento key={o.slug} slug={o.slug} descricao={o.h1} />
               ))}
             </div>
           </div>

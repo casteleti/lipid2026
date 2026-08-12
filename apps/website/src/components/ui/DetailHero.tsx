@@ -5,6 +5,10 @@ import { Badge } from '@/components/ui/Badge';
 
 interface DetailHeroProps {
   badge: string;
+  /** Variante do selo principal — o blog marca material para download em escuro. */
+  badgeVariant?: 'primary' | 'dark';
+  /** Selo secundário ao lado do principal (as categorias, no caso do blog). */
+  badgeExtra?: string | null;
   title: string;
   description?: string | null;
   backHref: string;
@@ -12,7 +16,16 @@ interface DetailHeroProps {
   children?: ReactNode;
 }
 
-export function DetailHero({ badge, title, description, backHref, backLabel, children }: DetailHeroProps) {
+export function DetailHero({
+  badge,
+  badgeVariant = 'primary',
+  badgeExtra,
+  title,
+  description,
+  backHref,
+  backLabel,
+  children,
+}: DetailHeroProps) {
   return (
     <section className="border-b border-gray-100 bg-gray-50 py-16 md:py-20">
       <div className="container-main space-y-5">
@@ -23,8 +36,13 @@ export function DetailHero({ badge, title, description, backHref, backLabel, chi
           <HiArrowLeft className="h-4 w-4" />
           {backLabel}
         </Link>
-        <Badge variant="primary">{badge}</Badge>
-        <h1 className="text-gray-900">{title}</h1>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant={badgeVariant}>{badge}</Badge>
+          {badgeExtra && <Badge variant="secondary">{badgeExtra}</Badge>}
+        </div>
+        {/* `max-w-4xl` segura o título de virar uma linha larguíssima em 4K sem tirá-lo da
+            borda do container, que é onde todos os heros do site começam. */}
+        <h1 className="max-w-4xl text-gray-900">{title}</h1>
         {description && <p className="max-w-2xl text-lg text-gray-600">{description}</p>}
         {children}
       </div>

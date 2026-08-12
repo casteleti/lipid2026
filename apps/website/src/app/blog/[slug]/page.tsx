@@ -2,8 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { HiArrowLeft } from 'react-icons/hi2';
-import { Badge } from '@/components/ui/Badge';
+import { DetailHero } from '@/components/ui/DetailHero';
 import { Section } from '@/components/ui/Section';
 import { Reveal } from '@/components/ui/Reveal';
 import { DownloadGate } from '@/components/conteudo/DownloadGate';
@@ -145,45 +144,36 @@ export default async function ConteudoDetalhePage({ params }: { params: { slug: 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <section className="border-b border-gray-100 bg-gray-50 py-16 md:py-20">
-        <div className="container-main mx-auto max-w-3xl space-y-5">
-          <Link
-            href="/blog"
-            className="group inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-500 transition-colors hover:text-primary-600"
-          >
-            <HiArrowLeft className="h-4 w-4 transition-transform duration-500 ease-brand group-hover:-translate-x-1" />
-            Conteúdo técnico
-          </Link>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant={ehDownload ? 'dark' : 'primary'}>
-              {ehDownload ? 'Material para download' : 'Artigo'}
-            </Badge>
-            {item.categories.length > 0 && (
-              <Badge variant="secondary">
-                {item.categories.map((c) => c.category.name).join(', ')}
-              </Badge>
-            )}
-          </div>
-
-          <h1 className="text-gray-900">{item.title}</h1>
-
-          {item.excerpt && <p className="text-lg leading-relaxed text-gray-600">{item.excerpt}</p>}
-
-          {(item.author || item.publishedAt) && (
-            <p className="text-sm text-gray-500">
-              {item.author && <span>{item.author}</span>}
-              {item.author && item.publishedAt && ' · '}
-              {item.publishedAt &&
-                new Date(item.publishedAt).toLocaleDateString('pt-BR', {
-                  day: '2-digit',
-                  month: 'long',
-                  year: 'numeric',
-                })}
-            </p>
-          )}
-        </div>
-      </section>
+      {/* Mesmo hero das outras páginas de detalhe (ver /parceiros/<slug>). Antes daqui o
+          bloco era `container-main mx-auto max-w-3xl`: isso centrava o conteúdo DENTRO do
+          container e fazia o título começar ~380px para dentro, desalinhado de todos os
+          outros heros do site, que encostam na borda do container. */}
+      <DetailHero
+        backHref="/blog"
+        backLabel="Conteúdo técnico"
+        badge={ehDownload ? 'Material para download' : 'Artigo'}
+        badgeVariant={ehDownload ? 'dark' : 'primary'}
+        badgeExtra={
+          item.categories.length > 0
+            ? item.categories.map((c) => c.category.name).join(', ')
+            : null
+        }
+        title={item.title}
+        description={item.excerpt}
+      >
+        {(item.author || item.publishedAt) && (
+          <p className="text-sm text-gray-500">
+            {item.author && <span>{item.author}</span>}
+            {item.author && item.publishedAt && ' · '}
+            {item.publishedAt &&
+              new Date(item.publishedAt).toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
+              })}
+          </p>
+        )}
+      </DetailHero>
 
       <article className="py-16 md:py-20">
         <div

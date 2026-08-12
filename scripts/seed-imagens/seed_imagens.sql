@@ -21,7 +21,7 @@ UPDATE institutional_sections SET "imageUrl" = '/sobre/sobre-equipe-laboratorio-
 UPDATE institutional_sections SET "imageUrl" = '/sobre/sobre-processo-etapas-desenvolvimento.webp',
   "updatedAt" = now() WHERE slug = 'como-atuamos';
 
-UPDATE institutional_sections SET "imageUrl" = '/sobre/sobre-qualidade-documentacao-tecnica.webp',
+UPDATE institutional_sections SET "imageUrl" = '/sobre/sobre-qualidade-equipe-planta.webp',
   "updatedAt" = now() WHERE slug = 'qualidade';
 
 -- ---------------------------------------------------------------- /sobre : minis do bento "areas"

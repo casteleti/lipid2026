@@ -1,0 +1,98 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Header Lipid — logo que colapsa</title>
+<style>
+  body { margin: 0; background: #f1ede7; font-family: "Inter Tight", Helvetica, Arial, sans-serif; color: #0f1e46; }
+
+  .hdr {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 40px;
+    background: rgba(241,237,231,.84); backdrop-filter: blur(8px);
+    transition: padding 420ms cubic-bezier(.19,1,.22,1), box-shadow 420ms ease, background 420ms ease;
+  }
+  .hdr.is-collapsed {
+    padding: 13px 40px;
+    background: rgba(241,237,231,.95);
+    box-shadow: 0 10px 30px rgba(20,30,60,.09);
+  }
+
+  .logo { display: flex; align-items: flex-end; gap: 10px; }
+  .logo__symbol { display: block; width: 62px; height: 62px; flex: none; } /* fixo — não anima */
+
+  .logo__word { display: block; overflow: hidden; max-width: 148px;
+    transition: max-width 620ms cubic-bezier(.19,1,.22,1); }
+  .logo__inner { position: relative; display: block; width: 148px; height: 61.6px; }
+
+  /* posições em % = geometria exata do vetor original */
+  .logo__inner img { position: absolute; }
+  .l-l  { left: 0;       top: 0; width: 21.9%;  height: 55.3%; }
+  .l-i1 { left: 28.58%;  top: 0; width: 3.11%;  height: 55.3%; }
+  .l-p  { left: 38.11%;  top: 0; width: 23.35%; height: 55.3%; }
+  .l-i2 { left: 67.63%;  top: 0; width: 3.11%;  height: 55.3%; }
+  .l-d  { left: 76.93%;  top: 0; width: 23.06%; height: 55.3%; }
+  .l-ingr { left: 38.05%; top: 65.75%; width: 60.83%; height: 34.25%; }
+
+  .logo__inner .letter {
+    transition: transform 520ms cubic-bezier(.19,1,.22,1), opacity 380ms ease, filter 520ms ease;
+  }
+  .l-ingr {
+    transition: transform 460ms cubic-bezier(.19,1,.22,1), opacity 320ms ease, filter 460ms ease;
+  }
+
+  /* estado colapsado: letras evaporam */
+  .is-collapsed .logo__inner .letter {
+    opacity: 0; filter: blur(6px); transform: translateY(-18px) rotate(-8deg) scale(.92);
+  }
+  .is-collapsed .l-ingr {
+    opacity: 0; filter: blur(5px); transform: translateY(-10px) rotate(-5deg);
+  }
+  .is-collapsed .logo__word { max-width: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hdr, .logo__word, .logo__inner img { transition: none !important; }
+  }
+</style>
+
+<header class="hdr">
+  <a class="logo" href="/">
+    <img class="logo__symbol" src="assets/lipid-symbol.svg" alt="Lipid" />
+    <span class="logo__word">
+      <span class="logo__inner">
+        <img class="letter l-l"  src="assets/lipid-letter-l.svg"  alt="" />
+        <img class="letter l-i1" src="assets/lipid-letter-i1.svg" alt="" />
+        <img class="letter l-p"  src="assets/lipid-letter-p.svg"  alt="" />
+        <img class="letter l-i2" src="assets/lipid-letter-i2.svg" alt="" />
+        <img class="letter l-d"  src="assets/lipid-letter-d.svg"  alt="" />
+        <img class="l-ingr" src="assets/lipid-ingredients.svg" alt="ingredients" />
+      </span>
+    </span>
+  </a>
+  <nav><!-- seus links --></nav>
+</header>
+
+<div style="height: 300vh; padding: 14vh 40px;">role a página</div>
+
+<script>
+var STAGGER = 55, THRESHOLD = 70;
+var hdr = document.querySelector('.hdr');
+var letters = hdr.querySelectorAll('.letter');
+var ingr = hdr.querySelector('.l-ingr');
+var word = hdr.querySelector('.logo__word');
+var n = letters.length, state = null;
+
+function set(on) {
+  if (state === on) return;
+  state = on;
+  hdr.classList.toggle('is-collapsed', on);
+  // os delays em cascata são setados no JS (CSS puro não escalona por índice)
+  ingr.style.transitionDelay = on ? '0ms' : (n * STAGGER + 60) + 'ms';
+  letters.forEach(function (l, i) {
+    l.style.transitionDelay = (on ? i * STAGGER + 60 : (n - 1 - i) * STAGGER) + 'ms';
+  });
+  word.style.transitionDelay = on ? (n * STAGGER + 120) + 'ms' : '0ms';
+}
+
+addEventListener('scroll', function () { set(scrollY > THRESHOLD); }, { passive: true });
+set(scrollY > THRESHOLD);
+</script>

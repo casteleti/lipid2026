@@ -42,6 +42,15 @@ def item(*, icon=None, title=None, subtitle=None, text=None, value=None,
     }
 
 
+# Seções que saíram da página depois de já terem sido semeadas. Só remover o mapeamento em
+# `montar_secoes` não basta: o seed não apaga o que deixou de listar, então a seção
+# continuaria viva em qualquer banco que já a tivesse — inclusive produção, que recebe o
+# institucional por este mesmo arquivo. O DELETE abaixo fecha esse caminho.
+SECOES_REMOVIDAS = [
+    "service-proof",  # "ATUAÇÃO PRÁTICA" — retirada em 11/08/2026 a pedido do cliente.
+]
+
+
 def montar_secoes(doc):
     by_id = {s["id"]: s for s in doc["sections"]}
     secoes = []
@@ -179,13 +188,9 @@ def montar_secoes(doc):
         ],
     })
 
-    # 10. ATUAÇÃO PRÁTICA ------------------------------------------------------------
-    s = by_id["service-proof"]
-    secoes.append({
-        "slug": "service-proof", "type": "compact_service_list", "order": 9,
-        "eyebrow": s["eyebrow"], "title": s["title"],
-        "items": [item(text=t) for t in s["items"]],
-    })
+    # 10. ATUAÇÃO PRÁTICA — RETIRADA DA PÁGINA (ver SECOES_REMOVIDAS).
+    # O JSON de conteúdo ainda traz "service-proof"; a seção deixou de ser mapeada aqui de
+    # propósito. A ordem 9 fica vaga — `order` é relativo, não precisa ser contíguo.
 
     # 11. MANIFESTO FINAL ------------------------------------------------------------
     s = by_id["closing-manifesto"]
@@ -224,6 +229,15 @@ def gerar_sql(secoes) -> str:
         "BEGIN;",
         "",
     ]
+
+    if SECOES_REMOVIDAS:
+        alvos = ", ".join(sql_str(slug) for slug in SECOES_REMOVIDAS)
+        partes.append("-- ===== seções retiradas da página =====")
+        partes.append(
+            f"-- Os itens de cada uma caem junto por ON DELETE CASCADE.\n"
+            f"DELETE FROM institutional_sections WHERE slug IN ({alvos});"
+        )
+        partes.append("")
 
     for s in secoes:
         partes.append(f"-- ===== {s['slug']} ({s['type']}) =====")

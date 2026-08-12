@@ -1,0 +1,58 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Frase revelada palavra a palavra</title>
+<style>
+  body { margin: 0; background: #f1ede7; font-family: "Inter Tight", Helvetica, Arial, sans-serif; }
+  .spacer { height: 90vh; }
+  .frase {
+    max-width: 860px; margin: 0 auto; padding: 22vh 24px;
+    text-align: center; font-size: 34px; line-height: 1.34; font-weight: 700;
+    color: #0f1e46; text-wrap: pretty;
+  }
+  .frase [data-word] {
+    display: inline-block; opacity: 0; filter: blur(9px); transform: translateY(20px);
+    transition: opacity 800ms cubic-bezier(.22,.61,.36,1),
+                transform 800ms cubic-bezier(.22,.61,.36,1),
+                filter 800ms cubic-bezier(.22,.61,.36,1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .frase [data-word] { opacity: 1; filter: none; transform: none; transition: none; }
+  }
+</style>
+
+<div class="spacer"></div>
+
+<!-- Escreva a frase normalmente; o script divide em palavras. -->
+<p class="frase">Quando a tecnologia fica invisível na fórmula, ela aparece no desempenho, no sensorial e no valor percebido.</p>
+
+<div class="spacer"></div>
+
+<script>
+var STAGGER = 45; // ms entre palavras
+
+document.querySelectorAll('.frase').forEach(function (el) {
+  // 1. quebra o texto em <span data-word>
+  el.innerHTML = el.textContent.trim().split(/\s+/)
+    .map(function (w) { return '<span data-word>' + w + '&nbsp;</span>'; }).join('');
+
+  var words = el.querySelectorAll('[data-word]');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  function show(on) {
+    words.forEach(function (w, i) {
+      w.style.transitionDelay = on ? (i * STAGGER) + 'ms' : '0ms';
+      w.style.opacity = on ? '1' : '0';
+      w.style.filter = on ? 'blur(0px)' : 'blur(9px)';
+      w.style.transform = on ? 'translateY(0)' : 'translateY(20px)';
+    });
+  }
+
+  // 2. dispara ao entrar na dobra; rearma ao rolar de volta pra cima
+  new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) show(true);
+      else if (e.boundingClientRect.top > 0) show(false);
+    });
+  }, { threshold: .3 }).observe(el);
+});
+</script>

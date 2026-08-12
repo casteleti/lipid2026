@@ -14,9 +14,11 @@ export class LeadsService {
       ? 'ingrediente'
       : data.contentId
         ? 'material'
-        : data.landingRoute?.startsWith('/tecnologias/')
-          ? 'tecnologia'
-          : 'website';
+        : data.landingRoute === '/especialista'
+          ? 'quiz'
+          : data.landingRoute?.startsWith('/tecnologias/')
+            ? 'tecnologia'
+            : 'website';
 
     return this.db.lead.create({ data: { ...data, source } });
   }

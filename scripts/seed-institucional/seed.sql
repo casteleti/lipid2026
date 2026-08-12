@@ -4,6 +4,10 @@
 
 BEGIN;
 
+-- ===== seções retiradas da página =====
+-- Os itens de cada uma caem junto por ON DELETE CASCADE.
+DELETE FROM institutional_sections WHERE slug IN ('service-proof');
+
 -- ===== hero (institutional_hero) =====
 INSERT INTO institutional_sections
   (id, slug, type, "order", eyebrow, title, subtitle, body, highlight, quote,
@@ -327,7 +331,7 @@ VALUES (
   NULL, NULL, 'Em projetos regulados, escolher bem o ingrediente também significa saber exatamente qual documentação acompanha essa escolha.',
   NULL, NULL,
   NULL, NULL,
-  'Still de documentação técnica (ficha técnica, CoA, laudo) sobre mesa, ou textura de laboratório de controle de qualidade — reforça ''documentação real'', não decoração.', NULL, now()
+  'Foto real da planta: equipe de jaleco circulando pelos mezaninos — a documentação técnica é feita por gente, e a imagem mostra a operação, não um still de papel.', NULL, now()
 )
 ON CONFLICT (slug) DO UPDATE SET
   type = EXCLUDED.type, "order" = EXCLUDED."order", eyebrow = EXCLUDED.eyebrow,
@@ -446,81 +450,6 @@ VALUES (
   (SELECT id FROM institutional_sections WHERE slug = 'important-topics'),
   5, NULL, 'Fornecimento', NULL,
   'Alinhamento de apresentação comercial, demanda, disponibilidade e continuidade do projeto.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-
--- ===== service-proof (compact_service_list) =====
-INSERT INTO institutional_sections
-  (id, slug, type, "order", eyebrow, title, subtitle, body, highlight, quote,
-   "ctaLabel", "ctaHref", "secondaryCtaLabel", "secondaryCtaHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text, 'service-proof', 'compact_service_list', 9,
-  'ATUAÇÃO PRÁTICA', 'Onde o suporte técnico encontra o trabalho cotidiano', NULL,
-  NULL, NULL, NULL,
-  NULL, NULL,
-  NULL, NULL,
-  NULL, NULL, now()
-)
-ON CONFLICT (slug) DO UPDATE SET
-  type = EXCLUDED.type, "order" = EXCLUDED."order", eyebrow = EXCLUDED.eyebrow,
-  title = EXCLUDED.title, subtitle = EXCLUDED.subtitle, body = EXCLUDED.body,
-  highlight = EXCLUDED.highlight, quote = EXCLUDED.quote,
-  "ctaLabel" = EXCLUDED."ctaLabel", "ctaHref" = EXCLUDED."ctaHref",
-  "secondaryCtaLabel" = EXCLUDED."secondaryCtaLabel", "secondaryCtaHref" = EXCLUDED."secondaryCtaHref",
-  "imageHint" = EXCLUDED."imageHint", extra = EXCLUDED.extra, "updatedAt" = now();
-DELETE FROM institutional_section_items WHERE "sectionId" = (SELECT id FROM institutional_sections WHERE slug = 'service-proof');
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'service-proof'),
-  0, NULL, NULL, NULL,
-  'Auxílio no desenvolvimento de novos produtos.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'service-proof'),
-  1, NULL, NULL, NULL,
-  'Discussão de soluções personalizadas conforme o projeto.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'service-proof'),
-  2, NULL, NULL, NULL,
-  'Acompanhamento da pesquisa à preparação para escala industrial.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'service-proof'),
-  3, NULL, NULL, NULL,
-  'Fornecimento de matérias-primas com documentação correspondente.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'service-proof'),
-  4, NULL, NULL, NULL,
-  'Suporte em documentação e métodos analíticos disponíveis.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'service-proof'),
-  5, NULL, NULL, NULL,
-  'Atendimento técnico para dúvidas de aplicação.', NULL, NULL,
   NULL, NULL, NULL, now()
 );
 

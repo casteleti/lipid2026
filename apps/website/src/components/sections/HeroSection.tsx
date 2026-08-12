@@ -33,14 +33,17 @@ function Particles() {
 export function HeroSection() {
   return (
     <section className="relative isolate min-h-[560px] overflow-hidden bg-white py-20 md:py-28 lg:min-h-[680px] lg:py-32">
-      {/* Full-bleed hero image */}
+      {/* Full-bleed hero image. `object-right` porque a vesícula foi composta encostada à
+          direita — em telas mais estreitas que o arquivo (2.29:1) o corte tem de sair da
+          esquerda, que é fundo vazio, e não do meio.
+          O banner anterior (/hero/fullbanner-lipid.jpg) continua versionado. */}
       <Image
-        src="/hero/fullbanner-lipid.jpg"
-        alt="Lipossoma — estrutura lipídica avançada de delivery molecular"
+        src="/hero/fullbanner-vesicula.jpg"
+        alt="Vesícula lipossomal em corte: bicamada fosfolipídica envolvendo o núcleo aquoso com o princípio ativo"
         fill
         priority
         sizes="100vw"
-        className="pointer-events-none select-none object-cover object-center"
+        className="pointer-events-none select-none object-cover object-right"
       />
 
       {/* Readability gradient over the text side */}
@@ -53,6 +56,11 @@ export function HeroSection() {
         }}
       />
 
+      {/* O degradê acima é horizontal e pressupõe texto à esquerda, imagem à direita. No
+          celular o texto ocupa a largura toda e o recorte cai em cima das caudas lipídicas,
+          onde ele já é quase transparente. Esta camada chapada só existe abaixo de md. */}
+      <div aria-hidden className="absolute inset-0 z-[1] bg-white/55 md:bg-transparent" />
+
       <Particles />
 
       <div className="container-main relative z-[2] grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-8">
@@ -61,7 +69,9 @@ export function HeroSection() {
             <Badge variant="primary">LIPID TECHNOLOGY PLATFORM</Badge>
           </div>
 
-          <h1 className="reveal reveal-delay-1 text-gray-900">
+          {/* Único h1 do site fora da escala global: a home mantém o tamanho que sempre teve
+              (48 / 60 / 72px). Ver o comentário do `h1` em globals.css. */}
+          <h1 className="reveal reveal-delay-1 text-5xl leading-tight text-gray-900 md:text-6xl lg:text-7xl">
             Ciência que transforma <span className="text-primary-600">formulações</span> em{' '}
             <span className="font-light text-gray-500">performance.</span>
           </h1>

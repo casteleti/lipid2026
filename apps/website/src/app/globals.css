@@ -16,8 +16,12 @@
     @apply bg-white text-gray-900;
   }
 
+  /* Escala padrão de h1 do site. A home é a única exceção e declara a sua no HeroSection —
+     lá o título é a primeira coisa que se vê e sustenta a dobra inteira. Nas demais páginas
+     o h1 costuma ser uma frase de conteúdo (o nome de um ingrediente, o título de um artigo,
+     a promessa de um segmento) e, no tamanho da home, virava um bloco de cinco linhas. */
   h1 {
-    @apply text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight;
+    @apply text-[2rem] md:text-[2.5rem] lg:text-[3rem] font-bold leading-tight tracking-tight;
   }
 
   h2 {
@@ -54,6 +58,22 @@
 
   .glass-chip {
     @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md;
+  }
+
+  /* Card de opção do quiz "Fale com um especialista" (/especialista). Estado ativo
+     usa a mesma cor de marca do resto do site; a transição de fundo é rápida para
+     acompanhar o clique sem parecer solto do resto do slide. */
+  .quiz-opcao {
+    @apply flex rounded-2xl border-2 border-gray-200 bg-white text-gray-900 shadow-sm transition-all duration-200 ease-brand hover:border-primary-300 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
+  }
+
+  .quiz-opcao-ativa {
+    @apply border-primary-600 bg-primary-50 shadow-md;
+  }
+
+  /* Atalho numérico exibido no canto da opção — decorativo, oculto no teclado. */
+  .quiz-tecla {
+    @apply hidden h-6 min-w-[1.5rem] items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-1.5 text-xs font-semibold text-gray-400 sm:flex;
   }
 }
 
@@ -280,7 +300,103 @@
   transform: translateY(0);
 }
 
+/* Logo do header que colapsa ao rolar (componente <LogoLipid/>). Estado e transições ficam
+   aqui, junto do resto da animação do site, para a regra de prefers-reduced-motion no fim
+   deste arquivo desligar tudo num lugar só. Os atrasos em cascata vão inline no componente
+   — são dado por peça, não estilo. */
+.logo-letra {
+  transition:
+    transform 520ms cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 380ms ease,
+    filter 520ms ease;
+}
+
+.logo-colapsado .logo-letra {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(-18px) rotate(-8deg) scale(0.92);
+}
+
+.logo-hairline {
+  transition:
+    transform 460ms cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 320ms ease,
+    filter 460ms ease;
+}
+
+.logo-colapsado .logo-hairline {
+  opacity: 0;
+  filter: blur(5px);
+  transform: translateY(-10px) rotate(-5deg);
+}
+
+/* A largura só encolhe DEPOIS que as letras somem, e reabre ANTES de elas voltarem — daí os
+   atrasos assimétricos aplicados no componente. */
+.logo-wordmark {
+  overflow: hidden;
+  transition: max-width 620ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Frase de destaque revelada palavra a palavra (componente <FraseRevelada/>). O estado
+   inicial mora aqui, e não no JSX, pelo mesmo motivo do `.reveal-on-scroll`: assim a regra
+   de prefers-reduced-motion logo abaixo desliga tudo num lugar só. O escalonamento por
+   palavra é a única parte que vai inline — é dado, não estilo. */
+.frase-palavra {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(9px);
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+    filter 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.frase-revelada .frase-palavra {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* Troca de pergunta no quiz (<QuizEspecialista/>): a tela atual sobe e esmaece, a
+   próxima entra de baixo. Duas fases controladas em JS (ver `irPara` no componente) —
+   'saindo' aplica a classe abaixo, depois o passo troca e 'entrando'→'parado' faz a
+   entrada. Sem essa separação em fases o React trocaria o conteúdo no meio do
+   caminho e a transição pularia. */
+.quiz-slide {
+  transition:
+    opacity 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.quiz-slide-entrando {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.quiz-slide-parado {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.quiz-slide-saindo {
+  opacity: 0;
+  transform: translateY(-18px);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .frase-palavra {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+  /* O logo troca de estado sem percurso: as letras somem, não voam. */
+  .logo-letra,
+  .logo-hairline,
+  .logo-wordmark {
+    transition: none;
+  }
   .reveal {
     animation: none;
     opacity: 1;
@@ -302,5 +418,12 @@
   .check-traco path {
     stroke-dashoffset: 0;
     animation: none;
+  }
+  .quiz-slide,
+  .quiz-slide-entrando,
+  .quiz-slide-saindo {
+    transition: none;
+    opacity: 1;
+    transform: none;
   }
 }
