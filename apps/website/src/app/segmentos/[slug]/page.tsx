@@ -13,44 +13,48 @@ import { SegmentProjectForm } from '@/components/segmentos/SegmentProjectForm';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
-/**
- * Composição de produtos do segmento, exibida na dobra 1. Asset versionado do site: são quatro
- * segmentos fixos e `SegmentPage` não tem coluna de imagem.
- *
- * Dois recortes do mesmo material. `banner` (2800×1120) é a versão panorâmica, usada como
- * fundo de largura inteira a partir de `xl` — a composição encosta à direita e o texto ocupa
- * a esquerda. `src` é o original 1400×901, que continua sendo o que aparece abaixo disso:
- * numa tela estreita o panorâmico teria de ser ampliado tanto que os frascos sairiam do
- * quadro, e a coluna de texto ficaria estreita demais para um h1 de 72px.
- *
- * O panorâmico é gerado por scripts/gerar-banners-segmentos/gerar.py a partir do original.
- */
 /** Os 3 beats da seção comercial — iguais nos quatro segmentos, por desenho. */
 const ETAPAS_VENDA = ['O contexto', 'Como trabalhamos', 'O que muda'] as const;
 
-const ARTES_SEGMENTO: Record<string, { src: string; banner: string; alt: string }> = {
+/**
+ * Artes da dobra, por segmento. São duas composições da mesma linha de produto — uma
+ * panorâmica, com o produto à direita do texto, e uma retrato, com o produto embaixo dele.
+ * As duas saem de scripts/gerar-banners-segmentos/gerar.py.
+ *
+ * `reservaMobile` é o espaço que o texto precisa deixar livre embaixo para não cair em cima
+ * dos frascos, em PORCENTAGEM DA LARGURA da tela — a unidade certa porque a arte entra com
+ * a largura toda e a proporção natural, então a altura do produto acompanha a largura, não
+ * a altura da dobra. O gerador mede esse número em cada arte e o imprime; ele varia muito
+ * (a veterinária tem os produtos bem mais baixos que a farmacêutica), e um valor único
+ * deixaria um vão morto entre o texto e o produto em três das quatro páginas.
+ */
+const ARTES_SEGMENTO: Record<
+  string,
+  { mobile: string; banner: string; reservaMobile: number; alt: string }
+> = {
   farmaceutica: {
-    src: '/segmentos/farmaceutica.webp',
+    mobile: '/segmentos/banner-farmaceutica-mobile.webp',
     banner: '/segmentos/banner-farmaceutica.webp',
-    alt: 'Linha farmacêutica: frascos conta-gotas, blísteres, cápsulas e solução oral em vidro âmbar',
+    reservaMobile: 73,
+    alt: 'Linha farmacêutica em embalagens azul-claro com logo LIPID dourado: caixas, frasco de cápsulas, frasco com válvula pump, conta-gotas, pote de creme e blíster',
   },
   cosmetica: {
-    // Linha nova (2026-08-11). A composição anterior — perfume, batom, máscara de cílios —
-    // continua versionada em /segmentos/cosmetica.webp e ainda alimenta o card de
-    // /segmentos (card-cosmetica.webp), que não foi trocado.
-    src: '/segmentos/cosmetica-pack.webp',
+    mobile: '/segmentos/banner-cosmetica-mobile.webp',
     banner: '/segmentos/banner-cosmetica.webp',
+    reservaMobile: 61,
     alt: 'Linha de skincare em frascos azul-claro com logo LIPID em dourado: bisnaga, sérum conta-gotas, tônico, loção com pump e pote de creme',
   },
   nutricional: {
-    src: '/segmentos/nutricional.webp',
+    mobile: '/segmentos/banner-nutricional-mobile.webp',
     banner: '/segmentos/banner-nutricional.webp',
-    alt: 'Linha nutricional: whey protein, creatina, cápsulas e barra proteica ao lado de vesícula lipossomal em corte',
+    reservaMobile: 68,
+    alt: 'Linha nutricional em embalagens azul-claro com logo LIPID dourado: frasco de cápsulas, sachê stick, pouch, pote e jarra de proteína',
   },
   veterinaria: {
-    src: '/segmentos/veterinaria.webp',
+    mobile: '/segmentos/banner-veterinaria-mobile.webp',
     banner: '/segmentos/banner-veterinaria.webp',
-    alt: 'Linha veterinária: frascos, sachês e embalagens ao lado de vesícula lipossomal em corte',
+    reservaMobile: 47,
+    alt: 'Linha veterinária em embalagens brancas com detalhe azul: caixas, frasco-ampola âmbar, blíster de comprimidos, conta-gotas, spray e bisnaga',
   },
 };
 
@@ -144,11 +148,43 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
           </div>
         )}
 
+        {/* Abaixo de xl entra a arte retrato, sangrando de borda a borda com o produto
+            ancorado no rodapé da dobra — é para isso que ela foi composta, com o topo vazio
+            reservado ao texto. O corte continua em xl, e não em lg, porque entre 1024 e 1279
+            o header já está em modo hambúrguer e o h1 de 72px não caberia numa coluna de
+            metade da tela ao lado da panorâmica.
+
+            A arte entra com a largura toda e a proporção natural (0.583:1), o que a deixa
+            sempre mais alta que a dobra — ela transborda para cima e o `overflow-hidden` da
+            seção corta. Isso é de propósito: garante que o produto fique inteiro e nunca
+            seja cortado nas laterais, o que aconteceria com `object-cover` assim que um
+            título mais longo fizesse a dobra passar da altura da imagem.
+
+            Vem ANTES do texto no DOM pelo mesmo motivo que a panorâmica: os dois são
+            absolutos, e é a ordem do documento que decide quem pinta por cima. Resolver
+            isso com z-index negativo joga a arte para trás do gradiente da própria seção,
+            que é opaco — a imagem some. */}
+        {arte && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 xl:hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={arte.mobile} alt={arte.alt} className="w-full" />
+            {/* Dissolve o corte do topo no fundo da página. */}
+            <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white to-transparent" />
+          </div>
+        )}
+
         {/* A largura do texto é conferida, não estimada: `container-main` é max-w-7xl com
-            px-8, e os frascos começam em 63% da tela — agora independente da altura da dobra.
-            Em 1280 isso põe o produto em 806px e o texto termina em 704px; em 1600, 1008 e
-            864. `max-w-2xl` cabe com folga nos dois extremos. */}
-        <div className="container-main relative flex items-center py-20 md:py-28 xl:min-h-[620px]">
+            px-8, e os frascos começam em 61% da tela — independente da altura da dobra.
+            Medido na página: em 1280 o texto acaba em 704px e o produto começa em 781px
+            (calha de 77px); em 1512, 820px e 922px (102px). `max-w-2xl` cabe nos dois.
+
+            Abaixo de xl a reserva embaixo sai de `reservaMobile` (ver ARTES_SEGMENTO): a
+            porcentagem vale sobre a LARGURA da seção, que é a mesma largura da arte, então
+            texto e produto nunca se encontram por mais que o título cresça. */}
+        <div
+          className="container-main relative flex items-center pt-16 pb-[var(--reserva-produto)] md:pt-24 xl:min-h-[620px] xl:py-28"
+          style={{ '--reserva-produto': `${arte?.reservaMobile ?? 55}%` } as React.CSSProperties}
+        >
           <div className="reveal max-w-2xl">
             {page.eyebrow && <Badge variant="primary">{page.eyebrow}</Badge>}
             <h1 className="mt-6 text-gray-900">{page.h1}</h1>
@@ -161,20 +197,6 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
           </div>
         </div>
 
-        {/* Abaixo de xl a dobra volta a ser empilhada: texto em cima, composição original
-            embaixo. O corte é em xl, e não em lg, porque entre 1024 e 1279 o próprio header
-            já está em modo hambúrguer e o h1 de 72px não cabe numa coluna de metade da tela
-            — sobrariam seis linhas de título ao lado do banner. */}
-        {arte && (
-          <div className="reveal px-4 pb-14 md:px-6 xl:hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={arte.src}
-              alt={arte.alt}
-              className="mx-auto w-full max-w-3xl rounded-2xl drop-shadow-[0_28px_36px_rgba(15,23,42,0.10)]"
-            />
-          </div>
-        )}
       </section>
 
       {/* ---------------------------------------------------------------- 3 PARÁGRAFOS COMERCIAIS */}

@@ -52,3 +52,12 @@ apps/api/uploads/
 # Artes em resolução de produção (91 MB). O site consome os WebP derivados, versionados
 # em apps/website/public/. Ver Docs/plans/imagens-otimizacao-2026-08-06.md
 img/imagens-originais/
+
+# Artes de origem dos banners de /segmentos (12 MB de PNG), mesma regra acima: o site
+# consome os WebP gerados por scripts/gerar-banners-segmentos/gerar.py, versionados em
+# apps/website/public/segmentos/. Reverter isto é uma linha, se um dia valer versionar.
+img/banners/
+
+# Cache do Python (scripts/)
+__pycache__/
+*.pyc
