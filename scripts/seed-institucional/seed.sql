@@ -6,7 +6,7 @@ BEGIN;
 
 -- ===== seções retiradas da página =====
 -- Os itens de cada uma caem junto por ON DELETE CASCADE.
-DELETE FROM institutional_sections WHERE slug IN ('service-proof');
+DELETE FROM institutional_sections WHERE slug IN ('service-proof', 'important-topics');
 
 -- ===== hero (institutional_hero) =====
 INSERT INTO institutional_sections
@@ -14,7 +14,7 @@ INSERT INTO institutional_sections
    "ctaLabel", "ctaHref", "secondaryCtaLabel", "secondaryCtaHref", "imageHint", extra, "updatedAt")
 VALUES (
   gen_random_uuid()::text, 'hero', 'institutional_hero', 0,
-  'LIPID INGREDIENTS', 'Ingredientes especializados. Decisões técnicas mais bem fundamentadas.', 'Desde 2006, a Lipid Ingredients atua no Brasil conectando matérias-primas de alto padrão, conhecimento aplicado e suporte técnico para projetos farmacêuticos, cosméticos, nutricionais e veterinários.',
+  'LIPID INGREDIENTS', 'Ingredientes especializados para decisões técnicas bem fundamentadas.', 'Desde 2006, a Lipid Ingredients atua no Brasil conectando matérias-primas de alto padrão, conhecimento aplicado e suporte técnico para projetos farmacêuticos, cosméticos, nutricionais e veterinários.',
   'Nosso trabalho começa antes da compra e continua durante a avaliação do ingrediente, o desenvolvimento da formulação, a análise documental e a preparação para escala.', 'Tecnologia internacional, leitura técnica local e acompanhamento próximo de cada projeto.', NULL,
   'Falar com um especialista', '/contato',
   'Conhecer as soluções', '/produtos',
@@ -327,7 +327,7 @@ INSERT INTO institutional_sections
    "ctaLabel", "ctaHref", "secondaryCtaLabel", "secondaryCtaHref", "imageHint", extra, "updatedAt")
 VALUES (
   gen_random_uuid()::text, 'qualidade', 'quality_framework', 7,
-  'QUALIDADE E DOCUMENTAÇÃO', 'Qualidade não é uma frase de rodapé. É parte da arquitetura do projeto.', 'A seleção de um ingrediente especializado envolve mais do que identidade comercial. Origem, composição, especificações, grau, método analítico, rastreabilidade e documentação precisam acompanhar a finalidade pretendida.',
+  'QUALIDADE E DOCUMENTAÇÃO', 'Qualidade se demonstra em documentação, rastreabilidade e método.', 'A seleção de um ingrediente especializado envolve mais do que identidade comercial. Origem, composição, especificações, grau, método analítico, rastreabilidade e documentação precisam acompanhar a finalidade pretendida.',
   NULL, NULL, 'Em projetos regulados, escolher bem o ingrediente também significa saber exatamente qual documentação acompanha essa escolha.',
   NULL, NULL,
   NULL, NULL,
@@ -375,81 +375,6 @@ VALUES (
   (SELECT id FROM institutional_sections WHERE slug = 'qualidade'),
   3, NULL, 'Suporte técnico', NULL,
   'Dúvidas de aplicação e documentação precisam chegar à equipe certa antes de se tornarem problemas no desenvolvimento.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-
--- ===== important-topics (important_topics) =====
-INSERT INTO institutional_sections
-  (id, slug, type, "order", eyebrow, title, subtitle, body, highlight, quote,
-   "ctaLabel", "ctaHref", "secondaryCtaLabel", "secondaryCtaHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text, 'important-topics', 'important_topics', 8,
-  'TÓPICOS IMPORTANTES', 'O que a equipe pode ajudar a organizar durante o desenvolvimento', NULL,
-  NULL, NULL, NULL,
-  NULL, NULL,
-  NULL, NULL,
-  NULL, NULL, now()
-)
-ON CONFLICT (slug) DO UPDATE SET
-  type = EXCLUDED.type, "order" = EXCLUDED."order", eyebrow = EXCLUDED.eyebrow,
-  title = EXCLUDED.title, subtitle = EXCLUDED.subtitle, body = EXCLUDED.body,
-  highlight = EXCLUDED.highlight, quote = EXCLUDED.quote,
-  "ctaLabel" = EXCLUDED."ctaLabel", "ctaHref" = EXCLUDED."ctaHref",
-  "secondaryCtaLabel" = EXCLUDED."secondaryCtaLabel", "secondaryCtaHref" = EXCLUDED."secondaryCtaHref",
-  "imageHint" = EXCLUDED."imageHint", extra = EXCLUDED.extra, "updatedAt" = now();
-DELETE FROM institutional_section_items WHERE "sectionId" = (SELECT id FROM institutional_sections WHERE slug = 'important-topics');
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'important-topics'),
-  0, NULL, 'Seleção de ingredientes', NULL,
-  'Comparação entre famílias, fontes, concentrações, apresentações e graus de qualidade.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'important-topics'),
-  1, NULL, 'Desenvolvimento de produto', NULL,
-  'Discussão de aplicação, arquitetura da formulação, estratégia de incorporação e testes necessários.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'important-topics'),
-  2, NULL, 'Escalonamento', NULL,
-  'Avaliação de processo, ordem de adição, equipamentos, condições térmicas e pontos críticos.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'important-topics'),
-  3, NULL, 'Documentação técnica', NULL,
-  'Orientação sobre fichas, especificações, certificados, métodos e documentos disponíveis.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'important-topics'),
-  4, NULL, 'Pesquisa e inovação', NULL,
-  'Apoio a universidades, centros de pesquisa e empresas na avaliação de tecnologias especializadas.', NULL, NULL,
-  NULL, NULL, NULL, now()
-);
-INSERT INTO institutional_section_items
-  (id, "sectionId", "order", icon, title, subtitle, text, value, "linkLabel", "linkHref", "imageHint", extra, "updatedAt")
-VALUES (
-  gen_random_uuid()::text,
-  (SELECT id FROM institutional_sections WHERE slug = 'important-topics'),
-  5, NULL, 'Fornecimento', NULL,
-  'Alinhamento de apresentação comercial, demanda, disponibilidade e continuidade do projeto.', NULL, NULL,
   NULL, NULL, NULL, now()
 );
 

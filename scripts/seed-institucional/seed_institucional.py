@@ -48,6 +48,7 @@ def item(*, icon=None, title=None, subtitle=None, text=None, value=None,
 # institucional por este mesmo arquivo. O DELETE abaixo fecha esse caminho.
 SECOES_REMOVIDAS = [
     "service-proof",  # "ATUAÇÃO PRÁTICA" — retirada em 11/08/2026 a pedido do cliente.
+    "important-topics",  # "TÓPICOS IMPORTANTES" — retirada em 12/08/2026 a pedido do cliente.
 ]
 
 
@@ -178,19 +179,11 @@ def montar_secoes(doc):
         ],
     })
 
-    # 9. TÓPICOS IMPORTANTES ------------------------------------------------------------
-    s = by_id["important-topics"]
-    secoes.append({
-        "slug": "important-topics", "type": "important_topics", "order": 8,
-        "eyebrow": s["eyebrow"], "title": s["title"],
-        "items": [
-            item(title=it["title"], text=it["text"]) for it in s["items"]
-        ],
-    })
-
+    # 9. TÓPICOS IMPORTANTES — RETIRADA DA PÁGINA (ver SECOES_REMOVIDAS).
     # 10. ATUAÇÃO PRÁTICA — RETIRADA DA PÁGINA (ver SECOES_REMOVIDAS).
-    # O JSON de conteúdo ainda traz "service-proof"; a seção deixou de ser mapeada aqui de
-    # propósito. A ordem 9 fica vaga — `order` é relativo, não precisa ser contíguo.
+    # O JSON de conteúdo ainda traz "important-topics" e "service-proof"; as duas deixaram
+    # de ser mapeadas aqui de propósito. As ordens 8 e 9 ficam vagas — `order` é relativo,
+    # não precisa ser contíguo.
 
     # 11. MANIFESTO FINAL ------------------------------------------------------------
     s = by_id["closing-manifesto"]

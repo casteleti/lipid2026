@@ -50,7 +50,7 @@ export default async function SegmentosPage() {
     <>
       <ListingHero
         badge="SEGMENTOS"
-        title="Cada indústria precisa provar uma coisa diferente"
+        title="Cada setor exige uma resposta diferente da mesma tecnologia"
         description="Farmacêutica, cosmética, nutricional e veterinária partem do mesmo conjunto de tecnologias lipídicas — mas o que define um bom projeto muda em cada uma. Escolha o seu segmento."
       />
 
