@@ -12,6 +12,7 @@ import { Section } from '@/components/ui/Section';
 import { CollapsibleChips, type ChipOption } from '@/components/ui/CollapsibleChips';
 import { ViewToggle, type ModoVisualizacao } from '@/components/ui/ViewToggle';
 import { CHAVE_BUSCA } from '@/components/ingredientes/BackToSearch';
+import { LiaWidget } from '@/components/lia/LiaWidget';
 
 /** Preferência de exibição — fica no localStorage porque é gosto de quem navega, não
  *  filtro: não deve entrar na URL nem ser restaurada junto com uma busca compartilhada. */
@@ -458,6 +459,8 @@ export default function IngredientesPage() {
           )}
         </div>
       </Section>
+
+      <LiaWidget />
     </>
   );
 }

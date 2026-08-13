@@ -22,6 +22,7 @@ import { InstitutionalSectionsModule } from './modules/institutional-sections/in
 import { SegmentPagesModule } from './modules/segment-pages/segment-pages.module';
 import { PageViewsModule } from './modules/page-views/page-views.module';
 import { SeoPagesModule } from './modules/seo-pages/seo-pages.module';
+import { LiaModule } from './modules/lia/lia.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { SeoPagesModule } from './modules/seo-pages/seo-pages.module';
     SegmentPagesModule,
     PageViewsModule,
     SeoPagesModule,
+    LiaModule,
   ],
   controllers: [AppController],
   providers: [
