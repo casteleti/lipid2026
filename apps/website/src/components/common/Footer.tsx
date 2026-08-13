@@ -106,28 +106,27 @@ export function Footer() {
       </footer>
 
       <div className="bg-primary-950 text-white">
-        <Container className="flex flex-col items-center justify-between gap-3 py-5 text-xs text-white/70 md:flex-row">
-          <p>© {new Date().getFullYear()} LIPID Ingredients. Todos os direitos reservados.</p>
-          <div className="flex gap-6">
+        <Container className="grid grid-cols-1 items-center gap-3 py-5 text-xs text-white/70 md:grid-cols-3">
+          <p className="text-center md:text-left">
+            © {new Date().getFullYear()} LIPID Ingredients. Todos os direitos reservados.
+          </p>
+
+          <div className="flex items-center justify-center gap-2 font-light tracking-wide text-white/40">
+            <span>Powered by</span>
+            <Image
+              src="/icons/whale-daksa.svg"
+              alt="Daksa"
+              width={14}
+              height={14}
+              className="opacity-50"
+            />
+            <span>DAKSA</span>
+          </div>
+
+          <div className="flex justify-center md:justify-end">
             <span>Política de Privacidade</span>
           </div>
         </Container>
-
-        <div className="border-t border-white/10 py-4">
-          <Container className="flex items-center justify-center">
-            <span className="flex items-center gap-2 text-xs font-light tracking-wide text-white/70">
-              Powered by
-              <Image
-                src="/icons/whale-daksa.svg"
-                alt="Daksa"
-                width={14}
-                height={14}
-                className="opacity-70"
-              />
-              DAKSA
-            </span>
-          </Container>
-        </div>
       </div>
     </>
   );
