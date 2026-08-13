@@ -16,7 +16,7 @@ VALUES (
   gen_random_uuid()::text, 'hero', 'institutional_hero', 0,
   'LIPID INGREDIENTS', 'Ingredientes especializados para decisões técnicas bem fundamentadas.', 'Desde 2006, a Lipid Ingredients atua no Brasil conectando matérias-primas de alto padrão, conhecimento aplicado e suporte técnico para projetos farmacêuticos, cosméticos, nutricionais e veterinários.',
   'Nosso trabalho começa antes da compra e continua durante a avaliação do ingrediente, o desenvolvimento da formulação, a análise documental e a preparação para escala.', 'Tecnologia internacional, leitura técnica local e acompanhamento próximo de cada projeto.', NULL,
-  'Falar com um especialista', '/contato',
+  'Falar com um especialista', '/especialista',
   'Conhecer as soluções', '/produtos',
   'Composição abstrata de fundo: bicamada lipídica, membranas e partículas em suspensão, tom azul-profundo/verde-técnico. Não usar foto de bancada de laboratório genérica como peça principal — é pra ler como ciência, não estoque.', NULL, now()
 )

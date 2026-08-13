@@ -62,7 +62,10 @@ def montar_secoes(doc):
         "slug": "hero", "type": "institutional_hero", "order": 0,
         "eyebrow": s["eyebrow"], "title": s["title"], "subtitle": s["lead"],
         "body": s["supporting_text"], "highlight": s["highlight"],
-        "cta_label": s["primary_cta"]["label"], "cta_href": s["primary_cta"]["href"],
+        "cta_label": s["primary_cta"]["label"],
+        # O JSON de conteúdo aponta este CTA para /contato. Desde 12/08/2026 todo botão
+        # "Falar com um especialista" do site leva ao quiz — ver /especialista.
+        "cta_href": "/especialista",
         "secondary_cta_label": s["secondary_cta"]["label"], "secondary_cta_href": s["secondary_cta"]["href"],
         "image_hint": "Composição abstrata de fundo: bicamada lipídica, membranas e partículas em "
                       "suspensão, tom azul-profundo/verde-técnico. Não usar foto de bancada de "

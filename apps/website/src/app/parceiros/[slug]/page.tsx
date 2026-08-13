@@ -138,7 +138,7 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
           <p className="text-lg text-white/70">
             Fale com nossos especialistas e descubra como a Lipid conecta você a essa tecnologia.
           </p>
-          <Button href="/contato" variant="secondary" size="lg">
+          <Button href="/especialista" variant="secondary" size="lg">
             Fale com um especialista
           </Button>
         </div>

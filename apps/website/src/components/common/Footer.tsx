@@ -95,7 +95,7 @@ export function Footer() {
                 </p>
               </div>
               <Link
-                href="/contato"
+                href="/especialista"
                 className="mt-4 inline-block text-sm font-semibold text-primary-600 transition-colors hover:text-primary-700"
               >
                 Fale com um especialista →

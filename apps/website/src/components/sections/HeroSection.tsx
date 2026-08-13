@@ -85,7 +85,7 @@ export function HeroSection() {
             <Button href="/tecnologias" variant="primary" size="lg">
               Nossas tecnologias
             </Button>
-            <LinkArrow href="/contato" diagonal>
+            <LinkArrow href="/especialista" diagonal>
               Fale com um especialista
             </LinkArrow>
           </div>

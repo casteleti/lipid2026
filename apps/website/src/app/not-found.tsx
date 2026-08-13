@@ -24,7 +24,7 @@ export default function NotFound() {
           <Button href="/" variant="primary" size="lg">
             Voltar para a home
           </Button>
-          <Button href="/contato" variant="outline" size="lg">
+          <Button href="/especialista" variant="outline" size="lg">
             Falar com um especialista
           </Button>
         </div>

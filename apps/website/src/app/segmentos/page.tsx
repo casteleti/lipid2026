@@ -98,7 +98,7 @@ export default async function SegmentosPage() {
             A conversa técnica começa pelo ativo e pelo que ele precisa entregar — não pela
             categoria do produto final.
           </p>
-          <Button href="/contato" variant="secondary" size="lg">
+          <Button href="/especialista" variant="secondary" size="lg">
             Falar com um especialista
           </Button>
         </div>
