@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { HiXMark, HiOutlinePaperAirplane } from 'react-icons/hi2';
 import { LiaAvatar } from './LiaAvatar';
+import { LiaMarkdown } from './LiaMarkdown';
 import { enviarMensagemLia, MENSAGEM_INICIAL, type LiaMessage } from './lia-api';
 
 export function LiaChatWindow({ onClose }: { onClose: () => void }) {
@@ -65,13 +66,13 @@ export function LiaChatWindow({ onClose }: { onClose: () => void }) {
           <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             {m.role === 'assistant' && <LiaAvatar tamanho="sm" />}
             <div
-              className={`ml-2 max-w-[78%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+              className={`ml-2 max-w-[78%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                 m.role === 'user'
-                  ? 'bg-primary-600 text-white'
+                  ? 'whitespace-pre-wrap bg-primary-600 text-white'
                   : 'bg-gray-100 text-gray-800'
               }`}
             >
-              {m.content}
+              {m.role === 'assistant' ? <LiaMarkdown>{m.content}</LiaMarkdown> : m.content}
             </div>
           </div>
         ))}
