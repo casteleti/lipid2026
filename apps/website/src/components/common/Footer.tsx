@@ -112,6 +112,22 @@ export function Footer() {
             <span>Política de Privacidade</span>
           </div>
         </Container>
+
+        <div className="border-t border-white/10 py-4">
+          <Container className="flex items-center justify-center">
+            <span className="flex items-center gap-2 text-xs font-light tracking-wide text-white/70">
+              Powered by
+              <Image
+                src="/icons/whale-daksa.svg"
+                alt="Daksa"
+                width={14}
+                height={14}
+                className="opacity-70"
+              />
+              DAKSA
+            </span>
+          </Container>
+        </div>
       </div>
     </>
   );
