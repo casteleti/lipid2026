@@ -15,7 +15,10 @@ export function LiaWidget() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    // top-28 garante que o painel nunca sobe até colidir com o header (que tem ~97px de
+    // altura no estado não-rolado) — sem esse limite, um painel de altura fixa numa janela
+    // baixa cresce pra cima e passa por cima do menu.
+    <div className="fixed bottom-6 right-6 top-28 z-40 flex items-end justify-end">
       {fase === 'intro' && (
         <LiaIntroPanel onClose={() => setFase('fechado')} onStart={() => setFase('chat')} />
       )}

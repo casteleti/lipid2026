@@ -42,7 +42,7 @@ export function LiaChatWindow({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="flex h-[560px] max-h-[calc(100vh-2.5rem)] w-[380px] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-3xl border border-black/[0.06] bg-white shadow-[0_40px_80px_-30px_rgba(15,23,42,0.35),0_8px_24px_-12px_rgba(15,23,42,0.15)]">
+    <div className="flex h-full max-h-[560px] w-[380px] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-3xl border border-black/[0.06] bg-white shadow-[0_40px_80px_-30px_rgba(15,23,42,0.35),0_8px_24px_-12px_rgba(15,23,42,0.15)]">
       <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
         <div className="flex items-center gap-3">
           <LiaAvatar tamanho="sm" />

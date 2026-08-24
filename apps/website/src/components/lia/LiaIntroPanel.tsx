@@ -18,7 +18,7 @@ const CAPACIDADES = [
 
 export function LiaIntroPanel({ onClose, onStart }: { onClose: () => void; onStart: () => void }) {
   return (
-    <div className="flex w-[380px] max-w-[calc(100vw-2.5rem)] flex-col rounded-3xl border border-black/[0.06] bg-white p-6 shadow-[0_40px_80px_-30px_rgba(15,23,42,0.35),0_8px_24px_-12px_rgba(15,23,42,0.15)]">
+    <div className="flex max-h-full w-[380px] max-w-[calc(100vw-2.5rem)] flex-col overflow-y-auto rounded-3xl border border-black/[0.06] bg-white p-6 shadow-[0_40px_80px_-30px_rgba(15,23,42,0.35),0_8px_24px_-12px_rgba(15,23,42,0.15)]">
       <div className="mb-4 flex items-start justify-between">
         <LiaAvatar tamanho="md" />
         <button

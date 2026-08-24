@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { ListingHero } from '@/components/ui/ListingHero';
 import { SearchBar } from '@/components/ui/SearchBar';
@@ -12,7 +13,13 @@ import { Section } from '@/components/ui/Section';
 import { CollapsibleChips, type ChipOption } from '@/components/ui/CollapsibleChips';
 import { ViewToggle, type ModoVisualizacao } from '@/components/ui/ViewToggle';
 import { CHAVE_BUSCA } from '@/components/ingredientes/BackToSearch';
-import { LiaWidget } from '@/components/lia/LiaWidget';
+
+// Carregado sob demanda: o chat (react-markdown incluso) só pesa pra quem realmente abre o
+// widget, em vez de entrar no bundle inicial de todo visitante da listagem. ssr:false porque
+// é 100% interativo (useState) e não tem nada a renderizar no servidor.
+const LiaWidget = dynamic(() => import('@/components/lia/LiaWidget').then((m) => m.LiaWidget), {
+  ssr: false,
+});
 
 /** Preferência de exibição — fica no localStorage porque é gosto de quem navega, não
  *  filtro: não deve entrar na URL nem ser restaurada junto com uma busca compartilhada. */
