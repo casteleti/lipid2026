@@ -112,7 +112,7 @@ UPDATE technologies SET
   pillars = '[
     {
       "title": "É uma família, não um ingrediente",
-      "description": "Fosfatidilcolina, fosfatidiletanolamina, fosfatidilglicerol e fosfatidilserina têm carga, hidratação, temperatura de transição e interação molecular próprias. A escolha começa pelo papel funcional desejado, não pela nomenclatura."
+      "description": "As diferentes classes de fosfolipídios apresentam características distintas de carga, hidratação e interação molecular. Propriedades como a temperatura de transição dependem também da composição das cadeias acila, incluindo comprimento e grau de insaturação. A escolha começa pelo papel funcional desejado, não pela nomenclatura."
     },
     {
       "title": "A origem decide mais do que o rótulo",
