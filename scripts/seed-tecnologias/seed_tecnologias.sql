@@ -46,7 +46,7 @@ UPDATE technologies SET
     },
     {
       "title": "Escala pensada desde a bancada",
-      "description": "Hidratação, cisalhamento, homogeneização, extrusão e filtração mudam de comportamento entre o laboratório e a planta. Matéria-prima com identidade, pureza e perfil de ácidos graxos consistentes reduz variabilidade e encurta validação."
+      "description": "Hidratação, cisalhamento, homogeneização, extrusão e filtração mudam de comportamento entre o laboratório e a planta. Matéria-prima com identidade e composição molecular consistentes, incluindo, quando aplicável, perfil de cadeias acila, reduz variabilidade e encurta validação."
     },
     {
       "title": "Estabilidade até o fim do prazo de validade",
