@@ -68,7 +68,7 @@ UPDATE technologies SET
     },
     {
       "label": "Documentação para mercado regulado",
-      "description": "Especificações, métodos analíticos e rastreabilidade que acompanham o produto no registro e na auditoria."
+      "description": "Especificações, métodos analíticos e rastreabilidade que acompanham o produto no registro e na auditoria. A documentação do ingrediente sustenta a qualificação da matéria-prima — a adequação e a estabilidade da formulação final precisam ser demonstradas no produto e processo específicos."
     },
     {
       "label": "Leitura crítica de alegações",
