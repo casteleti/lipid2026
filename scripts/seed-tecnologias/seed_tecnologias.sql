@@ -42,7 +42,7 @@ UPDATE technologies SET
     },
     {
       "title": "Especificação vai muito além do tamanho médio",
-      "description": "Distribuição de tamanho, índice de polidispersidade, carga superficial, morfologia e proporção entre ativo livre e encapsulado. É o conjunto que sustenta o dossiê, e ele precisa ser definido a partir do objetivo do produto."
+      "description": "Distribuição de tamanho, índice de polidispersidade, potencial zeta/carga superficial, morfologia e proporção entre ativo livre e encapsulado. É o conjunto que sustenta o dossiê, e ele precisa ser definido a partir do objetivo do produto."
     },
     {
       "title": "Escala pensada desde a bancada",
