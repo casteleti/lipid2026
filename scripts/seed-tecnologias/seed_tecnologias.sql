@@ -19,6 +19,7 @@ BEGIN;
 -- -----------------------------------------------------------------------------
 UPDATE technologies SET
   eyebrow      = 'Tecnologia lipídica',
+  description  = 'Vesículas esféricas compostas por fosfolipídios que encapsulam ativos hidrofílicos e lipofílicos. Tecnologia empregada em formulações dermatológicas e farmacêuticas, com desempenho demonstrado por aplicação.',
   h1           = 'O lipossoma não é uma cápsula. É uma decisão de engenharia.',
   subheadline  = 'Composição, processo e caracterização definem o que a vesícula realmente entrega. Trabalhamos essas três variáveis com fosfolipídios de origem rastreada e fabricantes internacionais de referência — entre eles o grupo alemão LIPOID.',
   "heroCtaLabel" = 'Discutir meu projeto liposomal',
@@ -167,6 +168,7 @@ WHERE slug = 'fosfolipidios';
 -- -----------------------------------------------------------------------------
 UPDATE technologies SET
   eyebrow      = 'Tecnologia lipídica',
+  description  = 'Tecnologia de proteção de ativos sensíveis. Utilizada para otimizar estabilidade, biodisponibilidade e desempenho, conforme demonstrado para cada formulação.',
   h1           = 'Encapsular é resolver um problema mensurável.',
   subheadline  = 'Proteger, incorporar ou controlar liberação são objetivos diferentes, e cada um leva a um sistema diferente. Lipossomas, emulsões, partículas lipídicas, complexos e pós obtidos por secagem são meios — a escolha nasce do problema.',
   "heroCtaLabel" = 'Levar meu desafio de formulação',

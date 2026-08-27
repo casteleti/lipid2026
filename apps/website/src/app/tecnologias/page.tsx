@@ -75,7 +75,7 @@ export default function TecnologiasPage() {
       <ListingHero
         badge="TECNOLOGIAS"
         title="Tecnologias Lipídicas"
-        description="Plataformas científicas de ponta baseadas em lipídios, com estabilidade, biodisponibilidade e eficácia comprovadas para formulações avançadas."
+        description="Plataformas científicas baseadas em lipídios para desenvolver formulações com maior controle de estabilidade, biodisponibilidade e desempenho."
       >
         <SearchBar value={query} onChange={handleSearch} placeholder="Buscar tecnologias..." />
       </ListingHero>

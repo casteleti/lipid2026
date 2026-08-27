@@ -42,7 +42,7 @@ export const ARTES_TECNOLOGIA: Record<string, { src: string; alt: string }> = {
 export function TechnologiesSection({
   eyebrow = 'PLATAFORMAS CIENTÍFICAS',
   heading = 'Tecnologias de ponta baseadas em lipídios',
-  description = 'Plataformas tecnológicas que garantem estabilidade, biodisponibilidade e eficácia para sistemas de entrega avançados e formulações de alta performance.',
+  description = 'Plataformas tecnológicas desenvolvidas para otimizar estabilidade, biodisponibilidade e desempenho de formulações, conforme demonstrado para cada aplicação.',
 }: TechnologiesSectionProps = {}) {
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const [loading, setLoading] = useState(true);
