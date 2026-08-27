@@ -37,7 +37,7 @@ UPDATE technologies SET
 
   pillars = '[
     {
-      "title": "A arquitetura é definida pelo ativo",
+      "title": "A arquitetura começa pelas propriedades do ativo",
       "description": "Hidrossolúvel no núcleo aquoso, lipossolúvel na bicamada, anfifílico na interface. A afinidade entre ingrediente e lipídio, a proporção entre fases, o pH e a força iônica determinam a carga real — não a intenção descrita no fluxograma."
     },
     {
