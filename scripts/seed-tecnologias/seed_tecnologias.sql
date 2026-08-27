@@ -26,7 +26,7 @@ UPDATE technologies SET
 
   "imageOneUrl"     = '/tecnologias/lipossomas-arquitetura.svg',
   "imageOneAlt"     = 'Corte esquemático de um lipossoma: núcleo aquoso, bicamada fosfolipídica e interface',
-  "imageOneCaption" = 'Três regiões, três destinos possíveis para o ativo — e é a afinidade química que decide qual deles é viável.',
+  "imageOneCaption" = 'A distribuição do ativo entre núcleo aquoso, bicamada e interfaces depende de suas propriedades físico-químicas e das características da formulação e do processo.',
 
   "imageTwoUrl"     = '/tecnologias/lipossomas-populacao.svg',
   "imageTwoAlt"     = 'Vesículas unilamelares, multilamelares e populações heterogêneas, com os atributos que compõem a especificação',
