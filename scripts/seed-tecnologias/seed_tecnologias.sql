@@ -50,7 +50,7 @@ UPDATE technologies SET
     },
     {
       "title": "Estabilidade até o fim do prazo de validade",
-      "description": "Fusão de vesículas, sedimentação, hidrólise, oxidação e perda de material encapsulado são riscos de prateleira e de transporte. Antioxidantes, pH, atmosfera e embalagem fazem parte da estratégia — e nunca substituem o estudo de estabilidade."
+      "description": "Agregação, floculação, fusão ou alteração da população vesicular, hidrólise, oxidação e perda de retenção (leakage) são riscos de prateleira e de transporte. Antioxidantes, pH, atmosfera e embalagem fazem parte da estratégia — e nunca substituem o estudo de estabilidade."
     }
   ]'::jsonb,
 
