@@ -43,7 +43,16 @@ export function LogoLipid({ colapsado, className }: { colapsado: boolean; classN
       className={clsx(
         // `--logo-sim` é o lado do símbolo e a única medida a mexer para escalar o logo:
         // largura, altura e gap saem dela pelas razões acima.
-        'flex items-end [--logo-sim:36px] md:[--logo-sim:44px]',
+        //
+        // Colapsado, o lockup inteiro encolhe 10% (44 -> 40px, 36 -> 32px). É um desvio
+        // consciente do handoff, que pede símbolo de tamanho fixo: na barra flutuante,
+        // mais baixa, o logo em tamanho cheio ficava pesado ao lado do menu. Como tudo
+        // deriva de `--logo-sim`, símbolo, wordmark e gap encolhem juntos e as proporções
+        // do vetor continuam intactas.
+        'flex items-end',
+        colapsado
+          ? '[--logo-sim:32px] md:[--logo-sim:40px]'
+          : '[--logo-sim:36px] md:[--logo-sim:44px]',
         colapsado && 'logo-colapsado',
         className,
       )}
@@ -56,7 +65,10 @@ export function LogoLipid({ colapsado, className }: { colapsado: boolean; classN
         width={62}
         height={62}
         style={{ width: 'var(--logo-sim)', height: 'var(--logo-sim)' }}
-        className="block shrink-0"
+        // A variável não anima sozinha (custom property não é interpolável), mas width e
+        // height sim: sem esta transição o símbolo saltaria de 44 para 40px de um quadro
+        // para o outro, no mesmo instante em que a barra encolhe suavemente.
+        className="block shrink-0 transition-[width,height] duration-500 ease-brand motion-reduce:transition-none"
       />
 
       <span

@@ -139,13 +139,16 @@ export function Header() {
 
           <div
             className={clsx(
-              // As duas colunas de ponta ganham a mesma largura mínima a partir de `2xl`
-              // (onde o nav centralizado aparece): a logo colapsa/expande e o botão CTA é
-              // bem mais largo que ela, então sem isso o nav — centralizado na barra
-              // inteira, não no espaço "sobrando" — fica descentrado o suficiente para
-              // invadir a área do botão. Com as colunas simétricas, centralizar na barra
-              // inteira volta a ser exatamente centralizar no meio real disponível.
-              'relative grid grid-cols-[auto_1fr_auto] items-center px-3 transition-all duration-500 ease-brand md:px-5 2xl:grid-cols-[300px_1fr_300px]',
+              // Flex de três zonas, não grid com colunas fixas. A versão anterior centrava o
+              // nav na barra INTEIRA (`absolute left-1/2`), o que só não invadia o botão se
+              // as duas pontas tivessem a mesma largura — daí colunas de 300px, quase o
+              // dobro da logo real (~156px). Aquele padding forçado somava 1351px de
+              // necessidade mínima e não cabia em 1366, a tela do laptop de 14" do cliente,
+              // que por isso caía no menu hambúrguer.
+              // Aqui o nav ocupa o espaço que sobra e se centra nele: ninguém pode invadir
+              // ninguém (é fluxo, não posicionamento absoluto), o vão da logo some e a
+              // necessidade real cai para ~1160px — cabe folgado em 1366 e ainda em 1280.
+              'relative flex items-center gap-1 px-3 transition-all duration-500 ease-brand md:px-5 xl:gap-2',
               scrolled ? 'h-14 md:h-16' : 'h-16 md:h-20',
             )}
           >
@@ -153,13 +156,23 @@ export function Header() {
                 A altura do <Link> deixou de mudar com o scroll: o handoff do logo é
                 explícito em que o símbolo não reduz nem se desloca — quem colapsa é o
                 wordmark ao lado dele. */}
-            <Link href="/" className="relative flex shrink-0 items-center">
+            {/* A zona reserva a largura do lockup EXPANDIDO e não a devolve quando ele
+                colapsa. Sem isso o menu — que se centra no espaço entre logo e CTA —
+                escorregava ~55px para a esquerda ao rolar, porque o logo encolhe de 156
+                para 46px e o vão da esquerda cresce 110px. Reservando, o centro disponível
+                não se mexe: ao rolar, o menu só reduz a fonte, no lugar.
+
+                156px = 44px (--logo-sim no md) x 3.54839, a soma das razões do lockup
+                (símbolo 1 + gap 0.16129 + wordmark 2.38710). Mudou o tamanho do logo,
+                mude aqui junto. */}
+            <Link href="/" className="relative flex shrink-0 items-center menu:min-w-[156px]">
               <LogoLipid colapsado={scrolled} />
             </Link>
 
-            {/* Navigation area — truly centered on the whole bar (not just the leftover
-                space between logo/CTA, which shifts as those change width by state) */}
-            <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 2xl:flex 2xl:items-center">
+            {/* O nav toma o espaço entre logo e CTA (`flex-1`) e se centra DENTRO dele.
+                `min-w-0` para o flex poder encolher em telas estreitas em vez de empurrar
+                o botão para fora — sem isso o conteúdo define um piso de largura. */}
+            <nav className="hidden min-w-0 flex-1 items-center justify-center menu:flex">
           {menuItems.map((item) => {
             const active = isActive(item.href);
             const isOpen = item.dropdownKey ? openSection === item.dropdownKey : false;
@@ -171,7 +184,7 @@ export function Header() {
                 // dele tem seu próprio `group`. Um `group` anônimo neste ancestral faria o
                 // hover em qualquer ponto do item acender todos os ícones do submenu de uma
                 // vez — `group/nav` mantém o efeito restrito à seta desta palavra.
-                className="group/nav relative shrink-0 px-3"
+                className="group/nav relative shrink-0 px-1 xl:px-2.5"
                 onMouseEnter={() => item.dropdownKey && openDropdown(item.dropdownKey)}
                 onMouseLeave={() => item.dropdownKey && scheduleClose()}
                 onKeyDown={(e) => {
@@ -196,7 +209,10 @@ export function Header() {
                       // colore o texto é o mesmo que abre o submenu — sem tratar os dois
                       // juntos, TECNOLOGIAS e SEGMENTOS ficariam de fora do efeito.
                       'whitespace-nowrap py-2 transition-all duration-300 hover:text-primary-600',
-                      scrolled ? 'text-[11px]' : 'text-[12px]',
+                      // Na faixa 1000..1279 a fonte fica em 11px nos dois estados: é ali
+                      // que os sete itens dividem a barra com a logo e o CTA, e sem isso o
+                      // conteúdo transborda 60px e passa por cima dos dois.
+                      scrolled ? 'text-[11px]' : 'text-[11px] xl:text-[12px]',
                       active || isOpen ? 'font-semibold' : 'font-medium',
                       isOpen ? 'text-primary-600' : active ? 'text-gray-900' : 'text-gray-600',
                     )}
@@ -219,7 +235,7 @@ export function Header() {
                         // A seta acompanha a palavra no hover, um tom mais claro para não
                         // competir com ela. `group-hover` cobre a janela do hover-intent,
                         // entre o mouse entrar e o submenu de fato abrir.
-                        'ml-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-150 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500',
+                        'ml-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-150 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 xl:h-6 xl:w-6',
                         isOpen ? 'text-primary-500' : 'text-gray-400 group-hover/nav:text-primary-400',
                       )}
                     >
@@ -252,13 +268,19 @@ export function Header() {
         </nav>
 
         {/* Conversion area — protected zone, pinned to the far edge */}
-        {/* col-start-3 explícito: como o nav é `absolute` (fora do fluxo do grid), o
-            auto-placement pula ele e essa div — a próxima no fluxo — cairia sozinha na
-            coluna do meio (1fr) em vez da 3ª coluna fixa, deixando a 3ª coluna vazia e o
-            botão CTA deslocado para a esquerda, sobre o nav. */}
-        <div className="flex items-center justify-end pl-4 2xl:col-start-3 2xl:pl-6">
-          <div className="hidden 2xl:block">
-            <BotaoEspecialista href="/especialista">Fale com um especialista</BotaoEspecialista>
+        {/* `shrink-0` para o botão nunca ser espremido: quem cede espaço é o nav. */}
+        <div className="ml-auto flex shrink-0 items-center justify-end pl-2 xl:pl-4">
+          <div className="hidden menu:block">
+            {/* O rótulo vai em duas partes de propósito: entre 1000 e 1279 o botão empilha
+                as linhas para devolver largura ao menu, e a quebra tem de cair depois de
+                "um" — deixar o navegador quebrar sozinho põe "especialista" sozinho numa
+                linha larga demais. De `xl` para cima elas voltam a ser uma frase só. */}
+            <BotaoEspecialista href="/especialista" compacto={scrolled}>
+              <span className="flex flex-col items-center leading-[1.25] xl:flex-row xl:gap-[0.28em] xl:leading-4">
+                <span>Fale com um</span>
+                <span>especialista</span>
+              </span>
+            </BotaoEspecialista>
           </div>
 
           <button
@@ -267,7 +289,7 @@ export function Header() {
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-nav-drawer"
             aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-            className="flex h-11 w-11 items-center justify-center text-gray-900 2xl:hidden"
+            className="flex h-11 w-11 items-center justify-center text-gray-900 menu:hidden"
             onClick={() => setIsMobileMenuOpen((v) => !v)}
           >
             {isMobileMenuOpen ? <HiXMark className="h-6 w-6" /> : <HiBars3 className="h-6 w-6" />}
@@ -280,7 +302,7 @@ export function Header() {
       {/* Mobile / tablet drawer */}
       <div
         className={clsx(
-          'fixed inset-0 z-[60] bg-gray-900/25 backdrop-blur-[2px] transition-opacity duration-300 2xl:hidden motion-reduce:transition-none',
+          'fixed inset-0 z-[60] bg-gray-900/25 backdrop-blur-[2px] transition-opacity duration-300 menu:hidden motion-reduce:transition-none',
           isMobileMenuOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
         )}
         onClick={() => setIsMobileMenuOpen(false)}
@@ -300,7 +322,7 @@ export function Header() {
           }
         }}
         className={clsx(
-          'fixed inset-y-0 right-0 z-[70] flex w-full max-w-sm flex-col bg-white shadow-2xl transition-transform duration-300 ease-out 2xl:hidden motion-reduce:transition-none',
+          'fixed inset-y-0 right-0 z-[70] flex w-full max-w-sm flex-col bg-white shadow-2xl transition-transform duration-300 ease-out menu:hidden motion-reduce:transition-none',
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full',
         )}
       >

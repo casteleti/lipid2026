@@ -43,12 +43,15 @@ export function BotaoEspecialista({
   onClick,
   tabIndex,
   className,
+  compacto = false,
 }: {
   href: string;
   children: React.ReactNode;
   onClick?: () => void;
   tabIndex?: number;
   className?: string;
+  /** Estado flutuante do header: o botão encolhe junto com a barra, a logo e o menu. */
+  compacto?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   /** 1 enquanto o ponteiro ou o foco está no botão. Ref, não state: muda a cada frame. */
@@ -199,8 +202,24 @@ export function BotaoEspecialista({
         // `leading-4` não é enfeite: `text-[15px]` só define o tamanho, e a entrelinha de
         // 1.5 herdada da página empurrava a altura para 53px. Com 16px, 15+16+15 = 46px,
         // que é a medida do handoff.
-        'bg-[#0f1e46] px-[30px] py-[15px] text-[15px] font-bold leading-4 tracking-[0.01em] text-white',
-        'transition-[background-color,box-shadow,transform] duration-300 ease-out',
+        //
+        // Três faixas de largura, e dentro de cada uma um estado de scroll (`compacto`):
+        //
+        // - abaixo de `xl` (1000..1279): o rótulo vai em DUAS LINHAS. É o que devolve
+        //   largura ao menu nessa faixa e evita cair no hambúrguer antes de 1000px. O
+        //   respiro vertical cai junto, senão duas linhas fariam um botão mais alto que a
+        //   barra flutuante.
+        // - `xl` (1280..1535): uma linha, medida intermediária.
+        // - `2xl` para cima: a medida do handoff (46px), onde há espaço de sobra.
+        //
+        // A entrelinha é controlada no rótulo (ver Header), não aqui: com duas linhas ela
+        // precisa ser proporcional, e com uma linha volta a ser fixa em 16px para a altura
+        // do botão continuar previsível.
+        'bg-[#0f1e46] font-bold tracking-[0.01em] text-white',
+        compacto
+          ? 'px-[16px] py-[6px] text-[12px] xl:px-[18px] xl:py-[10px] xl:text-[13px] 2xl:px-[26px] 2xl:py-[12px] 2xl:text-[14px]'
+          : 'px-[18px] py-[8px] text-[13px] xl:px-[22px] xl:py-[12px] xl:text-[14px] 2xl:px-[30px] 2xl:py-[15px] 2xl:text-[15px]',
+        'transition-[background-color,box-shadow,transform,padding,font-size] duration-300 ease-out',
         'hover:-translate-y-px hover:bg-[#16306f] hover:shadow-[0_8px_26px_rgba(20,45,110,0.32)]',
         'focus-visible:-translate-y-px focus-visible:bg-[#16306f]',
         'focus-visible:shadow-[0_8px_26px_rgba(20,45,110,0.32)]',

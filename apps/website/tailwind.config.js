@@ -3,6 +3,11 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      // Ponto em que o menu horizontal dá lugar ao hambúrguer. Não é um dos padrões do
+      // Tailwind: de 1000 a 1279 o menu ainda cabe, desde que o CTA vá para duas linhas.
+      screens: {
+        menu: '1000px',
+      },
       colors: {
         primary: {
           50: '#f2f5fc',
