@@ -212,7 +212,7 @@ export default function IngredientesPage() {
             setQuery(q);
             setPage(1);
           }}
-          placeholder="Buscar por nome, INCI ou código..."
+          placeholder="Buscar por nome ou INCI..."
         />
       </ListingHero>
 
@@ -365,17 +365,6 @@ export default function IngredientesPage() {
                         </div>
                       )}
 
-                      {item.codes.length > 0 && (
-                        <div className="space-y-1">
-                          <p className="text-xs uppercase tracking-wide text-gray-500">
-                            Código{item.codes.length > 1 ? 's' : ''}
-                          </p>
-                          <p className="font-mono text-xs text-gray-600">
-                            {item.codes.map((c) => c.code).join(' · ')}
-                          </p>
-                        </div>
-                      )}
-
                       <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-2">
                         {item.partner && <Badge variant="secondary">{item.partner.name}</Badge>}
                         {item.category && <Badge variant="dark">{item.category.name}</Badge>}
@@ -385,14 +374,14 @@ export default function IngredientesPage() {
                 </Grid>
               ) : (
                 /* Listagem: colunas alinhadas entre as linhas. É o modo de COMPARAR — o
-                   INCI e o código de um produto caem exatamente sob os do produto de cima,
-                   o que a grade não permite porque cada card tem altura própria. */
+                   INCI de um produto cai exatamente sob o do produto de cima, o que a
+                   grade não permite porque cada card tem altura própria. */
                 <div className="divide-y divide-gray-100 overflow-hidden rounded-[20px] border border-black/[0.05] bg-white">
                   {items.map((item) => (
                     <Link
                       key={item.id}
                       href={`/ingredientes/${item.slug}`}
-                      className="group grid grid-cols-1 items-center gap-x-6 gap-y-3 px-6 py-4 transition-colors duration-300 hover:bg-gray-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1.4fr)_auto]"
+                      className="group grid grid-cols-1 items-center gap-x-6 gap-y-3 px-6 py-4 transition-colors duration-300 hover:bg-gray-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 lg:grid-cols-[minmax(0,2.4fr)_minmax(0,1.6fr)_minmax(0,1.6fr)_auto]"
                     >
                       <div className="min-w-0 space-y-1">
                         {/* Sem a chamada aqui, ao contrário da grade: no modo comparação o
@@ -413,21 +402,6 @@ export default function IngredientesPage() {
                           <>
                             <p className="text-[10px] uppercase tracking-wide text-gray-400">INCI</p>
                             <p className="truncate text-sm text-gray-700">{item.inci}</p>
-                          </>
-                        ) : (
-                          <span className="hidden text-sm text-gray-300 lg:inline">—</span>
-                        )}
-                      </div>
-
-                      <div className="min-w-0">
-                        {item.codes.length > 0 ? (
-                          <>
-                            <p className="text-[10px] uppercase tracking-wide text-gray-400">
-                              Código{item.codes.length > 1 ? 's' : ''}
-                            </p>
-                            <p className="truncate font-mono text-xs text-gray-600">
-                              {item.codes.map((c) => c.code).join(' · ')}
-                            </p>
                           </>
                         ) : (
                           <span className="hidden text-sm text-gray-300 lg:inline">—</span>

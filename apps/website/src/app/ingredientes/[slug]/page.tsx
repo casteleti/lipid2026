@@ -171,25 +171,12 @@ export default async function IngredienteDetalhePage({ params }: { params: { slu
             </p>
           )}
 
-          {(item.inci || item.codes.length > 0) && (
+          {item.inci && (
             <div className="reveal reveal-delay-3 mt-10 flex flex-wrap gap-3">
-              {item.inci && (
-                <div className="glass px-5 py-3">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">INCI</p>
-                  <p className="mt-0.5 text-sm font-medium text-gray-900">{item.inci}</p>
-                </div>
-              )}
-              {item.codes.length > 0 && (
-                <div className="glass px-5 py-3">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                    Código{item.codes.length > 1 ? 's' : ''} comercial
-                    {item.codes.length > 1 ? 'is' : ''}
-                  </p>
-                  <p className="mt-0.5 font-mono text-sm font-medium text-gray-900">
-                    {item.codes.map((c) => c.code).join(' · ')}
-                  </p>
-                </div>
-              )}
+              <div className="glass px-5 py-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400">INCI</p>
+                <p className="mt-0.5 text-sm font-medium text-gray-900">{item.inci}</p>
+              </div>
             </div>
           )}
         </div>
@@ -265,17 +252,6 @@ export default async function IngredienteDetalhePage({ params }: { params: { slu
                         >
                           {item.partner.name}
                         </Link>
-                      </dd>
-                    </div>
-                  )}
-                  {item.codes.length > 0 && (
-                    <div>
-                      <dt className="eyebrow">
-                        Código{item.codes.length > 1 ? 's' : ''} comercial
-                        {item.codes.length > 1 ? 'is' : ''}
-                      </dt>
-                      <dd className="mt-1 font-mono text-sm text-gray-800">
-                        {item.codes.map((c) => c.code).join(' · ')}
                       </dd>
                     </div>
                   )}
