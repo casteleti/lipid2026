@@ -139,7 +139,13 @@ export function Header() {
 
           <div
             className={clsx(
-              'relative grid grid-cols-[auto_1fr_auto] items-center px-3 transition-all duration-500 ease-brand md:px-5',
+              // As duas colunas de ponta ganham a mesma largura mínima a partir de `2xl`
+              // (onde o nav centralizado aparece): a logo colapsa/expande e o botão CTA é
+              // bem mais largo que ela, então sem isso o nav — centralizado na barra
+              // inteira, não no espaço "sobrando" — fica descentrado o suficiente para
+              // invadir a área do botão. Com as colunas simétricas, centralizar na barra
+              // inteira volta a ser exatamente centralizar no meio real disponível.
+              'relative grid grid-cols-[auto_1fr_auto] items-center px-3 transition-all duration-500 ease-brand md:px-5 2xl:grid-cols-[300px_1fr_300px]',
               scrolled ? 'h-14 md:h-16' : 'h-16 md:h-20',
             )}
           >
@@ -153,7 +159,7 @@ export function Header() {
 
             {/* Navigation area — truly centered on the whole bar (not just the leftover
                 space between logo/CTA, which shifts as those change width by state) */}
-            <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 xl:flex xl:items-center">
+            <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 2xl:flex 2xl:items-center">
           {menuItems.map((item) => {
             const active = isActive(item.href);
             const isOpen = item.dropdownKey ? openSection === item.dropdownKey : false;
@@ -165,7 +171,7 @@ export function Header() {
                 // dele tem seu próprio `group`. Um `group` anônimo neste ancestral faria o
                 // hover em qualquer ponto do item acender todos os ícones do submenu de uma
                 // vez — `group/nav` mantém o efeito restrito à seta desta palavra.
-                className="group/nav relative shrink-0 px-4 2xl:px-6"
+                className="group/nav relative shrink-0 px-3"
                 onMouseEnter={() => item.dropdownKey && openDropdown(item.dropdownKey)}
                 onMouseLeave={() => item.dropdownKey && scheduleClose()}
                 onKeyDown={(e) => {
@@ -246,8 +252,12 @@ export function Header() {
         </nav>
 
         {/* Conversion area — protected zone, pinned to the far edge */}
-        <div className="flex items-center justify-end pl-4 xl:pl-6">
-          <div className="hidden xl:block">
+        {/* col-start-3 explícito: como o nav é `absolute` (fora do fluxo do grid), o
+            auto-placement pula ele e essa div — a próxima no fluxo — cairia sozinha na
+            coluna do meio (1fr) em vez da 3ª coluna fixa, deixando a 3ª coluna vazia e o
+            botão CTA deslocado para a esquerda, sobre o nav. */}
+        <div className="flex items-center justify-end pl-4 2xl:col-start-3 2xl:pl-6">
+          <div className="hidden 2xl:block">
             <BotaoEspecialista href="/especialista">Fale com um especialista</BotaoEspecialista>
           </div>
 
@@ -257,7 +267,7 @@ export function Header() {
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-nav-drawer"
             aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-            className="flex h-11 w-11 items-center justify-center text-gray-900 xl:hidden"
+            className="flex h-11 w-11 items-center justify-center text-gray-900 2xl:hidden"
             onClick={() => setIsMobileMenuOpen((v) => !v)}
           >
             {isMobileMenuOpen ? <HiXMark className="h-6 w-6" /> : <HiBars3 className="h-6 w-6" />}
@@ -270,7 +280,7 @@ export function Header() {
       {/* Mobile / tablet drawer */}
       <div
         className={clsx(
-          'fixed inset-0 z-[60] bg-gray-900/25 backdrop-blur-[2px] transition-opacity duration-300 xl:hidden motion-reduce:transition-none',
+          'fixed inset-0 z-[60] bg-gray-900/25 backdrop-blur-[2px] transition-opacity duration-300 2xl:hidden motion-reduce:transition-none',
           isMobileMenuOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
         )}
         onClick={() => setIsMobileMenuOpen(false)}
@@ -290,7 +300,7 @@ export function Header() {
           }
         }}
         className={clsx(
-          'fixed inset-y-0 right-0 z-[70] flex w-full max-w-sm flex-col bg-white shadow-2xl transition-transform duration-300 ease-out xl:hidden motion-reduce:transition-none',
+          'fixed inset-y-0 right-0 z-[70] flex w-full max-w-sm flex-col bg-white shadow-2xl transition-transform duration-300 ease-out 2xl:hidden motion-reduce:transition-none',
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full',
         )}
       >
