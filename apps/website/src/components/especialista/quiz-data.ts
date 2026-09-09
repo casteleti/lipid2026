@@ -1,5 +1,5 @@
 import type { IconType } from 'react-icons';
-import { HiOutlineBeaker, HiOutlineSparkles, HiOutlineHeart } from 'react-icons/hi2';
+import { HiOutlineBeaker, HiOutlineSparkles } from 'react-icons/hi2';
 import { PiPawPrint } from 'react-icons/pi';
 
 /**
@@ -13,13 +13,12 @@ import { PiPawPrint } from 'react-icons/pi';
  * lipídica (igual nos 4 fluxos) → 4) desafio (por segmento) → contato.
  */
 
-export type SegmentoId = 'farmaceutica' | 'cosmetica' | 'nutricional' | 'veterinaria';
+export type SegmentoId = 'farmaceutica' | 'cosmetica' | 'veterinaria';
 
 /** Valor do enum `LeadSector` da API correspondente a cada segmento do quiz. */
 export const SETOR_API: Record<SegmentoId, string> = {
   farmaceutica: 'FARMACEUTICA',
   cosmetica: 'COSMETICO',
-  nutricional: 'NUTRICIONAL',
   veterinaria: 'VETERINARIO',
 };
 
@@ -118,35 +117,6 @@ export const SEGMENTOS_QUIZ: SegmentoQuiz[] = [
           { id: 'protecao-ativo', label: 'Proteção do ativo' },
           { id: 'emulsificacao', label: 'Emulsificação e dispersão' },
           { id: 'diferenciacao', label: 'Diferenciação premium' },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'nutricional',
-    label: 'Nutricional / Suplementos',
-    icone: HiOutlineHeart,
-    perguntas: [
-      {
-        id: 'produto',
-        titulo: 'Em qual formato o produto vai chegar ao consumidor?',
-        opcoes: [
-          { id: 'capsulas', label: 'Cápsulas ou softgel' },
-          { id: 'liquido', label: 'Líquido ou gotas' },
-          { id: 'po', label: 'Pó ou sachê' },
-          { id: 'indefinido', label: 'Ainda em definição' },
-        ],
-      },
-      PERGUNTA_EXPERIENCIA,
-      {
-        id: 'desafio',
-        titulo: 'Qual é o principal desafio do produto hoje?',
-        opcoes: [
-          { id: 'biodisponibilidade', label: 'Biodisponibilidade' },
-          { id: 'sabor', label: 'Sabor e palatabilidade' },
-          { id: 'estabilidade', label: 'Estabilidade' },
-          { id: 'claim', label: 'Sustentar o claim "lipossomal"' },
-          { id: 'escala', label: 'Escala de produção' },
         ],
       },
     ],

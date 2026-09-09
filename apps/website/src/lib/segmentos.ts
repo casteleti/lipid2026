@@ -9,7 +9,6 @@
 export const APLICACAO_PARA_SEGMENTO: Record<string, string> = {
   pharma: 'farmaceutica',
   cosmeticos: 'cosmetica',
-  nutraceutico: 'nutricional',
 };
 
 export function hrefDaAplicacao(slug: string): string {

@@ -3,7 +3,7 @@ import { QuizEspecialista } from '@/components/especialista/QuizEspecialista';
 export const metadata = {
   title: 'Fale com um Especialista',
   description:
-    'Responda 4 perguntas rápidas sobre seu projeto — farmacêutico, cosmético, nutricional ou veterinário — e receba o retorno de um especialista técnico da Lipid Ingredients.',
+    'Responda 4 perguntas rápidas sobre seu projeto — farmacêutico, cosmético ou veterinário — e receba o retorno de um especialista técnico da Lipid Ingredients.',
   robots: { index: false, follow: true },
 };
 

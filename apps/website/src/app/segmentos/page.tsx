@@ -21,7 +21,6 @@ interface SegmentPage {
 const NOMES: Record<string, string> = {
   farmaceutica: 'Farmacêutica',
   cosmetica: 'Cosmética',
-  nutricional: 'Nutricional',
   veterinaria: 'Veterinária',
 };
 
@@ -39,8 +38,8 @@ async function getSegmentos(): Promise<SegmentPage[]> {
 export const metadata: Metadata = {
   title: 'Segmentos atendidos',
   description:
-    'Tecnologia lipídica aplicada a farmacêutica, cosmética, nutricional e veterinária — com seleção técnica, documentação e suporte da formulação à escala industrial.',
-  keywords: ['segmentos', 'farmacêutica', 'cosmética', 'nutricional', 'veterinária', 'ingredientes lipídicos'],
+    'Tecnologia lipídica aplicada a farmacêutica, cosmética e veterinária — com seleção técnica, documentação e suporte da formulação à escala industrial.',
+  keywords: ['segmentos', 'farmacêutica', 'cosmética', 'veterinária', 'ingredientes lipídicos'],
 };
 
 export default async function SegmentosPage() {
@@ -51,7 +50,7 @@ export default async function SegmentosPage() {
       <ListingHero
         badge="SEGMENTOS"
         title="Cada setor exige uma resposta diferente da mesma tecnologia"
-        description="Farmacêutica, cosmética, nutricional e veterinária partem do mesmo conjunto de tecnologias lipídicas — mas o que define um bom projeto muda em cada uma. Escolha o seu segmento."
+        description="Farmacêutica, cosmética e veterinária partem do mesmo conjunto de tecnologias lipídicas — mas o que define um bom projeto muda em cada uma. Escolha o seu segmento."
       />
 
       <Section>

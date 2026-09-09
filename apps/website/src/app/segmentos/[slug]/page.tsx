@@ -53,12 +53,6 @@ const ARTES_SEGMENTO: Record<
     reservaMobile: 61,
     alt: 'Linha de skincare em frascos azul-claro com logo LIPID em dourado: bisnaga, sérum conta-gotas, tônico, loção com pump e pote de creme',
   },
-  nutricional: {
-    mobile: '/segmentos/banner-nutricional-mobile.webp',
-    banner: '/segmentos/banner-nutricional.webp',
-    reservaMobile: 68,
-    alt: 'Linha nutricional em embalagens azul-claro com logo LIPID dourado: frasco de cápsulas, sachê stick, pouch, pote e jarra de proteína',
-  },
   veterinaria: {
     mobile: '/segmentos/banner-veterinaria-mobile.webp',
     banner: '/segmentos/banner-veterinaria.webp',

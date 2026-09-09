@@ -5,7 +5,7 @@ export function MercadosSection() {
     <SegmentsSection
       eyebrow="MERCADOS ATENDIDOS"
       heading="Conhecimento especializado para diferentes mercados"
-      description="Ingredientes e suporte técnico dedicados aos segmentos farmacêutico, cosmético, nutricional e veterinário."
+      description="Ingredientes e suporte técnico dedicados aos segmentos farmacêutico, cosmético e veterinário."
     />
   );
 }

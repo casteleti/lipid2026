@@ -11,7 +11,6 @@ import { LinkArrow } from '@/components/ui/LinkArrow';
 export const NOMES_SEGMENTO: Record<string, string> = {
   farmaceutica: 'Farmacêutica',
   cosmetica: 'Cosmética',
-  nutricional: 'Nutricional',
   veterinaria: 'Veterinária',
 };
 
@@ -28,10 +27,6 @@ export const ARTES_CARD: Record<string, { src: string; alt: string }> = {
     src: '/segmentos/card-cosmetica.webp',
     alt: 'Creme cosmético, frasco de sérum e vesícula lipossomal em corte',
   },
-  nutricional: {
-    src: '/segmentos/card-nutricional.webp',
-    alt: 'Lecitina em pó, leite e grãos de soja em vidraria de laboratório',
-  },
   veterinaria: {
     src: '/segmentos/card-veterinaria.webp',
     alt: 'Bovino leiteiro em ambiente laboratorial, ao lado de ração e frasco de suplemento',
@@ -43,7 +38,7 @@ export const ARTES_CARD: Record<string, { src: string; alt: string }> = {
  * de /segmentos/cosmetica só entram três cards, e numerá-los 01-02-03 faria o mesmo segmento
  * trocar de número conforme a página. Farmacêutica é 02 em qualquer lugar.
  */
-const ORDEM = ['cosmetica', 'farmaceutica', 'nutricional', 'veterinaria'];
+const ORDEM = ['cosmetica', 'farmaceutica', 'veterinaria'];
 
 export function numeroDoSegmento(slug: string): string {
   const i = ORDEM.indexOf(slug);

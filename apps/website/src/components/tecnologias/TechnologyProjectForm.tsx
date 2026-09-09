@@ -174,7 +174,6 @@ export function TechnologyProjectForm({
             <option value="">Selecione</option>
             <option value="FARMACEUTICA">Farmacêutica</option>
             <option value="COSMETICO">Cosmética</option>
-            <option value="NUTRICIONAL">Nutricional</option>
             <option value="ALIMENTICIA">Alimentícia</option>
             <option value="VETERINARIO">Veterinária</option>
           </select>

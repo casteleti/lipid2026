@@ -78,7 +78,7 @@ export function HeroSection() {
 
           <p className="reveal reveal-delay-2 max-w-lg text-lg text-gray-600">
             Ingredientes inovadores, tecnologias avançadas e suporte técnico especializado para as
-            indústrias farmacêutica, cosmética, nutricional e veterinária.
+            indústrias farmacêutica, cosmética e veterinária.
           </p>
 
           <div className="reveal reveal-delay-3 flex flex-col gap-4 pt-2 sm:flex-row sm:items-center">

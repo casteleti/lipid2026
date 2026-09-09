@@ -5,7 +5,6 @@ import {
   HiOutlineShieldCheck,
   HiOutlineHeart,
   HiOutlineSparkles,
-  HiOutlineGlobeAlt,
 } from 'react-icons/hi2';
 // hi2 não tem ícone de veterinária; o fa6 já é usado no rodapé.
 import { FaPaw } from 'react-icons/fa6';
@@ -69,12 +68,6 @@ export const megamenuContent = {
         desc: 'Tecnologia que vira experiência de uso.',
         href: '/segmentos/cosmetica',
         icon: HiOutlineSparkles,
-      },
-      {
-        name: 'Nutricional',
-        desc: 'Mais função e mais valor percebido.',
-        href: '/segmentos/nutricional',
-        icon: HiOutlineGlobeAlt,
       },
       {
         name: 'Veterinária',

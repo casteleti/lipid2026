@@ -33,9 +33,10 @@ export default function SegmentosPage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Páginas por Segmento</h1>
         <p className="mt-2 max-w-3xl text-sm text-gray-500">
-          As 4 landing pages de <code className="rounded bg-gray-100 px-1.5 py-0.5">/segmentos/*</code> —
-          Farmacêutica, Cosmética, Nutricional e Veterinária. Clique em uma delas para editar todo o
-          conteúdo em uma tela própria.
+          As landing pages de <code className="rounded bg-gray-100 px-1.5 py-0.5">/segmentos/*</code> —
+          Farmacêutica, Cosmética e Veterinária. Clique em uma delas para editar todo o
+          conteúdo em uma tela própria. O segmento Nutricional foi descontinuado e aparece
+          marcado como inativo, mantido só pelo histórico de acessos e leads.
         </p>
       </div>
 

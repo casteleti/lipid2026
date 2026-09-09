@@ -8,7 +8,6 @@ const SETORES = [
   { value: 'FARMACEUTICA', label: 'Farmacêutica' },
   { value: 'COSMETICO', label: 'Cosmético' },
   { value: 'ALIMENTICIA', label: 'Alimentícia' },
-  { value: 'NUTRICIONAL', label: 'Nutricional' },
   { value: 'VETERINARIO', label: 'Veterinário' },
 ];
 

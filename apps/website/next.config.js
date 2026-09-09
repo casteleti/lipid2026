@@ -18,9 +18,11 @@ const nextConfig = {
       { source: '/aplicacoes', destination: '/segmentos', permanent: true },
       { source: '/aplicacoes/pharma', destination: '/segmentos/farmaceutica', permanent: true },
       { source: '/aplicacoes/cosmeticos', destination: '/segmentos/cosmetica', permanent: true },
-      { source: '/aplicacoes/nutraceutico', destination: '/segmentos/nutricional', permanent: true },
+      { source: '/aplicacoes/nutraceutico', destination: '/segmentos', permanent: true },
       // Aplicação sem equivalente cai no índice em vez de dar 404.
       { source: '/aplicacoes/:slug', destination: '/segmentos', permanent: true },
+      // Segmento Nutricional descontinuado — a landing saiu do ar, cai no índice.
+      { source: '/segmentos/nutricional', destination: '/segmentos', permanent: true },
     ];
   },
 
