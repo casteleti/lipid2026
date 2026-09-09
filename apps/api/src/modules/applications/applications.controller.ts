@@ -59,10 +59,4 @@ export class ApplicationsController {
   setTechnologies(@Param('id') id: string, @Body() dto: SetRelationsDto) {
     return this.service.setTechnologies(id, dto.ids);
   }
-
-  @Put(':id/ingredients')
-  @UseGuards(JwtAuthGuard)
-  setIngredients(@Param('id') id: string, @Body() dto: SetRelationsDto) {
-    return this.service.setIngredients(id, dto.ids);
-  }
 }

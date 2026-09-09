@@ -7,9 +7,6 @@ import { DatabaseModule } from './modules/database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ApplicationsModule } from './modules/applications/applications.module';
 import { TechnologiesModule } from './modules/technologies/technologies.module';
-import { IngredientsModule } from './modules/ingredients/ingredients.module';
-import { IngredientCategoriesModule } from './modules/ingredient-categories/ingredient-categories.module';
-import { TagsModule } from './modules/tags/tags.module';
 import { LeadsModule } from './modules/leads/leads.module';
 import { PartnersModule } from './modules/partners/partners.module';
 import { CategoriesModule } from './modules/categories/categories.module';
@@ -22,7 +19,6 @@ import { InstitutionalSectionsModule } from './modules/institutional-sections/in
 import { SegmentPagesModule } from './modules/segment-pages/segment-pages.module';
 import { PageViewsModule } from './modules/page-views/page-views.module';
 import { SeoPagesModule } from './modules/seo-pages/seo-pages.module';
-import { LiaModule } from './modules/lia/lia.module';
 
 @Module({
   imports: [
@@ -33,9 +29,6 @@ import { LiaModule } from './modules/lia/lia.module';
     AuthModule,
     ApplicationsModule,
     TechnologiesModule,
-    IngredientsModule,
-    IngredientCategoriesModule,
-    TagsModule,
     LeadsModule,
     PartnersModule,
     CategoriesModule,
@@ -48,7 +41,6 @@ import { LiaModule } from './modules/lia/lia.module';
     SegmentPagesModule,
     PageViewsModule,
     SeoPagesModule,
-    LiaModule,
   ],
   controllers: [AppController],
   providers: [

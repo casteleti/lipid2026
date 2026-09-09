@@ -16,8 +16,6 @@ export interface SegmentPage {
   applicationsIntro: string | null;
   applications: Application[] | null;
   floatingHighlight: string | null;
-  ingredientExplorerHeadline: string | null;
-  ingredientExplorerSupportingText: string | null;
   formEyebrow: string | null;
   formTitle: string | null;
   formDescription: string | null;

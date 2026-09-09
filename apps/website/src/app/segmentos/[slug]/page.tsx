@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { HiOutlineArrowRight } from 'react-icons/hi2';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
@@ -74,8 +72,6 @@ interface SegmentPageData {
   applicationsIntro: string | null;
   applications: { title: string; description: string }[] | null;
   floatingHighlight: string | null;
-  ingredientExplorerHeadline: string | null;
-  ingredientExplorerSupportingText: string | null;
   formEyebrow: string | null;
   formTitle: string | null;
   formDescription: string | null;
@@ -282,27 +278,6 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
           </div>
         </section>
       )}
-
-      {/* ---------------------------------------------------------------- NAVEGADOR DE INGREDIENTES (teaser) */}
-      <section className="bg-gray-50 py-16 md:py-20">
-        <div className="container-main">
-          <div className="max-w-2xl">
-            {page.ingredientExplorerHeadline && <h2 className="text-gray-900">{page.ingredientExplorerHeadline}</h2>}
-            {page.ingredientExplorerSupportingText && (
-              <p className="mt-4 text-gray-600">{page.ingredientExplorerSupportingText}</p>
-            )}
-          </div>
-          <div className="mt-8">
-            <Link
-              href="/ingredientes"
-              className="group inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-900 hover:text-primary-600"
-            >
-              Ver catálogo completo de ingredientes
-              <HiOutlineArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* ---------------------------------------------------------------- FORMULÁRIO DO PROJETO */}
       <section id="projeto" className="relative isolate overflow-hidden bg-white py-20 md:py-28">

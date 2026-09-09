@@ -75,7 +75,7 @@ export function GalleryUpload({ label, hint, value, onChange, disabled }: Galler
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={resolveMediaUrl(img.url)}
-                alt={img.alt || 'Imagem do ingrediente'}
+                alt={img.alt || 'Imagem'}
                 className="mb-2 h-28 w-full rounded-md border border-gray-100 object-cover"
               />
               <input

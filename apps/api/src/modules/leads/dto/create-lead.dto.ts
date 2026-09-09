@@ -30,11 +30,6 @@ export class CreateLeadDto {
   @MaxLength(2000)
   message?: string;
 
-  /** Preenchido pelo formulário da ficha de produto — marca o lead como qualificado. */
-  @IsOptional()
-  @IsString()
-  ingredientId?: string;
-
   /** Material baixado — preenchido pelo formulário que libera o download. */
   @IsOptional()
   @IsString()

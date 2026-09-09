@@ -49,16 +49,6 @@ export class UpdateSegmentPageDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(300)
-  ingredientExplorerHeadline?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(500)
-  ingredientExplorerSupportingText?: string;
-
-  @IsOptional()
-  @IsString()
   @MaxLength(100)
   formEyebrow?: string;
 

@@ -16,7 +16,6 @@ interface Lead {
   pageTitle: string | null;
   landingRoute: string | null;
   createdAt: string;
-  ingredient: { id: string; name: string; slug: string } | null;
   content: { id: string; title: string; slug: string; type: string } | null;
 }
 
@@ -27,19 +26,10 @@ interface Paginado {
   totalPages: number;
 }
 
-interface RankingItem {
-  id: string;
-  name: string;
-  slug: string;
-  views: number;
-  leads: number;
-}
-
 interface Stats {
   totalLeads: number;
   porSetor: { setor: string | null; total: number }[];
   porOrigem: { origem: string; total: number }[];
-  maisAcessados: RankingItem[];
 }
 
 interface FilterOptions {
@@ -57,7 +47,6 @@ const ROTULO_SETOR: Record<string, string> = {
 
 const ROTULO_ORIGEM: Record<string, string> = {
   website: 'Site (contato geral)',
-  ingrediente: 'Ficha de ingrediente',
   material: 'Material baixado',
   tecnologia: 'Página de tecnologia',
 };
@@ -72,7 +61,6 @@ const PERIODOS = [
 const POR_PAGINA = 10;
 
 const TONS = {
-  ingrediente: 'bg-primary-50 text-primary-700',
   material: 'bg-amber-50 text-amber-700',
   landing: 'bg-emerald-50 text-emerald-700',
   site: 'bg-gray-100 text-gray-600',
@@ -90,7 +78,6 @@ function formatarData(iso: string): string {
 
 /** De onde veio o lead, em um rótulo legível para o comercial. */
 function origemDoLead(lead: Lead): { rotulo: string; tom: keyof typeof TONS } {
-  if (lead.ingredient) return { rotulo: lead.ingredient.name, tom: 'ingrediente' };
   if (lead.content) return { rotulo: lead.content.title, tom: 'material' };
   if (lead.landingRoute) return { rotulo: lead.landingRoute, tom: 'landing' };
   return { rotulo: lead.pageTitle || 'Site', tom: 'site' };
@@ -182,7 +169,6 @@ export default function LeadsPage() {
     setPage(1);
   };
 
-  const maxViews = Math.max(1, ...(stats?.maisAcessados.map((i) => i.views) ?? [1]));
   const inicio = total === 0 ? 0 : (page - 1) * POR_PAGINA + 1;
   const fim = Math.min(page * POR_PAGINA, total);
 
@@ -237,12 +223,12 @@ export default function LeadsPage() {
 
           <div>
             <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Página, ingrediente ou material
+              Página ou material
             </label>
             <input
               value={pagina}
               onChange={(e) => setPagina(e.target.value)}
-              placeholder="Ex.: lipossomas, NMN, e-book..."
+              placeholder="Ex.: lipossomas, e-book..."
               className={campoFiltro}
             />
           </div>
@@ -467,42 +453,6 @@ export default function LeadsPage() {
         )}
       </div>
 
-      {/* ------------------------------------ RANKING — agora depois da lista de leads */}
-      {stats && (
-        <Card>
-          <h2 className="text-lg font-bold text-gray-900">Ingredientes mais acessados</h2>
-          <p className="mt-1 max-w-3xl text-sm text-gray-600">
-            Visitas na ficha pública e quantos leads cada uma gerou. Muita visita sem lead indica
-            página a melhorar; poucos acessos convertendo bem pedem mais divulgação.
-          </p>
-
-          {stats.maisAcessados.length === 0 ? (
-            <p className="mt-4 text-sm text-gray-500">Nenhum acesso registrado ainda.</p>
-          ) : (
-            <div className="mt-5 space-y-3">
-              {stats.maisAcessados.map((item) => (
-                <div key={item.id} className="flex items-center gap-4">
-                  <span className="w-56 flex-shrink-0 truncate text-sm font-medium text-gray-900">
-                    {item.name}
-                  </span>
-                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-100">
-                    <div
-                      className="h-full rounded-full bg-primary-500 transition-all duration-700"
-                      style={{ width: `${(item.views / maxViews) * 100}%` }}
-                    />
-                  </div>
-                  <span className="w-24 flex-shrink-0 text-right text-sm text-gray-600">
-                    {item.views} visita{item.views === 1 ? '' : 's'}
-                  </span>
-                  <span className="w-20 flex-shrink-0 text-right text-sm font-semibold text-primary-700">
-                    {item.leads} lead{item.leads === 1 ? '' : 's'}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </Card>
-      )}
     </div>
   );
 }

@@ -42,21 +42,20 @@ model Application {
   updatedAt   DateTime @updatedAt
 
   technologies TechnologyOnApplication[]
-  ingredients  IngredientOnApplication[]
 
   @@index([slug])
   @@map("applications")
 }
 
 model Technology {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  description String   @db.Text
+  id          String  @id @default(cuid())
+  name        String  @unique
+  slug        String  @unique
+  description String  @db.Text
   excerpt     String?
   icon        String?
-  order       Int      @default(0)
-  active      Boolean  @default(true)
+  order       Int     @default(0)
+  active      Boolean @default(true)
 
   // ------------------------------------------------------------------ LANDING PAGE
   // A rota /tecnologias/<slug> é a landing da tecnologia (mesmo papel das páginas de
@@ -76,13 +75,13 @@ model Technology {
   imageTwoAlt     String?
   imageTwoCaption String?
 
-  essenceTitle  String?
-  essenceIntro  String? @db.Text
+  essenceTitle       String?
+  essenceIntro       String? @db.Text
   /// {title, description}[] — pilares da dobra 2.
-  pillars       Json?
-  criteriaTitle String?
+  pillars            Json?
+  criteriaTitle      String?
   /// {label, description}[] — o que a Lipid coloca na mesa nessa tecnologia.
-  criteria      Json?
+  criteria           Json?
   /// Frase de autoridade, exibida isolada entre as dobras.
   authorityStatement String? @db.Text
 
@@ -99,11 +98,10 @@ model Technology {
   seoDescription String? @db.Text
   seoKeywords    Json?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   applications TechnologyOnApplication[]
-  ingredients  IngredientOnTechnology[]
 
   @@index([slug])
   @@map("technologies")
@@ -117,156 +115,6 @@ model TechnologyOnApplication {
 
   @@id([technologyId, applicationId])
   @@map("technologies_on_applications")
-}
-
-/// Categoria técnica do ingrediente (ex.: "Lecitinas e fosfolipídios de soja", "Antioxidantes").
-/// Taxonomia GLOBAL, compartilhada entre fabricantes — "Ativos hidratantes" é usada tanto pela
-/// Lipoid quanto pela Readline. Não criar categorias por fabricante.
-model IngredientCategory {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  description String?  @db.Text
-  order       Int      @default(0)
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  ingredients Ingredient[]
-
-  @@index([slug])
-  @@map("ingredient_categories")
-}
-
-/// Marcador transversal de busca/filtro. Diferente de categoria: um ingrediente tem UMA categoria
-/// e VÁRIAS tags. Normalizada (e não text[]) para permitir filtro facetado por slug e renomear
-/// uma tag sem reescrever todas as linhas de ingrediente.
-model Tag {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  ingredients IngredientOnTag[]
-
-  @@index([slug])
-  @@map("tags")
-}
-
-model IngredientOnTag {
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
-  ingredientId String
-  tag          Tag        @relation(fields: [tagId], references: [id], onDelete: Cascade)
-  tagId        String
-
-  @@id([ingredientId, tagId])
-  @@map("ingredients_on_tags")
-}
-
-/// Código comercial do ingrediente na Lista de Produtos LIPID. Um produto pode ter VÁRIOS
-/// (ex.: ReGrow-Ex = 873645.10 / 873645.100 / 873645.1000), tipicamente variações de
-/// apresentação. SEMPRE String, nunca numérico: há códigos com zero à esquerda
-/// ("040723.100000") e pares como ".100"/".1000" que um NUMERIC colapsaria no mesmo valor.
-/// Imagens do ingrediente (produto, aplicação, gráficos). Opcional: a ficha funciona sem
-/// nenhuma. 1:N para permitir galeria.
-model IngredientImage {
-  id           String     @id @default(cuid())
-  url          String
-  alt          String?
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
-  ingredientId String
-  order        Int        @default(0)
-  createdAt    DateTime   @default(now())
-
-  @@index([ingredientId])
-  @@map("ingredient_images")
-}
-
-/// Documentos anexos (ficha técnica, especificação, certificado). `label` é o que aparece
-/// para o visitante — o nome do arquivo no disco é aleatório (uuid) por causa do upload.
-model IngredientFile {
-  id           String     @id @default(cuid())
-  url          String
-  label        String
-  sizeBytes    Int?
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
-  ingredientId String
-  order        Int        @default(0)
-  createdAt    DateTime   @default(now())
-
-  @@index([ingredientId])
-  @@map("ingredient_files")
-}
-
-model IngredientCode {
-  id           String     @id @default(cuid())
-  code         String     @unique
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
-  ingredientId String
-  order        Int        @default(0)
-  createdAt    DateTime   @default(now())
-
-  @@index([ingredientId])
-  @@map("ingredient_codes")
-}
-
-model Ingredient {
-  id          String              @id @default(cuid())
-  name        String
-  slug        String              @unique
-  description String              @db.Text
-  excerpt     String?
-  /// Frase de encerramento própria do produto, vinda do PDF ("Apresente sua formulação no
-  /// Formulário de Atendimento..."). Varia por ingrediente — não é boilerplate.
-  cta         String?             @db.Text
-  inci        String?
-  partnerId   String?
-  partner     Partner?            @relation(fields: [partnerId], references: [id], onDelete: SetNull)
-  categoryId  String?
-  category    IngredientCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  active      Boolean             @default(true)
-  /// Visitas na ficha pública. Contador simples (sem tabela de eventos): o painel só
-  /// precisa do ranking de mais acessados, não da série temporal.
-  views       Int                 @default(0)
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
-
-  codes        IngredientCode[]
-  images       IngredientImage[]
-  files        IngredientFile[]
-  tags         IngredientOnTag[]
-  leads        Lead[]
-  technologies IngredientOnTechnology[]
-  applications IngredientOnApplication[]
-
-  /// Nome é único POR FABRICANTE, não globalmente: duas fabricantes podem vender a mesma
-  /// molécula commodity (ex.: "Glutathione", "Ergothioneine"). O slug segue global por ser URL.
-  @@unique([partnerId, name])
-  @@index([slug])
-  @@index([partnerId])
-  @@index([categoryId])
-  @@map("ingredients")
-}
-
-model IngredientOnTechnology {
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
-  ingredientId String
-  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
-  technologyId String
-
-  @@id([ingredientId, technologyId])
-  @@map("ingredients_on_technologies")
-}
-
-model IngredientOnApplication {
-  ingredient    Ingredient  @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
-  ingredientId  String
-  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  applicationId String
-
-  @@id([ingredientId, applicationId])
-  @@map("ingredients_on_applications")
 }
 
 /// Fabricante internacional representado pela Lipid no Brasil (ex.: Lipoid, Readline).
@@ -288,8 +136,6 @@ model Partner {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  ingredients Ingredient[]
-
   @@index([slug])
   @@map("partners")
 }
@@ -302,7 +148,7 @@ model InstitutionalPage {
   // 1. Hero institucional
   heroEyebrow           String?
   heroTitle             String?
-  heroDescription       String?  @db.Text
+  heroDescription       String? @db.Text
   heroImage             String?
   heroCtaPrimaryLabel   String?
   heroCtaPrimaryHref    String?
@@ -376,17 +222,17 @@ model InstitutionalBlock {
 /// Campos que só fazem sentido pra alguns `type` (ex. contato, disclaimer) ficam soltos em
 /// `extra` (JSON) pra não empilhar dezena de coluna quase sempre vazia.
 model InstitutionalSection {
-  id        String   @id @default(cuid())
-  slug      String   @unique
+  id        String  @id @default(cuid())
+  slug      String  @unique
   type      String
-  order     Int      @default(0)
-  active    Boolean  @default(true)
+  order     Int     @default(0)
+  active    Boolean @default(true)
   eyebrow   String?
-  title     String?  @db.Text
-  subtitle  String?  @db.Text
-  body      String?  @db.Text
-  highlight String?  @db.Text
-  quote     String?  @db.Text
+  title     String? @db.Text
+  subtitle  String? @db.Text
+  body      String? @db.Text
+  highlight String? @db.Text
+  quote     String? @db.Text
 
   ctaLabel          String?
   ctaHref           String?
@@ -455,9 +301,9 @@ model SegmentPage {
   order  Int        @default(0)
   active Boolean    @default(true)
 
-  eyebrow      String?
-  h1           String? @db.Text
-  subheadline  String? @db.Text
+  eyebrow         String?
+  h1              String? @db.Text
+  subheadline     String? @db.Text
   /// Os 3 parágrafos comerciais — string[].
   salesParagraphs Json?
 
@@ -468,15 +314,12 @@ model SegmentPage {
 
   floatingHighlight String? @db.Text
 
-  ingredientExplorerHeadline       String?
-  ingredientExplorerSupportingText String? @db.Text
-
-  formEyebrow         String?
-  formTitle           String? @db.Text
-  formDescription     String? @db.Text
+  formEyebrow          String?
+  formTitle            String? @db.Text
+  formDescription      String? @db.Text
   formValueProposition String? @db.Text
-  formCtaLabel        String?
-  formSuccessMessage  String? @db.Text
+  formCtaLabel         String?
+  formSuccessMessage   String? @db.Text
   /// Opções do "principal desafio técnico" deste segmento — string[].
   formChallengeOptions Json?
 
@@ -495,14 +338,14 @@ model SegmentPage {
 /// Não é o event-tracking completo (sessão, UTM histórico, funil) do blueprint original;
 /// é o necessário pra responder "acessos e leads gerados por tela" no painel.
 model PageView {
-  id        String   @id @default(cuid())
-  route     String
-  sector    LeadSector?
-  referrer  String?
-  utmSource String?
-  utmMedium String?
+  id          String      @id @default(cuid())
+  route       String
+  sector      LeadSector?
+  referrer    String?
+  utmSource   String?
+  utmMedium   String?
   utmCampaign String?
-  createdAt DateTime @default(now())
+  createdAt   DateTime    @default(now())
 
   @@index([route])
   @@index([sector])
@@ -535,13 +378,13 @@ enum ContentType {
 }
 
 model Content {
-  id      String        @id @default(cuid())
-  type    ContentType   @default(ARTIGO)
-  title   String        @unique
-  slug    String        @unique
-  excerpt String?
+  id          String        @id @default(cuid())
+  type        ContentType   @default(ARTIGO)
+  title       String        @unique
+  slug        String        @unique
+  excerpt     String?
   /// HTML do artigo (vazio quando type=DOWNLOAD).
-  content String        @db.Text
+  content     String        @db.Text
   /// Capa: vale como miniatura na listagem E como imagem de abertura na leitura.
   featured    String?
   featuredAlt String?
@@ -652,7 +495,9 @@ model Lead {
   company String?
   sector  LeadSector?
   message String?
-  /// De onde veio: 'website' (contato geral) ou 'ingrediente' (formulário da ficha).
+  /// De onde veio: 'website' (contato geral). Valor histórico 'ingrediente' pode
+  /// aparecer em registros antigos, de quando existia formulário na ficha de produto
+  /// (feature removida) — mantido só como dado legado, não é mais gerado.
   source  String      @default("website")
 
   /// Página exata que converteu — todo formulário do site grava as duas. `pageTitle`
@@ -666,13 +511,8 @@ model Lead {
   /// `page_views.route` — e `pageUrl` traz domínio, UTMs e âncora, o que quebra o join.
   landingRoute String?
 
-  /// Qual ingrediente originou o interesse — lead de ficha de produto é lead qualificado.
-  ingredientId String?
-  ingredient   Ingredient? @relation(fields: [ingredientId], references: [id], onDelete: SetNull)
-
-  /// Qual material o visitante baixou. Um lead vem de ingrediente OU de conteúdo, nunca
-  /// dos dois — mas manter colunas separadas (em vez de um par polimórfico tipo+id) deixa
-  /// a FK real e o relatório por material sai com um join simples.
+  /// Qual material o visitante baixou — manter coluna separada (em vez de um par
+  /// polimórfico tipo+id) deixa a FK real e o relatório por material sai com um join simples.
   contentId String?
   content   Content? @relation(fields: [contentId], references: [id], onDelete: SetNull)
 
@@ -682,7 +522,6 @@ model Lead {
 
   @@index([email])
   @@index([createdAt])
-  @@index([ingredientId])
   @@index([contentId])
   @@index([landingRoute])
   @@map("leads")

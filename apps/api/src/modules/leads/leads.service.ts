@@ -9,16 +9,14 @@ export class LeadsService {
 
   create(data: CreateLeadDto) {
     // A origem diz ao comercial o que a pessoa já demonstrou querer antes de falar com
-    // alguém: um ingrediente específico, um material baixado, ou o contato genérico.
-    const source = data.ingredientId
-      ? 'ingrediente'
-      : data.contentId
-        ? 'material'
-        : data.landingRoute === '/especialista'
-          ? 'quiz'
-          : data.landingRoute?.startsWith('/tecnologias/')
-            ? 'tecnologia'
-            : 'website';
+    // alguém: um material baixado, ou o contato genérico.
+    const source = data.contentId
+      ? 'material'
+      : data.landingRoute === '/especialista'
+        ? 'quiz'
+        : data.landingRoute?.startsWith('/tecnologias/')
+          ? 'tecnologia'
+          : 'website';
 
     return this.db.lead.create({ data: { ...data, source } });
   }
@@ -28,8 +26,8 @@ export class LeadsService {
    * mostraria "10 por página" de um recorte errado e um total que não bate com a lista.
    *
    * - `q`      → nome, e-mail ou empresa
-   * - `pagina` → o que originou o lead: título/URL da página, rota da landing, nome do
-   *              ingrediente da ficha ou título do material baixado
+   * - `pagina` → o que originou o lead: título/URL da página, rota da landing ou título
+   *              do material baixado
    * - `sector` / `source` → filtros exatos
    * - `dias`   → janela a partir de hoje (7, 30, 90...); ausente = tudo
    */
@@ -81,7 +79,6 @@ export class LeadsService {
                   { pageTitle: contem(pagina) },
                   { pageUrl: contem(pagina) },
                   { landingRoute: contem(pagina) },
-                  { ingredient: { name: contem(pagina) } },
                   { content: { title: contem(pagina) } },
                 ],
               },
@@ -97,7 +94,6 @@ export class LeadsService {
         take,
         orderBy: { createdAt: 'desc' },
         include: {
-          ingredient: { select: { id: true, name: true, slug: true } },
           content: { select: { id: true, title: true, slug: true, type: true } },
         },
       }),
@@ -140,84 +136,43 @@ export class LeadsService {
 
   /**
    * Números do painel.
-   *
-   * Traz visitas E leads por ingrediente porque as duas isoladas enganam: um ingrediente
-   * muito visitado e sem lead é problema de página, e um com poucos acessos convertendo
-   * bem merece mais tráfego. O ranking sai por visitas, com a conversão ao lado.
    */
   async stats() {
-    const [totalLeads, porSetor, porOrigem, maisAcessados, materiaisMaisBaixados, leadsPorIngrediente] =
-      await Promise.all([
-        this.db.lead.count({ where: { active: true } }),
+    const [totalLeads, porSetor, porOrigem, materiaisMaisBaixados] = await Promise.all([
+      this.db.lead.count({ where: { active: true } }),
 
-        this.db.lead.groupBy({
-          by: ['sector'],
-          where: { active: true },
-          _count: { _all: true },
-        }),
+      this.db.lead.groupBy({
+        by: ['sector'],
+        where: { active: true },
+        _count: { _all: true },
+      }),
 
-        this.db.lead.groupBy({
-          by: ['source'],
-          where: { active: true },
-          _count: { _all: true },
-        }),
+      this.db.lead.groupBy({
+        by: ['source'],
+        where: { active: true },
+        _count: { _all: true },
+      }),
 
-        this.db.ingredient.findMany({
-          where: { active: true },
-          orderBy: [{ views: 'desc' }, { name: 'asc' }],
-          take: 20,
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            views: true,
-            _count: { select: { leads: true } },
-          },
-        }),
-
-        // Conteúdo ranqueado por visita, com quantos leads o material converteu.
-        this.db.content.findMany({
-          where: { status: 'PUBLISHED' },
-          orderBy: [{ views: 'desc' }, { title: 'asc' }],
-          take: 20,
-          select: {
-            id: true,
-            title: true,
-            slug: true,
-            type: true,
-            views: true,
-            _count: { select: { leads: true } },
-          },
-        }),
-
-        this.db.lead.groupBy({
-          by: ['ingredientId'],
-          where: { active: true, ingredientId: { not: null } },
-          _count: { _all: true },
-          orderBy: { _count: { ingredientId: 'desc' } },
-          take: 10,
-        }),
-      ]);
-
-    // groupBy devolve só o id; buscamos os nomes num único select em vez de N queries.
-    const ids = leadsPorIngrediente.map((l) => l.ingredientId).filter((i): i is string => !!i);
-    const nomes = await this.db.ingredient.findMany({
-      where: { id: { in: ids } },
-      select: { id: true, name: true, slug: true, views: true },
-    });
-    const porId = new Map(nomes.map((n) => [n.id, n]));
+      // Conteúdo ranqueado por visita, com quantos leads o material converteu.
+      this.db.content.findMany({
+        where: { status: 'PUBLISHED' },
+        orderBy: [{ views: 'desc' }, { title: 'asc' }],
+        take: 20,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          type: true,
+          views: true,
+          _count: { select: { leads: true } },
+        },
+      }),
+    ]);
 
     return {
       totalLeads,
       porSetor: porSetor.map((s) => ({ setor: s.sector, total: s._count._all })),
       porOrigem: porOrigem.map((s) => ({ origem: s.source, total: s._count._all })),
-      maisAcessados: maisAcessados.map((i) => ({
-        id: i.id,
-        name: i.name,
-        slug: i.slug,
-        views: i.views,
-        leads: i._count.leads,
-      })),
       conteudosMaisAcessados: materiaisMaisBaixados.map((c) => ({
         id: c.id,
         title: c.title,
@@ -226,12 +181,6 @@ export class LeadsService {
         views: c.views,
         leads: c._count.leads,
       })),
-      maisConvertem: leadsPorIngrediente
-        .map((l) => {
-          const ing = l.ingredientId ? porId.get(l.ingredientId) : undefined;
-          return ing ? { ...ing, leads: l._count._all } : null;
-        })
-        .filter(Boolean),
     };
   }
 }

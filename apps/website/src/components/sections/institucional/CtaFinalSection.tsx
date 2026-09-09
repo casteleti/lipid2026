@@ -33,7 +33,7 @@ export function CtaFinalSection({
             {ctaFinalPrimaryLabel || 'Fale com um especialista'}
           </Button>
           {ctaFinalSecondaryLabel && (
-            <Button href={ctaFinalSecondaryHref || '/ingredientes'} variant="secondary" size="lg">
+            <Button href={ctaFinalSecondaryHref || '/contato'} variant="secondary" size="lg">
               {ctaFinalSecondaryLabel}
             </Button>
           )}

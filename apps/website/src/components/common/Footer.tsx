@@ -10,7 +10,6 @@ const footerLinks = {
     { label: 'Sobre a Lipid', href: '/sobre' },
     { label: 'Tecnologias', href: '/tecnologias' },
     { label: 'Segmentos', href: '/segmentos' },
-    { label: 'Ingredientes', href: '/ingredientes' },
     { label: 'Conteúdo', href: '/blog' },
     { label: 'Parceiros', href: '/parceiros' },
     { label: 'Contato', href: '/contato' },

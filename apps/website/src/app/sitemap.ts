@@ -37,7 +37,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: SITE_URL },
     { url: `${SITE_URL}/segmentos` },
     { url: `${SITE_URL}/tecnologias` },
-    { url: `${SITE_URL}/ingredientes` },
     { url: `${SITE_URL}/parceiros` },
     { url: `${SITE_URL}/blog` },
     { url: `${SITE_URL}/sobre` },

@@ -61,3 +61,7 @@ img/banners/
 # Cache do Python (scripts/)
 __pycache__/
 *.pyc
+
+# Backups locais de dados de produção antes de migrations destrutivas — não é código,
+# não deve ir pro git. Ver CONTEXTO_PROJETO.md para o que cada um documenta.
+backups/

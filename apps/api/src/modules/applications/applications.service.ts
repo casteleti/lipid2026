@@ -42,7 +42,6 @@ export class ApplicationsService {
       where: { id },
       include: {
         technologies: { include: { technology: true } },
-        ingredients: { include: { ingredient: true } },
       },
     });
 
@@ -58,7 +57,6 @@ export class ApplicationsService {
       where: { slug },
       include: {
         technologies: { include: { technology: true } },
-        ingredients: { include: { ingredient: true } },
       },
     });
 
@@ -109,19 +107,6 @@ export class ApplicationsService {
     if (technologyIds.length) {
       await this.db.technologyOnApplication.createMany({
         data: technologyIds.map((technologyId) => ({ applicationId: id, technologyId })),
-      });
-    }
-
-    return this.findOne(id);
-  }
-
-  async setIngredients(id: string, ingredientIds: string[]) {
-    await this.findOne(id);
-
-    await this.db.ingredientOnApplication.deleteMany({ where: { applicationId: id } });
-    if (ingredientIds.length) {
-      await this.db.ingredientOnApplication.createMany({
-        data: ingredientIds.map((ingredientId) => ({ applicationId: id, ingredientId })),
       });
     }
 

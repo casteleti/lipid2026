@@ -21,7 +21,6 @@ const sections: { title: string; items: { href: string; label: string }[] }[] = 
       // tecnologia a um mercado) e não tem mais página pública — quem edita mercado edita
       // Páginas por Segmento. As rotas /aplicacoes do painel foram removidas junto.
       { href: '/tecnologias', label: 'Tecnologias' },
-      { href: '/ingredientes', label: 'Ingredientes' },
       { href: '/parceiros', label: 'Parceiros' },
       { href: '/blog', label: 'Conteúdo Técnico' },
       { href: '/categorias', label: 'Categorias' },

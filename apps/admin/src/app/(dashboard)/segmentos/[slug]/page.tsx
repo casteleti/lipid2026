@@ -13,7 +13,7 @@ const SECTIONS = [
   { id: 'hero', label: 'Hero' },
   { id: 'comercial', label: 'Texto comercial' },
   { id: 'aplicacoes', label: 'Aplicações' },
-  { id: 'destaque', label: 'Destaque + ingredientes' },
+  { id: 'destaque', label: 'Destaque' },
   { id: 'formulario', label: 'Formulário' },
   { id: 'seo', label: 'SEO' },
 ];
@@ -117,8 +117,6 @@ export default function SegmentoDetalhePage() {
         applicationsIntro: page.applicationsIntro,
         applications: page.applications,
         floatingHighlight: page.floatingHighlight,
-        ingredientExplorerHeadline: page.ingredientExplorerHeadline,
-        ingredientExplorerSupportingText: page.ingredientExplorerSupportingText,
         formEyebrow: page.formEyebrow,
         formTitle: page.formTitle,
         formDescription: page.formDescription,
@@ -327,30 +325,13 @@ export default function SegmentoDetalhePage() {
             </div>
           </Section>
 
-          <Section
-            id="destaque"
-            title="Destaque + navegador de ingredientes"
-            description="Frase flutuante e o bloco que leva ao catálogo."
-          >
-            <div className="grid gap-6 lg:grid-cols-3">
-              <Textarea
-                label="Frase flutuante de destaque"
-                value={page.floatingHighlight || ''}
-                onChange={(e) => patch({ floatingHighlight: e.target.value })}
-                rows={4}
-              />
-              <Input
-                label="Título do navegador de ingredientes"
-                value={page.ingredientExplorerHeadline || ''}
-                onChange={(e) => patch({ ingredientExplorerHeadline: e.target.value })}
-              />
-              <Textarea
-                label="Texto de apoio"
-                value={page.ingredientExplorerSupportingText || ''}
-                onChange={(e) => patch({ ingredientExplorerSupportingText: e.target.value })}
-                rows={4}
-              />
-            </div>
+          <Section id="destaque" title="Destaque" description="Frase flutuante da página.">
+            <Textarea
+              label="Frase flutuante de destaque"
+              value={page.floatingHighlight || ''}
+              onChange={(e) => patch({ floatingHighlight: e.target.value })}
+              rows={4}
+            />
           </Section>
 
           <Section

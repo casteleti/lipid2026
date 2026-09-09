@@ -16,7 +16,7 @@ const ALLOWED_MIME_TYPES = [
   'image/jpeg',
   'image/png',
   'image/webp',
-  // Fichas técnicas, especificações e certificados de análise dos ingredientes.
+  // Fichas técnicas, especificações e certificados de análise.
   'application/pdf',
   // Materiais ricos da área de conteúdo (apresentações e planilhas).
   'application/vnd.ms-powerpoint',

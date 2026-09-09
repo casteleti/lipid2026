@@ -230,7 +230,6 @@ export function QuizEspecialista() {
           ))}
         </div>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <Button href="/ingredientes" variant="outline" size="lg">Explorar ingredientes</Button>
           <Button href="/" variant="primary" size="lg">Voltar ao início</Button>
         </div>
       </div>

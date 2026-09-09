@@ -91,7 +91,6 @@ export const menuItems: NavItem[] = [
   { label: 'SOBRE A LIPID', href: '/sobre' },
   { label: 'TECNOLOGIAS', href: '/tecnologias', dropdownKey: 'TECNOLOGIAS' },
   { label: 'SEGMENTOS', href: '/segmentos', dropdownKey: 'SEGMENTOS' },
-  { label: 'INGREDIENTES', href: '/ingredientes' },
   { label: 'CONTEÚDO TÉCNICO', href: '/blog' },
   { label: 'PARCEIROS', href: '/parceiros' },
   { label: 'CONTATO', href: '/contato' },

@@ -7,7 +7,6 @@ import { api } from '@/lib/api-client';
 interface Stats {
   applications: number;
   technologies: number;
-  ingredients: number;
   partners: number;
   leads: number;
   content: number;
@@ -17,7 +16,6 @@ interface Stats {
 // algo que não se edita mais pelo painel só gera pergunta.
 const cards: { key: keyof Stats; label: string }[] = [
   { key: 'technologies', label: 'Tecnologias' },
-  { key: 'ingredients', label: 'Ingredientes' },
   { key: 'partners', label: 'Parceiros' },
   { key: 'content', label: 'Posts publicados' },
   { key: 'leads', label: 'Leads' },
@@ -57,9 +55,6 @@ export default function Dashboard() {
           </a>
           <a href="/tecnologias/novo" className="block p-3 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700">
             + Nova Tecnologia
-          </a>
-          <a href="/ingredientes/novo" className="block p-3 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700">
-            + Novo Ingrediente
           </a>
           <a href="/parceiros/novo" className="block p-3 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700">
             + Novo Parceiro

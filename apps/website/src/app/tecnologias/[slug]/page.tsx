@@ -64,7 +64,6 @@ interface Technology {
   seoKeywords: string[] | null;
 
   applications: { application: { id: string; name: string; slug: string } }[];
-  ingredients: { ingredient: { id: string; name: string } }[];
 }
 
 async function getTechnology(slug: string): Promise<Technology | null> {
@@ -308,39 +307,22 @@ export default async function TechnologyDetailPage({ params }: { params: { slug:
               </p>
             )}
 
-            {(tech.applications.length > 0 || tech.ingredients.length > 0) && (
+            {tech.applications.length > 0 && (
               <div className="mt-10 space-y-6 border-t border-gray-200 pt-8">
-                {tech.applications.length > 0 && (
-                  <div>
-                    <p className="eyebrow mb-3">Aplicada em</p>
-                    <div className="flex flex-wrap gap-2">
-                      {tech.applications.map(({ application }) => (
-                        <Link
-                          key={application.id}
-                          href={hrefDaAplicacao(application.slug)}
-                          className="rounded-full border border-gray-200 px-4 py-1.5 text-sm text-gray-700 transition-colors hover:border-primary-300 hover:text-primary-600"
-                        >
-                          {application.name}
-                        </Link>
-                      ))}
-                    </div>
+                <div>
+                  <p className="eyebrow mb-3">Aplicada em</p>
+                  <div className="flex flex-wrap gap-2">
+                    {tech.applications.map(({ application }) => (
+                      <Link
+                        key={application.id}
+                        href={hrefDaAplicacao(application.slug)}
+                        className="rounded-full border border-gray-200 px-4 py-1.5 text-sm text-gray-700 transition-colors hover:border-primary-300 hover:text-primary-600"
+                      >
+                        {application.name}
+                      </Link>
+                    ))}
                   </div>
-                )}
-                {tech.ingredients.length > 0 && (
-                  <div>
-                    <p className="eyebrow mb-3">Ingredientes relacionados</p>
-                    <div className="flex flex-wrap gap-2">
-                      {tech.ingredients.slice(0, 8).map(({ ingredient }) => (
-                        <span
-                          key={ingredient.id}
-                          className="rounded-full bg-gray-100 px-4 py-1.5 text-sm text-gray-600"
-                        >
-                          {ingredient.name}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
             )}
           </div>

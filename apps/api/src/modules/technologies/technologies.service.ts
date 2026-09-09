@@ -39,7 +39,6 @@ export class TechnologiesService {
       where: { id },
       include: {
         applications: { include: { application: true } },
-        ingredients: { include: { ingredient: true } },
       },
     });
 
@@ -57,7 +56,6 @@ export class TechnologiesService {
       where: { slug },
       include: {
         applications: { include: { application: true } },
-        ingredients: { include: { ingredient: true } },
       },
     });
 
