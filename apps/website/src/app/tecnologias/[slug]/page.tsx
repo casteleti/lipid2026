@@ -10,7 +10,6 @@ import { GridBackdrop } from '@/components/ui/GridBackdrop';
 import { PageViewTracker } from '@/components/segmentos/PageViewTracker';
 import { TechnologyProjectForm } from '@/components/tecnologias/TechnologyProjectForm';
 import { resolveMediaUrl } from '@/lib/api';
-import { hrefDaAplicacao } from '@/lib/segmentos';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
@@ -305,25 +304,6 @@ export default async function TechnologyDetailPage({ params }: { params: { slug:
               <p className="mt-5 border-l-2 border-primary-300 pl-4 text-sm font-medium text-primary-700">
                 {tech.formValueProposition}
               </p>
-            )}
-
-            {tech.applications.length > 0 && (
-              <div className="mt-10 space-y-6 border-t border-gray-200 pt-8">
-                <div>
-                  <p className="eyebrow mb-3">Aplicada em</p>
-                  <div className="flex flex-wrap gap-2">
-                    {tech.applications.map(({ application }) => (
-                      <Link
-                        key={application.id}
-                        href={hrefDaAplicacao(application.slug)}
-                        className="rounded-full border border-gray-200 px-4 py-1.5 text-sm text-gray-700 transition-colors hover:border-primary-300 hover:text-primary-600"
-                      >
-                        {application.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
             )}
           </div>
 
