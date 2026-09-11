@@ -17,9 +17,9 @@ const sections: { title: string; items: { href: string; label: string }[] }[] = 
     items: [
       { href: '/institucional', label: 'Página Institucional' },
       { href: '/segmentos', label: 'Páginas por Segmento' },
-      // "Aplicações" saiu do menu: virou classificação interna (é o que liga ingrediente e
-      // tecnologia a um mercado) e não tem mais página pública — quem edita mercado edita
-      // Páginas por Segmento. As rotas /aplicacoes do painel foram removidas junto.
+      // "Aplicações" saiu do menu: virou classificação interna (é o que liga tecnologia a
+      // um mercado) e não tem mais página pública — quem edita mercado edita Páginas por
+      // Segmento. As rotas /aplicacoes do painel foram removidas junto.
       { href: '/tecnologias', label: 'Tecnologias' },
       { href: '/parceiros', label: 'Parceiros' },
       { href: '/blog', label: 'Conteúdo Técnico' },

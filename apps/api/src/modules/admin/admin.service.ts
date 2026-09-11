@@ -8,15 +8,14 @@ export class AdminService {
   constructor(private db: DatabaseService) {}
 
   async getStats() {
-    const [applications, technologies, partners, leads, content] = await Promise.all([
-      this.db.application.count({ where: { active: true } }),
+    const [technologies, partners, leads, content] = await Promise.all([
       this.db.technology.count({ where: { active: true } }),
       this.db.partner.count({ where: { active: true } }),
       this.db.lead.count(),
       this.db.content.count({ where: { status: 'PUBLISHED' } }),
     ]);
 
-    return { applications, technologies, partners, leads, content };
+    return { technologies, partners, leads, content };
   }
 
   findUsers() {

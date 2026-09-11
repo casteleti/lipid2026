@@ -4,16 +4,26 @@ import { HiOutlineEnvelope, HiOutlinePhone, HiOutlineMapPin } from 'react-icons/
 import { FaLinkedin, FaInstagram, FaFacebookF } from 'react-icons/fa6';
 import { Container } from './Container';
 import { CONTATO } from '@/lib/contato';
+import { menuItems } from './nav-data';
+
+// Rótulos do menu principal vêm em caixa alta (uso no header); o rodapé usa o
+// mesmo destino em texto normal. Os hrefs continuam vindo só de nav-data.ts —
+// não duplicar a lista aqui (convenção do projeto).
+const CONECTIVOS_MINUSCULOS = new Set(['a', 'de', 'e', 'o', 'da', 'do']);
+function paraFraseComum(rotulo: string): string {
+  return rotulo
+    .toLowerCase()
+    .split(' ')
+    .map((palavra, indice) =>
+      indice === 0 || !CONECTIVOS_MINUSCULOS.has(palavra)
+        ? palavra.charAt(0).toUpperCase() + palavra.slice(1)
+        : palavra
+    )
+    .join(' ');
+}
 
 const footerLinks = {
-  navegacao: [
-    { label: 'Sobre a Lipid', href: '/sobre' },
-    { label: 'Tecnologias', href: '/tecnologias' },
-    { label: 'Segmentos', href: '/segmentos' },
-    { label: 'Conteúdo', href: '/blog' },
-    { label: 'Parceiros', href: '/parceiros' },
-    { label: 'Contato', href: '/contato' },
-  ],
+  navegacao: menuItems.map((item) => ({ label: paraFraseComum(item.label), href: item.href })),
 };
 
 export function Footer() {
@@ -105,12 +115,12 @@ export function Footer() {
       </footer>
 
       <div className="bg-primary-950 text-white">
-        <Container className="grid grid-cols-1 items-center gap-3 py-5 text-xs text-white/70 md:grid-cols-3">
+        <Container className="grid grid-cols-1 items-center gap-3 py-5 text-xs text-white/70 md:grid-cols-2">
           <p className="text-center md:text-left">
             © {new Date().getFullYear()} LIPID Ingredients. Todos os direitos reservados.
           </p>
 
-          <div className="flex items-center justify-center gap-2 font-light tracking-wide text-white/40">
+          <div className="flex items-center justify-center gap-2 font-light tracking-wide text-white/40 md:justify-end">
             <span>Powered by</span>
             <Image
               src="/icons/whale-daksa.svg"
@@ -120,10 +130,6 @@ export function Footer() {
               className="opacity-50"
             />
             <span>DAKSA</span>
-          </div>
-
-          <div className="flex justify-center md:justify-end">
-            <span>Política de Privacidade</span>
           </div>
         </Container>
       </div>

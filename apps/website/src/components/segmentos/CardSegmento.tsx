@@ -15,7 +15,7 @@ export const NOMES_SEGMENTO: Record<string, string> = {
 };
 
 /**
- * Arte do card. São quatro segmentos fixos, então a peça é um asset versionado do site em vez
+ * Arte do card. São três segmentos fixos, então a peça é um asset versionado do site em vez
  * de um campo do CMS — `SegmentPage` não tem coluna de imagem.
  */
 export const ARTES_CARD: Record<string, { src: string; alt: string }> = {

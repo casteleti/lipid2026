@@ -5,7 +5,6 @@ import { Card } from '@/components/Card';
 import { api } from '@/lib/api-client';
 
 interface Stats {
-  applications: number;
   technologies: number;
   partners: number;
   leads: number;
@@ -37,7 +36,7 @@ export default function Dashboard() {
     <div>
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
 
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5 mb-8">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
         {cards.map((card) => (
           <Card key={card.key}>
             <p className="text-sm text-gray-500">{card.label}</p>
