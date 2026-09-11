@@ -310,7 +310,6 @@ export default async function TechnologyDetailPage({ params }: { params: { slug:
             <TechnologyProjectForm
               landingRoute={route}
               technologyLabel={tech.name}
-              challengeOptions={tech.formChallengeOptions || []}
               ctaLabel={tech.formCtaLabel || 'Enviar'}
               successMessage={
                 tech.formSuccessMessage ||

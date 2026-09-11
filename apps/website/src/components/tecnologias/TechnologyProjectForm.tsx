@@ -12,7 +12,6 @@ interface TechnologyProjectFormProps {
   /** Rota normalizada da landing — é o que cruza com page_views.route no painel. */
   landingRoute: string;
   technologyLabel: string;
-  challengeOptions: string[];
   ctaLabel: string;
   successMessage: string;
 }
@@ -26,7 +25,6 @@ interface TechnologyProjectFormProps {
 export function TechnologyProjectForm({
   landingRoute,
   technologyLabel,
-  challengeOptions,
   ctaLabel,
   successMessage,
 }: TechnologyProjectFormProps) {
@@ -36,14 +34,10 @@ export function TechnologyProjectForm({
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [sector, setSector] = useState('');
-  const [challenges, setChallenges] = useState<string[]>([]);
   const [message, setMessage] = useState('');
 
   const [estado, setEstado] = useState<Estado>('editando');
   const [erro, setErro] = useState('');
-
-  const toggleChallenge = (opt: string) =>
-    setChallenges((prev) => (prev.includes(opt) ? prev.filter((c) => c !== opt) : [...prev, opt]));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +47,6 @@ export function TechnologyProjectForm({
     const partesMensagem = [
       `Interesse em ${technologyLabel}.`,
       role ? `Cargo/área: ${role}.` : null,
-      challenges.length ? `Principal desafio técnico: ${challenges.join(', ')}.` : null,
       message ? `Detalhes: ${message}` : null,
     ].filter(Boolean);
 
@@ -211,34 +204,6 @@ export function TechnologyProjectForm({
           />
         </div>
       </div>
-
-      {challengeOptions.length > 0 && (
-        <fieldset className="space-y-2 pt-1">
-          <legend className="text-xs font-semibold uppercase tracking-wide text-white/60">
-            Principal desafio técnico
-          </legend>
-          <div className="flex flex-wrap gap-2">
-            {challengeOptions.map((opt) => {
-              const active = challenges.includes(opt);
-              return (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => toggleChallenge(opt)}
-                  disabled={enviando}
-                  className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all duration-300 ${
-                    active
-                      ? 'border-white bg-white text-primary-950'
-                      : 'border-white/20 bg-white/[0.04] text-white/70 hover:border-white/40'
-                  }`}
-                >
-                  {opt}
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
-      )}
 
       <div className="space-y-1.5">
         <label htmlFor="tec-mensagem" className="block text-xs font-semibold uppercase tracking-wide text-white/60">
