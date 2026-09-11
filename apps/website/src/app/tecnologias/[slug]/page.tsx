@@ -10,8 +10,7 @@ import { GridBackdrop } from '@/components/ui/GridBackdrop';
 import { PageViewTracker } from '@/components/segmentos/PageViewTracker';
 import { TechnologyProjectForm } from '@/components/tecnologias/TechnologyProjectForm';
 import { resolveMediaUrl } from '@/lib/api';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+import { API_BASE_URL as API_URL } from '@/lib/api-url';
 
 /**
  * Ambientação do hero: render 3D esmaecido ao fundo, puramente decorativo. Quem explica a

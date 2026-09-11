@@ -8,8 +8,8 @@ import { Reveal } from '@/components/ui/Reveal';
 import { DownloadGate } from '@/components/conteudo/DownloadGate';
 import { RegistrarVisitaConteudo } from '@/components/conteudo/RegistrarVisitaConteudo';
 import { resolveMediaUrl } from '@/lib/api';
+import { API_BASE_URL as API_URL } from '@/lib/api-url';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://daksa.app.br';
 
 interface ContentItem {

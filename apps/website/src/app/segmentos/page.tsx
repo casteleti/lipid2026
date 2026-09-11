@@ -4,8 +4,7 @@ import { HiOutlineArrowRight } from 'react-icons/hi2';
 import { ListingHero } from '@/components/ui/ListingHero';
 import { Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+import { API_BASE_URL as API_URL } from '@/lib/api-url';
 
 interface SegmentPage {
   id: string;

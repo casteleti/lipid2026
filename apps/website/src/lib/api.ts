@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+import { API_BASE_URL as API_URL } from './api-url';
 
 async function apiCall<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_URL}/api/v1${endpoint}`;

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
+import { API_BASE_URL as API_URL } from '@/lib/api-url';
 
 const SITE_URL = 'https://lipid.daksa.app.br';
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
 
 async function safeFetch<T>(path: string): Promise<T[]> {
   try {

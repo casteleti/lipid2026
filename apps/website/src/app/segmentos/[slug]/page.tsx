@@ -8,11 +8,10 @@ import { CardSegmento } from '@/components/segmentos/CardSegmento';
 import { GridBackdrop } from '@/components/ui/GridBackdrop';
 import { PageViewTracker } from '@/components/segmentos/PageViewTracker';
 import { SegmentProjectForm } from '@/components/segmentos/SegmentProjectForm';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+import { API_BASE_URL as API_URL } from '@/lib/api-url';
 
 /**
- * Os 3 beats da seção comercial — iguais nos quatro segmentos, por desenho, e por isso
+ * Os 3 beats da seção comercial — iguais nos três segmentos, por desenho, e por isso
  * fixos aqui em vez de virem do CMS: os parágrafos mudam por segmento, a estrutura não.
  *
  * Os rótulos são escritos em caixa baixa e sobem para maiúsculas no CSS (`uppercase`),
@@ -20,7 +19,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
  */
 const ETAPAS_VENDA = ['O contexto do mercado', 'Nosso papel', 'Seu produto diferenciado'] as const;
 
-/** Chapéu do bloco comercial. Mesmo texto nas quatro páginas — é a promessa da marca. */
+/** Chapéu do bloco comercial. Mesmo texto nas três páginas — é a promessa da marca. */
 const TITULO_BLOCO_VENDA = 'Sua indústria + Lipid';
 
 /**
@@ -33,7 +32,7 @@ const TITULO_BLOCO_VENDA = 'Sua indústria + Lipid';
  * a largura toda e a proporção natural, então a altura do produto acompanha a largura, não
  * a altura da dobra. O gerador mede esse número em cada arte e o imprime; ele varia muito
  * (a veterinária tem os produtos bem mais baixos que a farmacêutica), e um valor único
- * deixaria um vão morto entre o texto e o produto em três das quatro páginas.
+ * deixaria um vão morto entre o texto e o produto nas outras páginas.
  */
 const ARTES_SEGMENTO: Record<
   string,
@@ -133,8 +132,8 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
             ancorado embaixo, com a proporção natural do arquivo (2.5:1) — de propósito, em
             vez de `object-cover` sobre a dobra toda.
             Motivo: com `cover`, a altura da imagem passa a ser a da dobra, e a dobra cresce
-            conforme o tamanho do h1. Na nutricional, cujo título ocupa cinco linhas, isso
-            ampliava a foto a ponto de o pote de creatina encostar no texto. Assim o tamanho
+            conforme o tamanho do h1 — em títulos mais longos isso ampliava a foto a ponto de
+            o produto encostar no texto. Assim o tamanho
             do produto depende só da largura da tela, e os frascos ficam sempre em 63%..94%. */}
         {arte && (
           <div className="pointer-events-none absolute inset-x-0 top-1/2 hidden -translate-y-1/2 xl:block">
@@ -199,7 +198,7 @@ export default async function SegmentoPage({ params }: { params: { slug: string 
       </section>
 
       {/* ---------------------------------------------------------------- 3 PARÁGRAFOS COMERCIAIS */}
-      {/* Os três parágrafos sempre contam a mesma história, nos quatro segmentos:
+      {/* Os três parágrafos sempre contam a mesma história, nos três segmentos:
           o contexto do setor → como a Lipid trabalha → o que o cliente ganha.
           Rotular cada coluna deixa isso explícito e permite ler só o que
           interessa, em vez de encarar três blocos iguais de texto corrido.

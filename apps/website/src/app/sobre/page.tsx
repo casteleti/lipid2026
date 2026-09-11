@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { InstitutionalSections } from '@/components/sections/institucional-novo/InstitutionalSections';
 import type { InstitutionalSectionData } from '@/components/sections/institucional-novo/types';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+import { API_BASE_URL as API_URL } from '@/lib/api-url';
 
 async function getSections(): Promise<InstitutionalSectionData[]> {
   try {
