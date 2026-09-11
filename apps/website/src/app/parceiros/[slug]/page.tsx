@@ -14,6 +14,7 @@ interface Partner {
   excerpt: string | null;
   logo: string | null;
   image: string | null;
+  youtubeUrl: string | null;
   websites: string[];
   country: string | null;
   highlights: string | null;
@@ -23,6 +24,17 @@ async function getPartner(slug: string): Promise<Partner | null> {
   const res = await fetch(`${API_URL}/api/v1/partners/slug/${slug}`, { next: { revalidate: 300 } });
   if (!res.ok) return null;
   return res.json();
+}
+
+/**
+ * Extrai o ID de vídeo de qualquer formato comum de link do YouTube
+ * (watch?v=, youtu.be/, embed/, shorts/) para montar a URL de embed.
+ */
+function getYoutubeEmbedUrl(url: string): string | null {
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -45,6 +57,7 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
   const highlights = partner.highlights
     ? partner.highlights.split('\n').map((line) => line.trim()).filter(Boolean)
     : [];
+  const youtubeEmbedUrl = partner.youtubeUrl ? getYoutubeEmbedUrl(partner.youtubeUrl) : null;
 
   return (
     <>
@@ -59,15 +72,27 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
       <Section>
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="space-y-8">
-            {partner.image && (
+            {youtubeEmbedUrl ? (
               <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={resolveAssetUrl(partner.image)}
-                  alt={`${partner.name} — registro institucional`}
-                  className="h-full w-full object-cover"
+                <iframe
+                  src={youtubeEmbedUrl}
+                  title={`Vídeo — ${partner.name}`}
+                  className="h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
                 />
               </div>
+            ) : (
+              partner.image && (
+                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={resolveAssetUrl(partner.image)}
+                    alt={`${partner.name} — registro institucional`}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              )
             )}
 
             <div className="prose prose-lg max-w-none whitespace-pre-line text-gray-700">

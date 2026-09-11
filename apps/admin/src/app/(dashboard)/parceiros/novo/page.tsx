@@ -17,6 +17,7 @@ export default function NovoParceiroPage() {
   const [excerpt, setExcerpt] = useState('');
   const [logo, setLogo] = useState('');
   const [image, setImage] = useState('');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
   const [websites, setWebsites] = useState<string[]>(['']);
   const [country, setCountry] = useState('');
   const [highlights, setHighlights] = useState('');
@@ -45,6 +46,7 @@ export default function NovoParceiroPage() {
         excerpt: excerpt || undefined,
         logo: logo || undefined,
         image: image || undefined,
+        youtubeUrl: youtubeUrl || undefined,
         websites: websites.map((w) => w.trim()).filter(Boolean),
         country: country || undefined,
         highlights: highlights || undefined,
@@ -102,6 +104,16 @@ export default function NovoParceiroPage() {
           <ImageUpload label="Logotipo" value={logo} onChange={setLogo} disabled={loading} />
 
           <ImageUpload label="Imagem ilustrativa" value={image} onChange={setImage} disabled={loading} />
+
+          <Input
+            label="Link do YouTube"
+            hint="Opcional — se preenchido, substitui a imagem ilustrativa por um vídeo na página do parceiro"
+            value={youtubeUrl}
+            onChange={(e) => setYoutubeUrl(e.target.value)}
+            placeholder="https://www.youtube.com/watch?v=..."
+            type="url"
+            disabled={loading}
+          />
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-gray-900">Site(s) oficial(is)</label>

@@ -17,6 +17,7 @@ interface Partner {
   excerpt: string | null;
   logo: string | null;
   image: string | null;
+  youtubeUrl: string | null;
   websites: string[];
   country: string | null;
   highlights: string | null;
@@ -32,6 +33,7 @@ export default function EditarParceiroPage() {
   const [excerpt, setExcerpt] = useState('');
   const [logo, setLogo] = useState('');
   const [image, setImage] = useState('');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
   const [websites, setWebsites] = useState<string[]>(['']);
   const [country, setCountry] = useState('');
   const [highlights, setHighlights] = useState('');
@@ -51,6 +53,7 @@ export default function EditarParceiroPage() {
         setExcerpt(item.excerpt || '');
         setLogo(item.logo || '');
         setImage(item.image || '');
+        setYoutubeUrl(item.youtubeUrl || '');
         setWebsites(item.websites && item.websites.length > 0 ? item.websites : ['']);
         setCountry(item.country || '');
         setHighlights(item.highlights || '');
@@ -82,6 +85,7 @@ export default function EditarParceiroPage() {
         excerpt: excerpt || undefined,
         logo: logo || undefined,
         image: image || undefined,
+        youtubeUrl: youtubeUrl || undefined,
         websites: websites.map((w) => w.trim()).filter(Boolean),
         country: country || undefined,
         highlights: highlights || undefined,
@@ -154,6 +158,16 @@ export default function EditarParceiroPage() {
           <ImageUpload label="Logotipo" value={logo} onChange={setLogo} disabled={saving} />
 
           <ImageUpload label="Imagem ilustrativa" value={image} onChange={setImage} disabled={saving} />
+
+          <Input
+            label="Link do YouTube"
+            hint="Opcional — se preenchido, substitui a imagem ilustrativa por um vídeo na página do parceiro"
+            value={youtubeUrl}
+            onChange={(e) => setYoutubeUrl(e.target.value)}
+            placeholder="https://www.youtube.com/watch?v=..."
+            type="url"
+            disabled={saving}
+          />
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-gray-900">Site(s) oficial(is)</label>

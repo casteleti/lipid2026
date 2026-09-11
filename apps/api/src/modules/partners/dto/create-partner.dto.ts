@@ -25,6 +25,11 @@ export class CreatePartnerDto {
   image?: string;
 
   @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  youtubeUrl?: string;
+
+  @IsOptional()
   @IsArray()
   @ArrayMaxSize(10)
   @IsUrl({}, { each: true })
