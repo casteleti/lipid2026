@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: apps/website/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: https://api.daksa.app.br
     restart: unless-stopped
     environment:
       NEXT_PUBLIC_API_URL: https://api.daksa.app.br
@@ -34,6 +36,8 @@ services:
     build:
       context: .
       dockerfile: apps/admin/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: https://api.daksa.app.br
     restart: unless-stopped
     environment:
       NEXT_PUBLIC_API_URL: https://api.daksa.app.br
