@@ -29,11 +29,14 @@ export class RdStationService {
         email: lead.email,
         name: lead.name ?? undefined,
         mobile_phone: lead.phone ?? undefined,
-        cf_empresa: lead.company ?? undefined,
+        // `company_name` é campo nativo do RD. Os `cf_*` são personalizados e PRECISAM
+        // existir na conta (Configurações → Campos personalizados) com este identificador
+        // exato — o RD aceita a conversão e descarta em silêncio o campo que não conhece.
+        // A rota da landing não vai: já está no identificador e dentro da URL de origem.
+        company_name: lead.company ?? undefined,
         cf_setor: lead.sector ?? undefined,
         cf_mensagem: lead.message ?? undefined,
-        cf_pagina_origem: lead.pageUrl ?? undefined,
-        cf_landing_route: lead.landingRoute ?? undefined,
+        cf_pagina_de_origem: lead.pageUrl ?? undefined,
       },
     };
 

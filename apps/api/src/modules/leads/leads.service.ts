@@ -11,7 +11,12 @@ export class LeadsService {
     private rdStation: RdStationService,
   ) {}
 
-  async create(data: CreateLeadDto) {
+  async create(dto: CreateLeadDto) {
+    // Nem todo formulário manda `landingRoute` (contato, institucional e segmentos mandam
+    // só `pageUrl`). Como a rota é o que identifica a conversão no RD Station e a origem
+    // aqui, ela é derivada da URL quando falta — senão esses três viram "website" genérico.
+    const data = { ...dto, landingRoute: dto.landingRoute ?? rotaDaUrl(dto.pageUrl) };
+
     // A origem diz ao comercial o que a pessoa já demonstrou querer antes de falar com
     // alguém: um material baixado, ou o contato genérico.
     const source = data.contentId
@@ -192,5 +197,15 @@ export class LeadsService {
         leads: c._count.leads,
       })),
     };
+  }
+}
+
+/** `https://site/segmentos/cosmetica?utm=x#form` → `/segmentos/cosmetica`. Inválida → undefined. */
+function rotaDaUrl(url?: string | null): string | undefined {
+  if (!url) return undefined;
+  try {
+    return new URL(url).pathname;
+  } catch {
+    return undefined;
   }
 }
