@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { LeadSector, Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
+import { RdStationService } from './rd-station.service';
 
 @Injectable()
 export class LeadsService {
-  constructor(private db: DatabaseService) {}
+  constructor(
+    private db: DatabaseService,
+    private rdStation: RdStationService,
+  ) {}
 
-  create(data: CreateLeadDto) {
+  async create(data: CreateLeadDto) {
     // A origem diz ao comercial o que a pessoa já demonstrou querer antes de falar com
     // alguém: um material baixado, ou o contato genérico.
     const source = data.contentId
@@ -18,7 +22,13 @@ export class LeadsService {
           ? 'tecnologia'
           : 'website';
 
-    return this.db.lead.create({ data: { ...data, source } });
+    const lead = await this.db.lead.create({ data: { ...data, source } });
+
+    // Best-effort: não aguardamos nem deixamos o RD Station atrasar ou derrubar a
+    // resposta do formulário — o lead já está salvo, essa chamada só espelha ele lá.
+    void this.rdStation.sendConversion(lead);
+
+    return lead;
   }
 
   /**

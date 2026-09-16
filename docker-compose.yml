@@ -30,6 +30,7 @@ services:
       NODE_ENV: development
       API_PORT: 3002
       JWT_SECRET: dev-secret-change-this
+      RD_STATION_API_KEY: ${RD_STATION_API_KEY}
     ports:
       - "3002:3002"
     depends_on:
