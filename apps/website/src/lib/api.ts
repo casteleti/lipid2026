@@ -1,4 +1,4 @@
-import { API_BASE_URL as API_URL } from './api-url';
+import { API_BASE_URL as API_URL, PUBLIC_API_URL } from './api-url';
 
 async function apiCall<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_URL}/api/v1${endpoint}`;
@@ -53,7 +53,7 @@ export async function submitContact(data: {
 
 export function resolveMediaUrl(path?: string | null): string {
   if (!path) return '';
-  return path.startsWith('http') ? path : `${API_URL}${path}`;
+  return path.startsWith('http') ? path : `${PUBLIC_API_URL}${path}`;
 }
 
 /**
@@ -64,5 +64,5 @@ export function resolveMediaUrl(path?: string | null): string {
 export function resolveAssetUrl(path?: string | null): string {
   if (!path) return '';
   if (path.startsWith('http') || !path.startsWith('/uploads')) return path;
-  return `${API_URL}${path}`;
+  return `${PUBLIC_API_URL}${path}`;
 }
