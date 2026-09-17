@@ -6,14 +6,9 @@
  *
  * Só serve pra `fetch()` feito pelo próprio servidor. Nunca usar pra montar `src` de
  * imagem/link que vai pro HTML entregue ao navegador — o navegador não resolve o
- * hostname interno do Docker. Pra isso, usar `PUBLIC_API_URL`.
+ * hostname interno do Docker. `/uploads/…` é servido via rewrite pelo próprio domínio do
+ * site (`next.config.js`), então `src`/`href` de asset usa o path relativo puro, sem
+ * precisar de outra constante aqui (ver `resolveAssetUrl`/`resolveMediaUrl` em `api.ts`).
  */
 export const API_BASE_URL =
   process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
-
-/**
- * URL da API alcançável pelo navegador do visitante — sempre a pública, nunca a interna
- * do Docker (`API_URL`), mesmo quando resolvida durante SSR. Usar em qualquer `src`/`href`
- * de asset (`resolveAssetUrl`, `resolveMediaUrl`) que acaba no HTML renderizado.
- */
-export const PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';

@@ -46,6 +46,15 @@ async function getRelacionados(slug: string): Promise<ContentItem[]> {
   return res.json();
 }
 
+/**
+ * `resolveMediaUrl` devolve path relativo (`/uploads/…`) — o `<img>`/`openGraph.images` do
+ * Next resolvem isso sozinhos contra `metadataBase`, mas JSON-LD é string crua injetada no
+ * HTML, sem nenhuma resolução por trás: schema.org exige URL absoluta de verdade aqui.
+ */
+function urlAbsoluta(path: string): string {
+  return path.startsWith('http') ? path : `${SITE_URL}${path}`;
+}
+
 /** Remove tags para gerar descrição a partir do corpo quando não há resumo escrito. */
 function textoLimpo(html: string, limite = 160): string {
   const texto = html
@@ -115,7 +124,7 @@ export default async function ConteudoDetalhePage({ params }: { params: { slug: 
       description: item.seoDescription || item.excerpt || textoLimpo(item.content),
       inLanguage: 'pt-BR',
       mainEntityOfPage: { '@type': 'WebPage', '@id': url },
-      ...(item.featured ? { image: [resolveMediaUrl(item.featured)] } : {}),
+      ...(item.featured ? { image: [urlAbsoluta(resolveMediaUrl(item.featured))] } : {}),
       ...(item.publishedAt ? { datePublished: item.publishedAt } : {}),
       ...(item.updatedAt ? { dateModified: item.updatedAt } : {}),
       author: { '@type': 'Organization', name: item.author || 'Lipid Ingredients' },
