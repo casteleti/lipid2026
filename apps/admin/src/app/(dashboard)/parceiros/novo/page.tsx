@@ -8,6 +8,7 @@ import { Input } from '@/components/Input';
 import { Textarea } from '@/components/Textarea';
 import { Button } from '@/components/Button';
 import { ImageUpload } from '@/components/ImageUpload';
+import { VideoUpload, type PartnerVideo } from '@/components/VideoUpload';
 import { api } from '@/lib/api-client';
 
 export default function NovoParceiroPage() {
@@ -17,7 +18,7 @@ export default function NovoParceiroPage() {
   const [excerpt, setExcerpt] = useState('');
   const [logo, setLogo] = useState('');
   const [image, setImage] = useState('');
-  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [videos, setVideos] = useState<PartnerVideo[]>([]);
   const [websites, setWebsites] = useState<string[]>(['']);
   const [country, setCountry] = useState('');
   const [highlights, setHighlights] = useState('');
@@ -46,7 +47,7 @@ export default function NovoParceiroPage() {
         excerpt: excerpt || undefined,
         logo: logo || undefined,
         image: image || undefined,
-        youtubeUrl: youtubeUrl || undefined,
+        videos: videos.map(({ url, title, poster }) => ({ url, title: title || undefined, poster: poster || undefined })),
         websites: websites.map((w) => w.trim()).filter(Boolean),
         country: country || undefined,
         highlights: highlights || undefined,
@@ -105,13 +106,10 @@ export default function NovoParceiroPage() {
 
           <ImageUpload label="Imagem ilustrativa" value={image} onChange={setImage} disabled={loading} />
 
-          <Input
-            label="Link do YouTube"
-            hint="Opcional — se preenchido, substitui a imagem ilustrativa por um vídeo na página do parceiro"
-            value={youtubeUrl}
-            onChange={(e) => setYoutubeUrl(e.target.value)}
-            placeholder="https://www.youtube.com/watch?v=..."
-            type="url"
+          <VideoUpload
+            label="Vídeos"
+            value={videos}
+            onChange={setVideos}
             disabled={loading}
           />
 

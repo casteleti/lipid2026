@@ -128,7 +128,12 @@ model Partner {
   excerpt     String?
   logo        String?
   image       String?
-  youtubeUrl  String?
+  /// Vídeos da página do parceiro, em ordem de exibição. Cada item é
+  /// { url, title?, poster? }: `url` pode ser um link do YouTube (vira embed) ou um
+  /// arquivo enviado pelo painel (`/uploads/…mp4`, vira <video>). Substitui o antigo
+  /// `youtubeUrl`, que era um só e só aceitava YouTube — a Lipoid tem dois vídeos
+  /// institucionais próprios, e o cliente não quis a moldura do YouTube.
+  videos      Json     @default("[]")
   websites    String[] @default([])
   country     String?
   highlights  String?  @db.Text

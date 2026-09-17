@@ -65,3 +65,9 @@ __pycache__/
 # Backups locais de dados de produção antes de migrations destrutivas — não é código,
 # não deve ir pro git. Ver CONTEXTO_PROJETO.md para o que cada um documenta.
 backups/
+
+# Vídeos institucionais (383 MB de master + ~61 MB já preparados para web). Ficam fora
+# do repo pela mesma regra das artes de produção: o site consome o que foi enviado pelo
+# painel (apps/api/uploads/, no volume do servidor). Receita de preparação em
+# videos/LEIA-ME.md.
+videos/

@@ -14,7 +14,7 @@ interface Partner {
   excerpt: string | null;
   logo: string | null;
   image: string | null;
-  youtubeUrl: string | null;
+  videos: PartnerVideo[] | null;
   websites: string[];
   country: string | null;
   highlights: string | null;
@@ -26,6 +26,13 @@ async function getPartner(slug: string): Promise<Partner | null> {
   return res.json();
 }
 
+/** Um vídeo do parceiro, como salvo pelo painel: link do YouTube ou arquivo em /uploads. */
+interface PartnerVideo {
+  url: string;
+  title?: string;
+  poster?: string;
+}
+
 /**
  * Extrai o ID de vídeo de qualquer formato comum de link do YouTube
  * (watch?v=, youtu.be/, embed/, shorts/) para montar a URL de embed.
@@ -35,6 +42,46 @@ function getYoutubeEmbedUrl(url: string): string | null {
     /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
   );
   return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+}
+
+/**
+ * Player de um vídeo do parceiro. YouTube vira <iframe>; arquivo próprio vira <video>
+ * nativo — `preload="metadata"` baixa só o cabeçalho (duração, dimensões) até o clique,
+ * e o `poster` evita a tela preta enquanto isso. A API serve /uploads por express.static,
+ * que atende Range requests, então avançar e voltar funciona sem baixar o arquivo todo.
+ */
+function VideoDoParceiro({ video, nome }: { video: PartnerVideo; nome: string }) {
+  const embed = getYoutubeEmbedUrl(video.url);
+  const titulo = video.title || `Vídeo — ${nome}`;
+  return (
+    <figure className="space-y-3">
+      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-gray-900">
+        {embed ? (
+          <iframe
+            src={embed}
+            title={titulo}
+            className="h-full w-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <video
+            src={resolveAssetUrl(video.url)}
+            poster={video.poster ? resolveAssetUrl(video.poster) : undefined}
+            controls
+            preload="metadata"
+            playsInline
+            className="h-full w-full"
+          >
+            Seu navegador não reproduz vídeo MP4.
+          </video>
+        )}
+      </div>
+      {video.title && (
+        <figcaption className="text-sm font-semibold text-gray-700">{video.title}</figcaption>
+      )}
+    </figure>
+  );
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -57,7 +104,7 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
   const highlights = partner.highlights
     ? partner.highlights.split('\n').map((line) => line.trim()).filter(Boolean)
     : [];
-  const youtubeEmbedUrl = partner.youtubeUrl ? getYoutubeEmbedUrl(partner.youtubeUrl) : null;
+  const videos = (partner.videos ?? []).filter((v) => v && v.url);
 
   return (
     <>
@@ -72,16 +119,12 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
       <Section>
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="space-y-8">
-            {youtubeEmbedUrl ? (
-              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
-                <iframe
-                  src={youtubeEmbedUrl}
-                  title={`Vídeo — ${partner.name}`}
-                  className="h-full w-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+            {/* Com vídeo, ele toma o lugar da imagem ilustrativa — os dois juntos
+                repetiriam a mesma função no topo da página. */}
+            {videos.length > 0 ? (
+              videos.map((video, i) => (
+                <VideoDoParceiro key={`${video.url}-${i}`} video={video} nome={partner.name} />
+              ))
             ) : (
               partner.image && (
                 <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">

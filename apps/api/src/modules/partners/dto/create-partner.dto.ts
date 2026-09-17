@@ -1,4 +1,32 @@
-import { IsString, IsOptional, IsUrl, IsArray, ArrayMaxSize, MinLength, MaxLength } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsUrl,
+  IsArray,
+  ArrayMaxSize,
+  MinLength,
+  MaxLength,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+/** Um vídeo da página do parceiro — link do YouTube ou arquivo enviado pelo painel. */
+export class PartnerVideoDto {
+  @IsString()
+  @MaxLength(500)
+  url: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  title?: string;
+
+  /** Imagem de capa do player, só faz sentido para arquivo próprio. */
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  poster?: string;
+}
 
 export class CreatePartnerDto {
   @IsString()
@@ -25,9 +53,11 @@ export class CreatePartnerDto {
   image?: string;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(500)
-  youtubeUrl?: string;
+  @IsArray()
+  @ArrayMaxSize(10)
+  @ValidateNested({ each: true })
+  @Type(() => PartnerVideoDto)
+  videos?: PartnerVideoDto[];
 
   @IsOptional()
   @IsArray()
