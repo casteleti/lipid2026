@@ -3,20 +3,6 @@ import { DatabaseService } from '../database/database.service';
 import { CreatePartnerDto } from './dto/create-partner.dto';
 import { UpdatePartnerDto } from './dto/update-partner.dto';
 import { generateUniqueSlug } from '../../common/slugify';
-import type { Prisma } from '@prisma/client';
-
-/**
- * `videos` chega validado como PartnerVideoDto[] (instâncias de classe, pelo
- * class-transformer), mas a coluna é Json e o Prisma só aceita valores JSON puros.
- * Serializar e reler produz o objeto simples que ele espera — e descarta qualquer
- * chave `undefined`, que o JSON não representa.
- */
-function comVideosJson<T extends { videos?: unknown }>(data: T): Omit<T, 'videos'> & { videos?: Prisma.InputJsonValue } {
-  const { videos, ...resto } = data;
-  return videos === undefined
-    ? resto
-    : { ...resto, videos: JSON.parse(JSON.stringify(videos)) as Prisma.InputJsonValue };
-}
 
 @Injectable()
 export class PartnersService {
@@ -73,15 +59,14 @@ export class PartnersService {
       !!(await this.db.partner.findFirst({ where: { slug } })));
 
     return this.db.partner.create({
-      data: { ...comVideosJson(data), slug },
+      data: { ...data, slug },
     });
   }
 
   async update(id: string, data: UpdatePartnerDto) {
     await this.findOne(id);
 
-    const updateData: ReturnType<typeof comVideosJson<UpdatePartnerDto>> & { slug?: string } =
-      comVideosJson(data);
+    const updateData: UpdatePartnerDto & { slug?: string } = { ...data };
     if (data.name) {
       updateData.slug = await generateUniqueSlug(data.name, async (slug) =>
         !!(await this.db.partner.findFirst({ where: { slug, id: { not: id } } })));

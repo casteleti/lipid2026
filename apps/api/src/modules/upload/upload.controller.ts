@@ -24,15 +24,8 @@ const ALLOWED_MIME_TYPES = [
   'application/vnd.ms-excel',
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   'text/csv',
-  // Vídeos institucionais dos parceiros. Só MP4 (H.264): é o único contêiner que toca
-  // em todo navegador sem plugin; WebM ficaria fora do Safari.
-  'video/mp4',
 ];
-// 60MB. Era 20MB (ficha técnica com gráficos). O que empurrou foi vídeo: um institucional
-// de 4 minutos, já recodificado para web (~1,7 Mbps), fica em ~52MB. O endpoint é
-// autenticado (JwtAuthGuard) e grava em disco (diskStorage), então o teto maior não
-// custa memória nem abre porta para anônimo.
-const MAX_FILE_SIZE = 60 * 1024 * 1024;
+const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB — ficha técnica com gráficos passa de 5MB
 export const UPLOADS_DIR = join(process.cwd(), 'uploads');
 
 @Controller('upload')
@@ -52,7 +45,7 @@ export class UploadController {
         if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
           callback(
             new BadRequestException(
-              'Aceitos: imagens (JPEG, PNG, WebP), vídeo MP4, PDF, PPT/PPTX, XLS/XLSX e CSV',
+              'Aceitos: imagens (JPEG, PNG, WebP), PDF, PPT/PPTX, XLS/XLSX e CSV',
             ),
             false,
           );

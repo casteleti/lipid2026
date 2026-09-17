@@ -8,7 +8,6 @@ import { Input } from '@/components/Input';
 import { Textarea } from '@/components/Textarea';
 import { Button } from '@/components/Button';
 import { ImageUpload } from '@/components/ImageUpload';
-import { VideoUpload, type PartnerVideo } from '@/components/VideoUpload';
 import { api } from '@/lib/api-client';
 
 interface Partner {
@@ -18,7 +17,7 @@ interface Partner {
   excerpt: string | null;
   logo: string | null;
   image: string | null;
-  videos: PartnerVideo[] | null;
+  youtubeUrl: string | null;
   websites: string[];
   country: string | null;
   highlights: string | null;
@@ -34,7 +33,7 @@ export default function EditarParceiroPage() {
   const [excerpt, setExcerpt] = useState('');
   const [logo, setLogo] = useState('');
   const [image, setImage] = useState('');
-  const [videos, setVideos] = useState<PartnerVideo[]>([]);
+  const [youtubeUrl, setYoutubeUrl] = useState('');
   const [websites, setWebsites] = useState<string[]>(['']);
   const [country, setCountry] = useState('');
   const [highlights, setHighlights] = useState('');
@@ -54,7 +53,7 @@ export default function EditarParceiroPage() {
         setExcerpt(item.excerpt || '');
         setLogo(item.logo || '');
         setImage(item.image || '');
-        setVideos(Array.isArray(item.videos) ? item.videos : []);
+        setYoutubeUrl(item.youtubeUrl || '');
         setWebsites(item.websites && item.websites.length > 0 ? item.websites : ['']);
         setCountry(item.country || '');
         setHighlights(item.highlights || '');
@@ -86,7 +85,7 @@ export default function EditarParceiroPage() {
         excerpt: excerpt || undefined,
         logo: logo || undefined,
         image: image || undefined,
-        videos: videos.map(({ url, title, poster }) => ({ url, title: title || undefined, poster: poster || undefined })),
+        youtubeUrl: youtubeUrl || undefined,
         websites: websites.map((w) => w.trim()).filter(Boolean),
         country: country || undefined,
         highlights: highlights || undefined,
@@ -160,10 +159,13 @@ export default function EditarParceiroPage() {
 
           <ImageUpload label="Imagem ilustrativa" value={image} onChange={setImage} disabled={saving} />
 
-          <VideoUpload
-            label="Vídeos"
-            value={videos}
-            onChange={setVideos}
+          <Input
+            label="Link do YouTube"
+            hint="Opcional — se preenchido, substitui a imagem ilustrativa por um vídeo na página do parceiro"
+            value={youtubeUrl}
+            onChange={(e) => setYoutubeUrl(e.target.value)}
+            placeholder="https://www.youtube.com/watch?v=..."
+            type="url"
             disabled={saving}
           />
 
