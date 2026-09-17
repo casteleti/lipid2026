@@ -7,13 +7,16 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { LinkArrow } from '@/components/ui/LinkArrow';
 import { resolveMediaUrl } from '@/lib/api';
+import { rotuloArquivo } from '@/lib/content';
 
 interface Post {
   id: string;
+  type: 'ARTIGO' | 'DOWNLOAD';
   title: string;
   slug: string;
   excerpt: string | null;
   featured: string | null;
+  files: { mimetype: string | null }[];
 }
 
 export function ContentSection() {
@@ -50,28 +53,31 @@ export function ContentSection() {
         <p className="text-gray-500">Carregando...</p>
       ) : (
         <Grid cols={3} gap="lg">
-          {posts.map((post) => (
-            <Card key={post.id} className="flex flex-col">
-              <div className="relative h-44 overflow-hidden bg-gray-100">
-                {post.featured && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={resolveMediaUrl(post.featured)}
-                    alt={post.title}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06]"
-                  />
-                )}
-                <Badge variant="secondary" className="absolute left-4 top-4 bg-white/85 backdrop-blur-sm">
-                  ARTIGO
-                </Badge>
-              </div>
-              <div className="flex flex-1 flex-col gap-3 p-5">
-                <h3 className="line-clamp-2 text-lg font-bold text-gray-900">{post.title}</h3>
-                <p className="line-clamp-3 flex-1 text-sm text-gray-600">{post.excerpt}</p>
-                <LinkArrow href={`/blog/${post.slug}`}>Ler artigo</LinkArrow>
-              </div>
-            </Card>
-          ))}
+          {posts.map((post) => {
+            const ehDownload = post.type === 'DOWNLOAD';
+            return (
+              <Card key={post.id} className="flex flex-col">
+                <div className="relative h-44 overflow-hidden bg-gray-100">
+                  {post.featured && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={resolveMediaUrl(post.featured)}
+                      alt={post.title}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06]"
+                    />
+                  )}
+                  <Badge variant="secondary" className="absolute left-4 top-4 bg-white/85 backdrop-blur-sm">
+                    {ehDownload ? rotuloArquivo(post.files?.[0]?.mimetype ?? null) : 'ARTIGO'}
+                  </Badge>
+                </div>
+                <div className="flex flex-1 flex-col gap-3 p-5">
+                  <h3 className="line-clamp-2 text-lg font-bold text-gray-900">{post.title}</h3>
+                  <p className="line-clamp-3 flex-1 text-sm text-gray-600">{post.excerpt}</p>
+                  <LinkArrow href={`/blog/${post.slug}`}>{ehDownload ? 'Baixar material' : 'Ler artigo'}</LinkArrow>
+                </div>
+              </Card>
+            );
+          })}
         </Grid>
       )}
     </Section>

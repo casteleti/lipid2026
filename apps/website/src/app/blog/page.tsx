@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button';
 import { Section } from '@/components/ui/Section';
 import { Reveal } from '@/components/ui/Reveal';
 import { resolveMediaUrl } from '@/lib/api';
+import { rotuloArquivo } from '@/lib/content';
 
 interface ContentItem {
   id: string;
@@ -40,15 +41,6 @@ const FILTROS: { valor: Filtro; rotulo: string }[] = [
   { valor: 'ARTIGO', rotulo: 'Artigos' },
   { valor: 'DOWNLOAD', rotulo: 'Materiais para baixar' },
 ];
-
-function rotuloArquivo(mimetype: string | null): string {
-  if (!mimetype) return 'ARQUIVO';
-  if (mimetype.includes('pdf')) return 'PDF';
-  if (mimetype.includes('presentation') || mimetype.includes('powerpoint')) return 'APRESENTAÇÃO';
-  if (mimetype.includes('spreadsheet') || mimetype.includes('excel')) return 'PLANILHA';
-  if (mimetype.includes('csv')) return 'CSV';
-  return 'ARQUIVO';
-}
 
 function formatarData(iso: string | null): string {
   if (!iso) return '';
