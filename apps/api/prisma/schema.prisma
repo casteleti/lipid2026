@@ -128,7 +128,9 @@ model Partner {
   excerpt     String?
   logo        String?
   image       String?
-  youtubeUrl  String?
+  /// Links do YouTube, em ordem de exibição — um embed por link na página do parceiro.
+  /// Era um campo só (`youtubeUrl`); a Lipoid tem dois vídeos institucionais.
+  youtubeUrls String[] @default([])
   websites    String[] @default([])
   country     String?
   highlights  String?  @db.Text

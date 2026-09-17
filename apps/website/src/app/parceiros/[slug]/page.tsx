@@ -14,7 +14,7 @@ interface Partner {
   excerpt: string | null;
   logo: string | null;
   image: string | null;
-  youtubeUrl: string | null;
+  youtubeUrls: string[] | null;
   websites: string[];
   country: string | null;
   highlights: string | null;
@@ -57,7 +57,11 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
   const highlights = partner.highlights
     ? partner.highlights.split('\n').map((line) => line.trim()).filter(Boolean)
     : [];
-  const youtubeEmbedUrl = partner.youtubeUrl ? getYoutubeEmbedUrl(partner.youtubeUrl) : null;
+  // Um embed por link, na ordem do painel. Link que não parece YouTube é descartado em
+  // silêncio em vez de virar um iframe quebrado.
+  const youtubeEmbeds = (partner.youtubeUrls ?? [])
+    .map((url) => getYoutubeEmbedUrl(url))
+    .filter((url): url is string => Boolean(url));
 
   return (
     <>
@@ -72,16 +76,18 @@ export default async function PartnerDetailPage({ params }: { params: { slug: st
       <Section>
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="space-y-8">
-            {youtubeEmbedUrl ? (
-              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
-                <iframe
-                  src={youtubeEmbedUrl}
-                  title={`Vídeo — ${partner.name}`}
-                  className="h-full w-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+            {youtubeEmbeds.length > 0 ? (
+              youtubeEmbeds.map((embed, i) => (
+                <div key={`${embed}-${i}`} className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
+                  <iframe
+                    src={embed}
+                    title={youtubeEmbeds.length > 1 ? `Vídeo ${i + 1} — ${partner.name}` : `Vídeo — ${partner.name}`}
+                    className="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              ))
             ) : (
               partner.image && (
                 <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl">

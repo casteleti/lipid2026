@@ -17,12 +17,22 @@ export default function NovoParceiroPage() {
   const [excerpt, setExcerpt] = useState('');
   const [logo, setLogo] = useState('');
   const [image, setImage] = useState('');
-  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [youtubeUrls, setYoutubeUrls] = useState<string[]>(['']);
   const [websites, setWebsites] = useState<string[]>(['']);
   const [country, setCountry] = useState('');
   const [highlights, setHighlights] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const updateYoutubeUrl = (index: number, value: string) => {
+    setYoutubeUrls((prev) => prev.map((item, i) => (i === index ? value : item)));
+  };
+
+  const addYoutubeUrl = () => setYoutubeUrls((prev) => [...prev, '']);
+
+  const removeYoutubeUrl = (index: number) => {
+    setYoutubeUrls((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const updateWebsite = (index: number, value: string) => {
     setWebsites((prev) => prev.map((item, i) => (i === index ? value : item)));
@@ -46,7 +56,7 @@ export default function NovoParceiroPage() {
         excerpt: excerpt || undefined,
         logo: logo || undefined,
         image: image || undefined,
-        youtubeUrl: youtubeUrl || undefined,
+        youtubeUrls: youtubeUrls.map((u) => u.trim()).filter(Boolean),
         websites: websites.map((w) => w.trim()).filter(Boolean),
         country: country || undefined,
         highlights: highlights || undefined,
@@ -105,15 +115,44 @@ export default function NovoParceiroPage() {
 
           <ImageUpload label="Imagem ilustrativa" value={image} onChange={setImage} disabled={loading} />
 
-          <Input
-            label="Link do YouTube"
-            hint="Opcional — se preenchido, substitui a imagem ilustrativa por um vídeo na página do parceiro"
-            value={youtubeUrl}
-            onChange={(e) => setYoutubeUrl(e.target.value)}
-            placeholder="https://www.youtube.com/watch?v=..."
-            type="url"
-            disabled={loading}
-          />
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-900">Vídeos do YouTube</label>
+            <div className="space-y-3">
+              {youtubeUrls.map((url, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  <Input
+                    value={url}
+                    onChange={(e) => updateYoutubeUrl(index, e.target.value)}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    type="url"
+                    disabled={loading}
+                    className="flex-1"
+                  />
+                  {youtubeUrls.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeYoutubeUrl(index)}
+                      className="text-sm text-red-600 hover:underline"
+                      disabled={loading}
+                    >
+                      Remover
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={addYoutubeUrl}
+              className="mt-3 text-sm font-semibold text-primary-600 hover:underline"
+              disabled={loading}
+            >
+              + Adicionar mais 1 vídeo do YouTube
+            </button>
+            <p className="mt-2 text-xs text-gray-500">
+              Opcional — cada link vira um player na página do parceiro, nesta ordem. Com vídeo, a imagem ilustrativa não aparece.
+            </p>
+          </div>
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-gray-900">Site(s) oficial(is)</label>

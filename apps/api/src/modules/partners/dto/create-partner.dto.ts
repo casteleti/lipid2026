@@ -24,10 +24,13 @@ export class CreatePartnerDto {
   @IsString()
   image?: string;
 
+  /** Links do YouTube, em ordem de exibição. O site monta um embed por link. */
   @IsOptional()
-  @IsString()
-  @MaxLength(500)
-  youtubeUrl?: string;
+  @IsArray()
+  @ArrayMaxSize(10)
+  @IsString({ each: true })
+  @MaxLength(500, { each: true })
+  youtubeUrls?: string[];
 
   @IsOptional()
   @IsArray()
