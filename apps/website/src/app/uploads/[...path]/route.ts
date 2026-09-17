@@ -19,16 +19,20 @@ export async function GET(_request: NextRequest, { params }: { params: { path: s
   const upstream = `${API_BASE_URL}/uploads/${params.path.map(encodeURIComponent).join('/')}`;
   const upstreamResponse = await fetch(upstream);
 
-  if (!upstreamResponse.ok || !upstreamResponse.body) {
+  if (!upstreamResponse.ok) {
     return new NextResponse(null, { status: upstreamResponse.status });
   }
+
+  // Buffer inteiro em vez de repassar `upstreamResponse.body` (stream) direto — no Node 18
+  // (imagem `node:18-alpine` do Dockerfile), repassar um ReadableStream de uma Response pra
+  // outra deu 500 sem log útil; buffer evita a incompatibilidade, ao custo de segurar o
+  // arquivo inteiro na memória por request (aceitável pro tamanho de imagem/PDF deste catálogo).
+  const bytes = await upstreamResponse.arrayBuffer();
 
   const headers = new Headers();
   const contentType = upstreamResponse.headers.get('content-type');
   if (contentType) headers.set('content-type', contentType);
-  const contentLength = upstreamResponse.headers.get('content-length');
-  if (contentLength) headers.set('content-length', contentLength);
   headers.set('cache-control', upstreamResponse.headers.get('cache-control') || 'public, max-age=31536000, immutable');
 
-  return new NextResponse(upstreamResponse.body, { status: 200, headers });
+  return new NextResponse(bytes, { status: 200, headers });
 }
