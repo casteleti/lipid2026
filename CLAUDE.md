@@ -52,3 +52,9 @@ anteriores, se disponível.
 
 Deploy é via Coolify, disparado manualmente pela API (auto-deploy por webhook nem sempre
 dispara de forma confiável). Comando e token estão em `CONTEXTO_PROJETO.md`.
+
+**Produção atual (desde 2026-09-18)**: VPS Hetzner (`cx43-prod-01`), gerenciada via Coolify.
+Domínios: `lipid.daksa.online` (website), `api.daksa.online` (API), `cms.daksa.online`
+(admin/CMS). A VPS antiga (`vps-automacao`, domínios `*.daksa.app.br`, compartilhada com
+outros clientes) foi desativada para este projeto — não fazer deploy nem alterar nada lá.
+Detalhes completos (credenciais, IP, checklist da migração) em `CONTEXTO_PROJETO.md`.
