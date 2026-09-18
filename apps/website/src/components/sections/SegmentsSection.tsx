@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Section } from '@/components/ui/Section';
 import { Grid } from '@/components/ui/Grid';
 import { LinkArrow } from '@/components/ui/LinkArrow';
-import { CardSegmento } from '@/components/segmentos/CardSegmento';
+import { CardSegmento, ehSegmentoPublicado } from '@/components/segmentos/CardSegmento';
 
 interface SegmentPage {
   id: string;
@@ -37,7 +37,7 @@ export function SegmentsSection({
       .then((r) => r.json())
       .then((data: SegmentPage[]) =>
         setSegmentos(
-          (data || []).filter((s) => s.active).sort((a, b) => a.slug.localeCompare(b.slug)),
+          (data || []).filter((s) => s.active && ehSegmentoPublicado(s.slug)).sort((a, b) => a.slug.localeCompare(b.slug)),
         ),
       )
       .catch(() => setSegmentos([]))

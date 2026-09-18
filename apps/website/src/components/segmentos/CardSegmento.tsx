@@ -34,6 +34,21 @@ export const ARTES_CARD: Record<string, { src: string; alt: string }> = {
 };
 
 /**
+ * Um segmento só é publicável quando o site tem a arte dele. A regra vale para a home, a
+ * listagem, o rodapé "Outros segmentos" e a própria landing — todos filtram por aqui.
+ *
+ * Motivo: em 09/09/2026 o segmento Nutricional saiu do produto (menu, landing, forms e
+ * quiz), mas a linha dele ficou no banco com `active=true`. Como só se filtrava por
+ * `active`, ele voltava em todo lugar como um card quebrado: nome em minúscula (o slug
+ * cru), degradê vazio no lugar da foto e numerador "04". Filtrar pelo gabarito de artes
+ * torna isso impossível por construção — uma linha esquecida ou religada por engano no
+ * painel não consegue reaparecer no site.
+ */
+export function ehSegmentoPublicado(slug: string): boolean {
+  return slug in ARTES_CARD;
+}
+
+/**
  * Ordem do numerador. É fixa por slug, e não o índice da lista onde o card aparece: no rodapé
  * de /segmentos/cosmetica só entram três cards, e numerá-los 01-02-03 faria o mesmo segmento
  * trocar de número conforme a página. Farmacêutica é 02 em qualquer lugar.

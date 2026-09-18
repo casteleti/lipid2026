@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { FraseRevelada } from '@/components/ui/FraseRevelada';
-import { CardSegmento } from '@/components/segmentos/CardSegmento';
+import { CardSegmento, ehSegmentoPublicado } from '@/components/segmentos/CardSegmento';
 import { GridBackdrop } from '@/components/ui/GridBackdrop';
 import { PageViewTracker } from '@/components/segmentos/PageViewTracker';
 import { SegmentProjectForm } from '@/components/segmentos/SegmentProjectForm';
@@ -105,7 +105,7 @@ async function getAllSegmentPages(): Promise<SegmentPageData[]> {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const page = await getSegmentPage(params.slug);
-  if (!page) return { title: 'Segmento não encontrado' };
+  if (!page || !ehSegmentoPublicado(page.slug)) return { title: 'Segmento não encontrado' };
 
   return {
     title: page.seoTitle || page.h1 || page.slug,
@@ -117,9 +117,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default async function SegmentoPage({ params }: { params: { slug: string } }) {
   const page = await getSegmentPage(params.slug);
-  if (!page || !page.active) notFound();
+  // Sem arte, sem página — ver ehSegmentoPublicado.
+  if (!page || !page.active || !ehSegmentoPublicado(page.slug)) notFound();
 
-  const outros = (await getAllSegmentPages()).filter((p) => p.slug !== page.slug && p.active);
+  const outros = (await getAllSegmentPages()).filter(
+    (p) => p.slug !== page.slug && p.active && ehSegmentoPublicado(p.slug),
+  );
   const arte = ARTES_SEGMENTO[page.slug];
 
   return (

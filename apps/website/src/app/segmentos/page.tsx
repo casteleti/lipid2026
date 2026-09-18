@@ -4,6 +4,7 @@ import { HiOutlineArrowRight } from 'react-icons/hi2';
 import { ListingHero } from '@/components/ui/ListingHero';
 import { Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
+import { ehSegmentoPublicado } from '@/components/segmentos/CardSegmento';
 import { API_BASE_URL as API_URL } from '@/lib/api-url';
 
 interface SegmentPage {
@@ -28,7 +29,7 @@ async function getSegmentos(): Promise<SegmentPage[]> {
     const res = await fetch(`${API_URL}/api/v1/segment-pages`, { next: { revalidate: 300 } });
     if (!res.ok) return [];
     const data: SegmentPage[] = await res.json();
-    return data.filter((s) => s.active).sort((a, b) => a.slug.localeCompare(b.slug));
+    return data.filter((s) => s.active && ehSegmentoPublicado(s.slug)).sort((a, b) => a.slug.localeCompare(b.slug));
   } catch {
     return [];
   }
