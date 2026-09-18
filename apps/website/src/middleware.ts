@@ -12,6 +12,8 @@ import { NextRequest, NextResponse } from 'next/server';
  * manter o código histórico 301 combinado para a migração de SEO.
  */
 const DESTINOS_EXATOS: Record<string, string> = {
+  // Variantes históricas do front controller para rotas que continuam existindo.
+  '/contato': '/contato',
   '/institucional': '/sobre',
   '/conheca-a-lipid-ingredients': '/sobre',
   '/servicos': '/tecnologias',
@@ -31,9 +33,10 @@ const DESTINOS_EXATOS: Record<string, string> = {
 function destinoLegado(pathname: string): string | undefined {
   if (pathname === '/index.php') return '/';
 
-  const normalized = pathname.startsWith('/index.php/')
-    ? pathname.slice('/index.php'.length)
-    : pathname;
+  const isIndexPhp = pathname.startsWith('/index.php/');
+  const normalized = isIndexPhp ? pathname.slice('/index.php'.length) : pathname;
+
+  if (isIndexPhp && normalized === '/blog') return '/blog';
 
   const exact = DESTINOS_EXATOS[normalized];
   if (exact) return exact;
