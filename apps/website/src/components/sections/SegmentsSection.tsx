@@ -25,7 +25,7 @@ interface SegmentsSectionProps {
  * as páginas públicas por mercado agora são as landings de /segmentos.
  */
 export function SegmentsSection({
-  eyebrow = 'WHERE SCIENCE MEETS PERFORMANCE',
+  eyebrow = 'ONDE A CIÊNCIA ENCONTRA A PERFORMANCE',
   heading = 'Soluções que impulsionam inovação em diversas indústrias',
   description = 'Atuamos com ingredientes especializados e tecnologias avançadas que elevam o desempenho, a estabilidade e a eficácia de formulações em múltiplos segmentos.',
 }: SegmentsSectionProps = {}) {
