@@ -39,6 +39,13 @@ export class ContactEmailService {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
 
+    // O formulário público persiste o assunto no início da mensagem para não alterar
+    // o schema do lead. Se vier de outra origem, mantém a mensagem inteira sem inventar.
+    const subjectMatch = lead.message?.match(/^Assunto:\s*([^\n]+)\n\n([\s\S]*)$/);
+    const subject = subjectMatch?.[1] || 'Não informado';
+    const message = subjectMatch?.[2] || lead.message || 'Não informada';
+    const pageUrl = safeUrl(lead.pageUrl) || 'https://lipid.com.br/contato';
+
     const text = [
       'Novo contato recebido pelo site Lipid.',
       '',
@@ -48,8 +55,10 @@ export class ContactEmailService {
       `Empresa: ${lead.company || 'Não informado'}`,
       `Página: ${lead.pageUrl || '/contato'}`,
       '',
+      `Assunto: ${subject}`,
+      '',
       'Mensagem:',
-      lead.message || 'Não informada',
+      message,
     ].join('\n');
 
     try {
@@ -66,16 +75,39 @@ export class ContactEmailService {
         replyTo: lead.email,
         subject: `Novo contato do site — ${lead.name || lead.email}`,
         text,
-        html: `<h2>Novo contato recebido pelo site Lipid</h2>
-<p><strong>Nome:</strong> ${escapeHtml(lead.name)}</p>
-<p><strong>E-mail:</strong> ${escapeHtml(lead.email)}</p>
-<p><strong>Telefone:</strong> ${escapeHtml(lead.phone)}</p>
-<p><strong>Empresa:</strong> ${escapeHtml(lead.company)}</p>
-<p><strong>Página:</strong> ${escapeHtml(lead.pageUrl || '/contato')}</p>
-<p><strong>Mensagem:</strong></p><pre>${escapeHtml(lead.message)}</pre>`,
+        html: `<!doctype html>
+<html><body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial,sans-serif;color:#1f2937;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;padding:32px 16px;"><tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;">
+<tr><td style="padding:32px;background:#123a63;color:#ffffff;"><div style="font-size:13px;opacity:.8;margin-bottom:8px;">LIPID</div><div style="font-size:24px;font-weight:700;">Novo contato recebido</div><div style="font-size:14px;margin-top:8px;opacity:.9;">Uma nova solicitação foi enviada pelo site.</div></td></tr>
+<tr><td style="padding:32px;"><div style="font-size:12px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;">Dados do contato</div>
+<table width="100%" cellpadding="8" cellspacing="0">
+<tr><td width="120" style="color:#6b7280;">Nome</td><td><strong>${escapeHtml(lead.name)}</strong></td></tr>
+<tr><td style="color:#6b7280;">Empresa</td><td>${escapeHtml(lead.company)}</td></tr>
+<tr><td style="color:#6b7280;">E-mail</td><td><a href="mailto:${escapeHtml(lead.email)}" style="color:#123a63;">${escapeHtml(lead.email)}</a></td></tr>
+<tr><td style="color:#6b7280;">Telefone</td><td>${escapeHtml(lead.phone)}</td></tr>
+<tr><td style="color:#6b7280;">Assunto</td><td>${escapeHtml(subject)}</td></tr>
+</table>
+<div style="margin-top:32px;font-size:12px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;">Mensagem</div>
+<div style="margin-top:12px;padding:20px;background:#f7f8fa;border-left:4px solid #123a63;line-height:1.6;border-radius:4px;white-space:pre-wrap;">${escapeHtml(message)}</div>
+<div style="margin-top:32px;font-size:12px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;">Página de origem</div>
+<div style="margin-top:8px;font-size:14px;"><a href="${escapeHtml(pageUrl)}" style="color:#123a63;">${escapeHtml(pageUrl)}</a></div>
+</td></tr>
+<tr><td style="padding:20px 32px;background:#f7f8fa;font-size:12px;color:#6b7280;">Mensagem enviada pelo formulário do site LIPID.</td></tr>
+</table></td></tr></table></body></html>`,
       });
     } catch (error) {
       this.logger.error('Falha ao enviar notificação SMTP de contato', error as Error);
     }
+  }
+}
+
+function safeUrl(value?: string | null): string | undefined {
+  if (!value) return undefined;
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' || url.protocol === 'http:' ? url.toString() : undefined;
+  } catch {
+    return undefined;
   }
 }
