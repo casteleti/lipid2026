@@ -54,13 +54,14 @@ services:
       context: .
       dockerfile: apps/website/Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: https://api.daksa.app.br
+        NEXT_PUBLIC_API_URL: https://api.daksa.online
     restart: unless-stopped
     depends_on:
       lipid_api:
         condition: service_healthy
     environment:
-      NEXT_PUBLIC_API_URL: https://api.daksa.app.br
+      NEXT_PUBLIC_API_URL: https://api.daksa.online
+      NEXT_PUBLIC_SITE_URL: https://lipid.daksa.online
       # Runtime-only (sem prefixo NEXT_PUBLIC_) — usado só em fetch feito pelo próprio
       # servidor (Server Components + proxy de /uploads). Evita hairpin NAT: o container
       # chama a API pelo nome do serviço na rede interna, não pelo domínio público via
@@ -87,13 +88,14 @@ services:
       context: .
       dockerfile: apps/admin/Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: https://api.daksa.app.br
+        NEXT_PUBLIC_API_URL: https://api.daksa.online
     restart: unless-stopped
     depends_on:
       lipid_api:
         condition: service_healthy
     environment:
-      NEXT_PUBLIC_API_URL: https://api.daksa.app.br
+      NEXT_PUBLIC_API_URL: https://api.daksa.online
+      NEXT_PUBLIC_SITE_URL: https://lipid.daksa.online
       NODE_ENV: production
       # server.js do output standalone ignora o "-p" do script start; só lê PORT/HOSTNAME.
       PORT: 3001

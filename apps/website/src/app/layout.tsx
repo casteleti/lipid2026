@@ -7,7 +7,7 @@ import { CONTATO } from '@/lib/contato';
 
 const inter = Inter({ subsets: ['latin'] });
 
-const SITE_URL = 'https://lipid.daksa.app.br';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lipid.daksa.app.br';
 const SITE_NAME = 'Lipid Ingredients';
 const DEFAULT_DESCRIPTION =
   'Ingredientes especializados, tecnologia internacional e suporte técnico para projetos farmacêuticos, cosméticos, nutricionais e veterinários. Representante exclusiva do Grupo Lipoid no Brasil.';

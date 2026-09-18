@@ -10,7 +10,7 @@ import { RegistrarVisitaConteudo } from '@/components/conteudo/RegistrarVisitaCo
 import { resolveMediaUrl } from '@/lib/api';
 import { API_BASE_URL as API_URL } from '@/lib/api-url';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://daksa.app.br';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lipid.daksa.app.br';
 
 interface ContentItem {
   id: string;

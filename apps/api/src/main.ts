@@ -25,6 +25,8 @@ async function bootstrap() {
       'http://localhost:3001',
       'https://lipid.daksa.app.br',
       'https://cms.daksa.app.br',
+      'https://lipid.daksa.online',
+      'https://cms.daksa.online',
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],

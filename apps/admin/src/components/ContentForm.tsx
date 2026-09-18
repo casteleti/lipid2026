@@ -65,7 +65,7 @@ interface ContentFormProps {
   extra?: React.ReactNode;
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://daksa.app.br';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lipid.daksa.app.br';
 
 function Secao({
   titulo,
