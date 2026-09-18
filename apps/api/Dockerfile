@@ -10,7 +10,7 @@ COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY apps/api/package.json ./apps/api/package.json
 COPY packages ./packages
 
-RUN pnpm install --frozen-lockfile --filter lipid-api...
+RUN pnpm install --frozen-lockfile --prod=false --filter lipid-api...
 
 COPY apps/api ./apps/api
 
