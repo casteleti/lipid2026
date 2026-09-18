@@ -3,12 +3,14 @@ import { LeadSector, Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { RdStationService } from './rd-station.service';
+import { ContactEmailService } from './contact-email.service';
 
 @Injectable()
 export class LeadsService {
   constructor(
     private db: DatabaseService,
     private rdStation: RdStationService,
+    private contactEmail: ContactEmailService,
   ) {}
 
   async create(dto: CreateLeadDto) {
@@ -32,6 +34,12 @@ export class LeadsService {
     // Best-effort: não aguardamos nem deixamos o RD Station atrasar ou derrubar a
     // resposta do formulário — o lead já está salvo, essa chamada só espelha ele lá.
     void this.rdStation.sendConversion(lead);
+
+    // Apenas a página /contato notifica por e-mail. Outros formulários continuam
+    // registrados no painel e no RD Station sem gerar notificações duplicadas.
+    if (data.landingRoute === '/contato') {
+      void this.contactEmail.sendContactNotification(lead);
+    }
 
     return lead;
   }
