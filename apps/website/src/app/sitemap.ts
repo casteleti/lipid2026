@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { API_BASE_URL as API_URL } from '@/lib/api-url';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lipid.daksa.app.br';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lipid.daksa.online';
 
 async function safeFetch<T>(path: string): Promise<T[]> {
   try {
@@ -47,6 +47,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticRoutes,
     ...technologies.map((t) => ({ url: `${SITE_URL}/tecnologias/${t.slug}` })),
     ...posts.map((p) => ({ url: `${SITE_URL}/blog/${p.slug}` })),
-    ...segments.filter((s) => s.active).map((s) => ({ url: `${SITE_URL}/segmentos/${s.slug}` })),
+    // Nutricional foi descontinuado: a rota redireciona e não pode aparecer no sitemap.
+    ...segments
+      .filter((s) => s.active && s.slug !== 'nutricional')
+      .map((s) => ({ url: `${SITE_URL}/segmentos/${s.slug}` })),
   ];
 }

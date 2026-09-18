@@ -27,6 +27,9 @@ async function bootstrap() {
       'https://cms.daksa.app.br',
       'https://lipid.daksa.online',
       'https://cms.daksa.online',
+      // Domínio oficial do site público. Mantemos Daksa Online durante a transição.
+      'https://lipid.com.br',
+      'https://www.lipid.com.br',
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],

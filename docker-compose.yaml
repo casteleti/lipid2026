@@ -55,13 +55,15 @@ services:
       dockerfile: apps/website/Dockerfile
       args:
         NEXT_PUBLIC_API_URL: https://api.daksa.online
+        # No corte, Coolify define NEXT_PUBLIC_SITE_URL=https://lipid.com.br antes do build.
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://lipid.daksa.online}
     restart: unless-stopped
     depends_on:
       lipid_api:
         condition: service_healthy
     environment:
       NEXT_PUBLIC_API_URL: https://api.daksa.online
-      NEXT_PUBLIC_SITE_URL: https://lipid.daksa.online
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://lipid.daksa.online}
       # Runtime-only (sem prefixo NEXT_PUBLIC_) — usado só em fetch feito pelo próprio
       # servidor (Server Components + proxy de /uploads). Evita hairpin NAT: o container
       # chama a API pelo nome do serviço na rede interna, não pelo domínio público via
