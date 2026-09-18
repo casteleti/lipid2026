@@ -50,6 +50,13 @@ const nextConfig = {
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
+          // Primeira etapa de HSTS: prazo curto para validar o comportamento em produção
+          // antes de elevar para um ano. O domínio já é servido exclusivamente por HTTPS.
+          { key: 'Strict-Transport-Security', value: 'max-age=86400; includeSubDomains' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          // O site não usa câmera, microfone nem geolocalização. Não restringir
+          // acelerômetro/giróscopo: embeds do YouTube podem solicitá-los.
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
         ],
       },
     ];
