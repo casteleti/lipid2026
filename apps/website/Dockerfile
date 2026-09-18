@@ -1,16 +1,20 @@
 # Stage 1: Dependencies
-FROM node:18-alpine AS deps
+FROM node:22-alpine AS deps
+
+RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
 
 WORKDIR /app
 
-COPY package.json pnpm-workspace.yaml ./
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY apps/website/package.json ./apps/website/package.json
 COPY packages ./packages
 
-RUN npm install -g pnpm && pnpm install --no-frozen-lockfile --filter lipid-website...
+RUN pnpm install --frozen-lockfile --filter lipid-website...
 
 # Stage 2: Build
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
+
+RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
 
 WORKDIR /app
 
@@ -20,25 +24,22 @@ COPY apps/website ./apps/website
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
-RUN npm install -g pnpm && pnpm --filter lipid-website run build
+RUN pnpm --filter lipid-website run build
 
-# Stage 3: Runtime
-FROM node:18-alpine
+# Stage 3: Runtime (Next.js standalone output — não precisa de pnpm/node_modules completo)
+FROM node:22-alpine
 
 WORKDIR /app
 
-RUN npm install -g pnpm
-
-# node_modules raiz contém o store pnpm (.pnpm) para o qual os symlinks apontam
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/website/node_modules ./apps/website/node_modules
-COPY --from=builder /app/apps/website/.next ./apps/website/.next
+# output: 'standalone' em monorepo pnpm replica a estrutura de pastas a partir da raiz do
+# workspace (outputFileTracingRoot) — por isso copiamos para /app e não para
+# /app/apps/website diretamente.
+COPY --from=builder /app/apps/website/.next/standalone ./
+COPY --from=builder /app/apps/website/.next/static ./apps/website/.next/static
 COPY --from=builder /app/apps/website/public ./apps/website/public
-COPY --from=builder /app/apps/website/package.json ./apps/website/package.json
-COPY --from=builder /app/apps/website/next.config.js ./apps/website/next.config.js
 
 WORKDIR /app/apps/website
 
 EXPOSE 3000
 
-CMD ["pnpm", "start"]
+CMD ["node", "server.js"]

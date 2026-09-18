@@ -1,56 +1,114 @@
 services:
-  website:
+  lipid_postgres:
+    image: postgres:15-alpine
+    container_name: lipid_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    mem_limit: 768m
+    cpus: 0.75
+    volumes:
+      - lipid_postgres_data:/var/lib/postgresql/data
+    # Sem porta publicada para o host — só acessível pela rede interna do projeto.
+
+  lipid_api:
+    container_name: lipid_api
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      lipid_postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@lipid_postgres:5432/${POSTGRES_DB}
+      NODE_ENV: production
+      API_PORT: 3002
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRY: 24h
+      RD_STATION_API_KEY: ${RD_STATION_API_KEY}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- --spider http://127.0.0.1:3002/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    mem_limit: 256m
+    cpus: 0.5
+    expose:
+      - "3002"
+    volumes:
+      - lipid_api_uploads:/app/apps/api/uploads
+
+  lipid_website:
+    container_name: lipid_website
     build:
       context: .
       dockerfile: apps/website/Dockerfile
       args:
         NEXT_PUBLIC_API_URL: https://api.daksa.app.br
     restart: unless-stopped
+    depends_on:
+      lipid_api:
+        condition: service_healthy
     environment:
       NEXT_PUBLIC_API_URL: https://api.daksa.app.br
+      # Runtime-only (sem prefixo NEXT_PUBLIC_) — usado só em fetch feito pelo próprio
+      # servidor (Server Components + proxy de /uploads). Evita hairpin NAT: o container
+      # chama a API pelo nome do serviço na rede interna, não pelo domínio público via
+      # Traefik. Ver apps/website/src/lib/api-url.ts.
+      API_URL: http://lipid_api:3002
       NODE_ENV: production
+      # server.js do output standalone ignora o "-p" do script start; só lê PORT/HOSTNAME.
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- --spider http://127.0.0.1:3000/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    mem_limit: 512m
+    cpus: 1.0
     expose:
       - "3000"
-    networks:
-      - coolify
 
-  api:
-    build:
-      context: .
-      dockerfile: apps/api/Dockerfile
-    restart: unless-stopped
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      NODE_ENV: production
-      API_PORT: 3002
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRY: 24h
-      RD_STATION_API_KEY: ${RD_STATION_API_KEY}
-    expose:
-      - "3002"
-    networks:
-      - coolify
-    volumes:
-      - api_uploads:/app/apps/api/uploads
-
-  admin:
+  lipid_admin:
+    container_name: lipid_admin
     build:
       context: .
       dockerfile: apps/admin/Dockerfile
       args:
         NEXT_PUBLIC_API_URL: https://api.daksa.app.br
     restart: unless-stopped
+    depends_on:
+      lipid_api:
+        condition: service_healthy
     environment:
       NEXT_PUBLIC_API_URL: https://api.daksa.app.br
       NODE_ENV: production
+      # server.js do output standalone ignora o "-p" do script start; só lê PORT/HOSTNAME.
+      PORT: 3001
+      HOSTNAME: 0.0.0.0
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- --spider http://127.0.0.1:3001/login || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    mem_limit: 256m
+    cpus: 0.5
     expose:
       - "3001"
-    networks:
-      - coolify
-
-networks:
-  coolify:
-    external: true
 
 volumes:
-  api_uploads:
+  lipid_api_uploads:
+  lipid_postgres_data:

@@ -22,6 +22,8 @@ dist/
 
 # Contexto local de continuidade entre sessões — tem token vivo do Coolify, nunca commitar
 CONTEXTO_PROJETO.md
+Docs/credenciais-vps
+Docs/token-vps-lipid2026
 
 # IDE
 .vscode/
